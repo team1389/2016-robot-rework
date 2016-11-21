@@ -11,6 +11,8 @@ import com.team1389.hardware.interfaces.inputs.LatchedDigitalInput;
 import com.team1389.hardware.interfaces.inputs.PercentRangeInput;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.watch.Watchable;
+import com.team1389.hardware.watch.Watcher;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
 import com.team1389.system.SystemManager;
@@ -18,9 +20,11 @@ import com.team1389.system.SystemManager;
 public class TeleopMain {
 	IOHardware robot;
 	SystemManager manager;
-
+	Watcher debuggingPanel;
+	
 	public TeleopMain(IOHardware robot) {
 		this.robot = robot;
+		debuggingPanel = new Watcher();
 	}
 
 	public void teleopInit() {
@@ -30,6 +34,7 @@ public class TeleopMain {
 
 	public void teleopPeriodic() {
 		manager.update();
+		debuggingPanel.display();
 	}
 
 	public System setupArmSystem() {
@@ -38,17 +43,18 @@ public class TeleopMain {
 		
 		LatchedDigitalInput liftArmButton = (LatchedDigitalInput) robot.manipJoystick.getButton(1, InputStyle.LATCHED);
 		LatchedDigitalInput lowerArmButton = (LatchedDigitalInput) robot.manipJoystick.getButton(2, InputStyle.LATCHED);
-		
-		return new ArmSystem(elevator, liftArmButton, lowerArmButton);
+		ArmSystem armSystem=new ArmSystem(elevator, liftArmButton, lowerArmButton);
+		debuggingPanel.watch(armSystem);
+		return armSystem;
 	}
 
 	public System setupDriveSystem() {
 		PercentRangeOutput left = robot.leftDrive.getVoltageOutput();
 		PercentRangeOutput right = robot.rightDrive.getVoltageOutput();
 
-		PercentRangeInput throttle = PercentRangeInput.applyDeadband(robot.driveJoystick.getAxis(0), .02);
-		PercentRangeInput wheel = PercentRangeInput.applyDeadband(robot.driveJoystick.getAxis(1), .02);
-		DigitalInput quickTurnButton = robot.driveJoystick.getButton(1, InputStyle.TOGGLED);
+		PercentRangeInput throttle = PercentRangeInput.applyDeadband(robot.driveJoystick.getAxis(1), .02);
+		PercentRangeInput wheel = PercentRangeInput.applyDeadband(robot.driveJoystick.getAxis(0), .02);
+		DigitalInput quickTurnButton = robot.driveJoystick.getButton(1, InputStyle.RAW);
 
 		return new CheesyDriveSystem(left, right, throttle, wheel, quickTurnButton);
 	}

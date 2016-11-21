@@ -26,7 +26,7 @@ public class CANTalonHardware implements Watchable {
 	private final StateTracker stateTracker;
 	private final CANTalon wpiTalon;
 	private String currentMode;
-
+	
 	private CANTalonHardware(CANPort port) {
 		stateTracker = new StateTracker();
 		wpiTalon = new CANTalon(port.number);
@@ -44,7 +44,7 @@ public class CANTalonHardware implements Watchable {
 			wpiTalon.set(voltage);
 		};
 	}
-
+	
 	public OpenRangeOutput getSpeedOutput(PIDConfiguration config) {
 		State speedState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Speed);
@@ -75,7 +75,9 @@ public class CANTalonHardware implements Watchable {
 
 		};
 	}
-
+	public void setInverted(boolean inverted){
+		wpiTalon.setInverted(inverted);
+	}
 	public OpenRangeOutput getPositionOutput(PIDConfiguration config) {
 		State positionState = stateTracker.newState(() -> {
 			wpiTalon.configEncoderCodesPerRev(4096);

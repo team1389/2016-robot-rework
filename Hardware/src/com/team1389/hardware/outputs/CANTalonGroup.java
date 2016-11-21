@@ -2,13 +2,15 @@ package com.team1389.hardware.outputs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.team1389.hardware.control.PIDConfiguration;
 import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.watch.Watchable;
 
-public class CANTalonGroup {
+public class CANTalonGroup implements Watchable{
 	
 	private final CANTalonHardware main;
 	private final List<CANTalonFollower> followers;
@@ -82,5 +84,17 @@ public class CANTalonGroup {
 				return 0;
 			}
 		};
+	}
+
+	@Override
+	public String getName() {
+		return "CANTalon Group: "+main.getName()+" ";
+		//TODO add followers
+	}
+
+	@Override
+	public Map<String, String> getInfo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

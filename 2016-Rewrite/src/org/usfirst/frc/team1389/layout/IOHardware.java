@@ -9,13 +9,14 @@ public class IOHardware extends IOLayout{
 	public IOHardware(){
 		registry=new Registry();
 		leftA= registry.registerCANHardware(RobotMap.leftMotorA_CAN, CANTalonHardware.constructor);
+		leftA.setInverted(true);
 		leftB= registry.registerCANHardware(RobotMap.leftMotorB_CAN, CANTalonHardware.constructor);
 		leftC= registry.registerCANHardware(RobotMap.leftMotorC_CAN, CANTalonHardware.constructor);
 		leftDrive=new CANTalonGroup(leftA,leftB,leftC);
 		
 		rightA= registry.registerCANHardware(RobotMap.rightMotorA_CAN, CANTalonHardware.constructor);
 		rightB= registry.registerCANHardware(RobotMap.rightMotorB_CAN, CANTalonHardware.constructor);
-		rightC= registry.registerCANHardware(RobotMap.rightMotorA_CAN, CANTalonHardware.constructor);
+		rightC= registry.registerCANHardware(RobotMap.rightMotorC_CAN, CANTalonHardware.constructor);
 		rightDrive=new CANTalonGroup(rightA,rightB,rightC);
 		
 		elevationA=registry.registerCANHardware(RobotMap.elevatorMotorA_CAN, CANTalonHardware.constructor);

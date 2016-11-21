@@ -6,6 +6,7 @@ public class LatchedDigitalInput extends DigitalInput{
 	LatchedBoolean latchedIn;
 	public LatchedDigitalInput(BooleanSource in) {
 		super(in);
+		latchedIn=new LatchedBoolean();
 	}
 
 	@Override
