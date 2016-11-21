@@ -21,7 +21,7 @@ public class Watcher {
 	public List<Watchable> getWatchables(){
 		return watchables;
 	}
-	public void display(Watcher watcher){
+	public void display(){
 		for(Watchable info:watchables){
 			SmartDashboard.putString("Watchable: ", info.getName());
 			for(Entry<String,String> e:info.getInfo().entrySet()){
