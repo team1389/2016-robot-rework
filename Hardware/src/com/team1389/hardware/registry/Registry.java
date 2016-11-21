@@ -19,7 +19,7 @@ public class Registry {
 	}
 	
 	public void registerWatcher(Watchable watchable){
-		watcher.newWatchable(watchable);
+		watcher.watch(watchable);
 	}
 	
 	public <T extends Watchable> T registerPWMHardware(int port, Constructor<PWMPort, T> constructor){
@@ -29,7 +29,7 @@ public class Registry {
 			pwmPorts.setUsed(port);
 			PWMPort pwm = new PWMPort(port);
 			T t = constructor.construct(pwm);
-			watcher.newWatchable(t);
+			watcher.watch(t);
 			return t;
 		}
 	}
@@ -41,7 +41,7 @@ public class Registry {
 			canPorts.setUsed(port);
 			CANPort can = new CANPort(port);
 			T t =  constructor.construct(can);
-			watcher.newWatchable(t);
+			watcher.watch(t);
 			return t;
 		}
 	}
@@ -53,7 +53,7 @@ public class Registry {
 			dioPorts.setUsed(port);
 			DIOPort dio = new DIOPort(port);
 			T t =  constructor.construct(dio);
-			watcher.newWatchable(t);
+			watcher.watch(t);
 			return t;
 		}
 	}
