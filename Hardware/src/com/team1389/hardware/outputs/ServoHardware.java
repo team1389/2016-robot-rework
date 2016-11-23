@@ -7,6 +7,7 @@ import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.registry.Constructor;
 import com.team1389.hardware.registry.PWMPort;
+import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -59,10 +60,10 @@ public class ServoHardware implements Watchable{
 	}
 
 	@Override
-	public Map<String, String> getInfo() {
+	public Info[] getInfo() {
 		Map<String, String> info = new HashMap<>();
 		info.put("position", "" + wpiServo.getPosition());
-		return info;
+		return null;
 	}
 	
 	public OpenRangeInput getPositionInput(){

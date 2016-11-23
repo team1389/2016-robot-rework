@@ -3,11 +3,12 @@ package com.team1389.hardware.inputs;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.team1389.hardware.inputs.DigitalInput.InputStyle;
 import com.team1389.hardware.interfaces.inputs.BooleanSource;
-import com.team1389.hardware.interfaces.inputs.DigitalInput;
-import com.team1389.hardware.interfaces.inputs.DigitalInput.InputStyle;
 import com.team1389.hardware.registry.Constructor;
 import com.team1389.hardware.registry.DIOPort;
+import com.team1389.hardware.watch.BooleanInfo;
+import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
 
@@ -36,12 +37,10 @@ public class SwitchHardware implements Watchable{
 	}
 
 	@Override
-	public Map<String, String> getInfo() {
-		Map<String, String> info = new HashMap<>();
-		
-		info.put("state", "" + wpiSwitch.get());
-		
-		return info;
+	public Info[] getInfo() {
+		return new Info[]{
+				new BooleanInfo("Switch "+wpiSwitch.getSmartDashboardType(),()->{return wpiSwitch.get();})
+			};
 	}
 
 }

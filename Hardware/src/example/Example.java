@@ -26,9 +26,7 @@ public class Example {
 		List<Watchable> allHardware = registry.getHardwareInfo();
 		for (Watchable watchable : allHardware){//loop through watchables
 			System.out.println(watchable.getName());
-			watchable.getInfo().forEach((String name, String value) -> {//loop through info
-				System.out.println("\t" + name + ":\t" + value);
-			});
+			
 		}
 		/*
 		 * will print out something like this:

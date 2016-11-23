@@ -13,6 +13,7 @@ import com.team1389.hardware.registry.CANPort;
 import com.team1389.hardware.registry.Constructor;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateTracker;
+import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -175,14 +176,35 @@ public class CANTalonHardware implements Watchable {
 	}
 
 	@Override
-	public Map<String, String> getInfo() {
+	public Info[] getInfo() {
 		Map<String, String> info = new HashMap<>();
-
-		info.put("speed", "" + wpiTalon.getSpeed());
-		info.put("position", "" + wpiTalon.getPosition());
-		info.put("voltage out", "" + wpiTalon.getOutputVoltage());
 		info.put("mode", currentMode);
+		switch(wpiTalon.getControlMode()){
+		case Current:
+			break;
+		case Disabled:
+			break;
+		case Follower:
+			break;
+		case MotionProfile:
+			break;
+		case PercentVbus:
+			break;
+		case Position:
+			info.put("position", "" + wpiTalon.getPosition());
+			info.put("setPoint", "" + wpiTalon.getSetpoint());
+			break;
+		case Speed:
+			break;
+		case Voltage:
+			break;
+		default:
+			break;
+		
+		}
+		//info.put("speed", "" + wpiTalon.getSpeed());
+		//info.put("voltage out", "" + wpiTalon.getOutputVoltage());
 
-		return info;
+		return null;
 	}
 }

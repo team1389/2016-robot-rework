@@ -6,6 +6,7 @@ import java.util.Map;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
 import com.team1389.hardware.registry.Constructor;
 import com.team1389.hardware.registry.PWMPort;
+import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Victor;
@@ -38,11 +39,11 @@ public class VictorHardware implements Watchable {
 	}
 
 	@Override
-	public Map<String, String> getInfo() {
+	public Info[] getInfo() {
 		Map<String, String> info = new HashMap<>();
 
 		info.put("last set output", "" + wpiVictor.getSpeed());
 
-		return info;
+		return null;
 	}
 }

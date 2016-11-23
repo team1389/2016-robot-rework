@@ -1,6 +1,6 @@
 package com.team1389.system;
 
-import com.team1389.hardware.interfaces.inputs.DigitalInput;
+import com.team1389.hardware.inputs.DigitalInput;
 import com.team1389.hardware.interfaces.inputs.PercentRangeInput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
 import com.team1389.hardware.util.DriveSignal;

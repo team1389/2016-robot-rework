@@ -1,14 +1,13 @@
 package org.usfirst.frc.team1389.systems;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.team1389.hardware.interfaces.inputs.LatchedDigitalInput;
+import com.team1389.hardware.inputs.LatchedDigitalInput;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
+import com.team1389.hardware.watch.Info;
+import com.team1389.hardware.watch.StringInfo;
 import com.team1389.hardware.watch.Watchable;
 import com.team1389.system.System;
 
-public class ArmSystem implements System, Watchable{
+public class ArmSystem implements System, Watchable {
 
 	OpenRangeOutput elevator;
 	ArmLocation armLocationTracker;
@@ -17,8 +16,8 @@ public class ArmSystem implements System, Watchable{
 
 	public ArmSystem(OpenRangeOutput elevator, LatchedDigitalInput increment, LatchedDigitalInput decrement) {
 		this.elevator = OpenRangeOutput.mapToOpenRange(elevator, 0d, 360d);
-		this.incrementer=increment;
-		this.decrementer=decrement;
+		this.incrementer = increment;
+		this.decrementer = decrement;
 	}
 
 	public void init() {
@@ -37,11 +36,10 @@ public class ArmSystem implements System, Watchable{
 	}
 
 	public enum ArmLocation {
-		DOWN(0,"Down"), DEFENSE(45,"Defense"), LOW_GOAL(25,"Low Goal"), HIGH_GOAL(35,"High Goal");
+		DOWN(0), DEFENSE(45), LOW_GOAL(25), HIGH_GOAL(35);
 
-		ArmLocation(double angle,String name) {
+		ArmLocation(double angle) {
 			this.angle = angle;
-			this.name=name;
 		}
 
 		public ArmLocation next() {
@@ -57,7 +55,7 @@ public class ArmSystem implements System, Watchable{
 			}
 			return this;
 		}
-		public final String name;
+
 		public final double angle;
 	}
 
@@ -67,10 +65,7 @@ public class ArmSystem implements System, Watchable{
 	}
 
 	@Override
-	public Map<String, String> getInfo() {
-		Map<String, String> info = new HashMap<>();
-		info.put("position", "" + armLocationTracker.name);
-		return info;
-
+	public Info[] getInfo() {
+		return new Info[]{new StringInfo("Position",()->{return armLocationTracker.name();})};
 	}
 }

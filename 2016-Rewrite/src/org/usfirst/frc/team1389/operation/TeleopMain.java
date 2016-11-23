@@ -5,13 +5,12 @@ import org.usfirst.frc.team1389.systems.ArmSystem;
 
 import com.team1389.hardware.configuration.PIDConstants;
 import com.team1389.hardware.control.PIDConfiguration;
-import com.team1389.hardware.interfaces.inputs.DigitalInput;
-import com.team1389.hardware.interfaces.inputs.DigitalInput.InputStyle;
-import com.team1389.hardware.interfaces.inputs.LatchedDigitalInput;
+import com.team1389.hardware.inputs.DigitalInput;
+import com.team1389.hardware.inputs.LatchedDigitalInput;
+import com.team1389.hardware.inputs.DigitalInput.InputStyle;
 import com.team1389.hardware.interfaces.inputs.PercentRangeInput;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
-import com.team1389.hardware.watch.Watchable;
 import com.team1389.hardware.watch.Watcher;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
@@ -30,6 +29,7 @@ public class TeleopMain {
 	public void teleopInit() {
 		manager = new SystemManager(setupArmSystem(), setupDriveSystem());
 		manager.init();
+		debuggingPanel.watch(robot.registry.getHardwareInfo());
 	}
 
 	public void teleopPeriodic() {

@@ -2,12 +2,12 @@ package com.team1389.hardware.outputs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.team1389.hardware.control.PIDConfiguration;
 import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
 public class CANTalonGroup implements Watchable{
@@ -50,14 +50,12 @@ public class CANTalonGroup implements Watchable{
 
 			@Override
 			public double min() {
-				// TODO Auto-generated method stub
 				return 0;
 			}
 
 			@Override
 			public double max() {
-				// TODO Auto-generated method stub
-				return 0;
+				return 4096;
 			}
 		};
 	}
@@ -93,7 +91,7 @@ public class CANTalonGroup implements Watchable{
 	}
 
 	@Override
-	public Map<String, String> getInfo() {
+	public Info[] getInfo() {
 		// TODO Auto-generated method stub
 		return null;
 	}
