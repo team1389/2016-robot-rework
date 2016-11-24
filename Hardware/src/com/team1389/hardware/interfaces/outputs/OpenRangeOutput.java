@@ -134,12 +134,12 @@ public interface OpenRangeOutput {
 
 			@Override
 			public double min() {
-				return -in.max();
+				return in.min();
 			}
 
 			@Override
 			public double max() {
-				return -min();
+				return in.max();
 			}
 		};
 	}
