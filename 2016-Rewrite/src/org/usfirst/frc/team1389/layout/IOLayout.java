@@ -7,7 +7,7 @@ import com.team1389.hardware.outputs.CANTalonHardware;
 import com.team1389.hardware.outputs.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
-public class IOLayout {
+public class IOLayout extends RobotMap{
 	public Registry registry;
 	
 	public SwitchHardware IRsensor1;

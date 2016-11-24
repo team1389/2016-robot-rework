@@ -22,39 +22,27 @@ public class Registry {
 		watcher.watch(watchable);
 	}
 	
-	public <T extends Watchable> T registerPWMHardware(int port, Constructor<PWMPort, T> constructor){
+	public void claimPWMPort(int port){
 		if (pwmPorts.isUsed(port)){
 			throw new PortTakenException("PWM port " + port + " is already being used");
 		} else {
 			pwmPorts.setUsed(port);
-			PWMPort pwm = new PWMPort(port);
-			T t = constructor.construct(pwm);
-			watcher.watch(t);
-			return t;
 		}
 	}
 	
-	public <T extends Watchable> T registerCANHardware(int port, Constructor<CANPort, T> constructor){
+	public void claimCANPort(int port){
 		if (canPorts.isUsed(port)){
 			throw new PortTakenException("CAN port " + port + " is already being used");
 		} else {
 			canPorts.setUsed(port);
-			CANPort can = new CANPort(port);
-			T t =  constructor.construct(can);
-			watcher.watch(t);
-			return t;
 		}
 	}
 
-	public <T extends Watchable> T registerDIOHardware(int port, Constructor<DIOPort, T> constructor){
+	public void claimDIOPort(int port){
 		if (dioPorts.isUsed(port)){
 			throw new PortTakenException("DIO port " + port + " is already being used");
 		} else {
 			dioPorts.setUsed(port);
-			DIOPort dio = new DIOPort(port);
-			T t =  constructor.construct(dio);
-			watcher.watch(t);
-			return t;
 		}
 	}
 	

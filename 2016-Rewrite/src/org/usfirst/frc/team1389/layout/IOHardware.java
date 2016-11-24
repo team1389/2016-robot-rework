@@ -7,38 +7,36 @@ import com.team1389.hardware.outputs.CANTalonHardware;
 import com.team1389.hardware.outputs.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
-public class IOHardware extends IOLayout{
-	public IOHardware(){
-		registry=new Registry();
-		leftA= registry.registerCANHardware(RobotMap.leftMotorA_CAN, CANTalonHardware.constructor);
+public class IOHardware extends IOLayout {
+	public IOHardware() {
+		registry = new Registry();
+		leftA = new CANTalonHardware(leftMotorA_CAN, registry);
 		leftA.setInverted(true);
-		leftB= registry.registerCANHardware(RobotMap.leftMotorB_CAN, CANTalonHardware.constructor);
-		leftC= registry.registerCANHardware(RobotMap.leftMotorC_CAN, CANTalonHardware.constructor);
-		leftDrive=new CANTalonGroup(leftA,leftB,leftC);
-		
-		rightA= registry.registerCANHardware(RobotMap.rightMotorA_CAN, CANTalonHardware.constructor);
-		rightB= registry.registerCANHardware(RobotMap.rightMotorB_CAN, CANTalonHardware.constructor);
-		rightC= registry.registerCANHardware(RobotMap.rightMotorC_CAN, CANTalonHardware.constructor);
-		rightDrive=new CANTalonGroup(rightA,rightB,rightC);
-		
-		elevationA=registry.registerCANHardware(RobotMap.elevatorMotorA_CAN, CANTalonHardware.constructor);
-		elevationA.getWrappedTalon().enableBrakeMode(false);
-		elevationB=registry.registerCANHardware(RobotMap.elevatorMotorB_CAN, CANTalonHardware.constructor);
-		elevationB.getWrappedTalon().enableBrakeMode(false);
+		leftB = new CANTalonHardware(leftMotorB_CAN, registry);
+		leftC = new CANTalonHardware(leftMotorC_CAN, registry);
+		leftDrive = new CANTalonGroup(leftA, leftB, leftC);
 
-		elevation=new CANTalonGroup(elevationA,elevationB);
-		
-		IRsensor1=registry.registerDIOHardware(RobotMap.ballHolderIR1_DIO, SwitchHardware.constructor);
-		IRsensor2=registry.registerDIOHardware(RobotMap.ballHolderIR2_DIO, SwitchHardware.constructor);
+		rightA = new CANTalonHardware(rightMotorA_CAN, registry);
+		rightB = new CANTalonHardware(rightMotorB_CAN, registry);
+		rightC = new CANTalonHardware(rightMotorC_CAN, registry);
+		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
+
+		elevationA = new CANTalonHardware(elevatorMotorA_CAN, registry);
+		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
+
+		elevation = new CANTalonGroup(elevationA, elevationB);
+
+		IRsensor1 = new SwitchHardware(ballHolderIR1_DIO, registry);
+		IRsensor2 = new SwitchHardware(ballHolderIR2_DIO, registry);
 		IRsensor1.invert(true);
 		IRsensor2.invert(true);
-		IRsensors=SwitchHardware.combineSwitchOR(IRsensor1,IRsensor2);
-		
-		intake=registry.registerPWMHardware(RobotMap.intakeMotor_PWM, VictorHardware.constructor);
+		IRsensors = SwitchHardware.combineSwitchOR(IRsensor1, IRsensor2);
+
+		intake = new VictorHardware(intakeMotor_PWM, registry);
 		intake.invert(true);
-		
-		driveJoystick=new JoystickController(RobotMap.driveJoystickPort);
-		manipJoystick=new JoystickController(RobotMap.manipJoystickPort);
+
+		driveJoystick = new JoystickController(driveJoystickPort);
+		manipJoystick = new JoystickController(manipJoystickPort);
 
 	}
 }

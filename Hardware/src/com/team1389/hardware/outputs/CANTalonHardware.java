@@ -9,8 +9,7 @@ import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
 import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
-import com.team1389.hardware.registry.CANPort;
-import com.team1389.hardware.registry.Constructor;
+import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateTracker;
 import com.team1389.hardware.watch.Info;
@@ -20,18 +19,16 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class CANTalonHardware implements Watchable {
-	public static final Constructor<CANPort, CANTalonHardware> constructor = (CANPort port) -> {
-		return new CANTalonHardware(port);
-	};
 
 	private final StateTracker stateTracker;
 	private final CANTalon wpiTalon;
 	private String currentMode;
-	
-	private CANTalonHardware(CANPort port) {
+
+	public CANTalonHardware(int canPort, Registry registry) {
+		registry.claimCANPort(canPort);
+		registry.registerWatcher(this);
+		wpiTalon = new CANTalon(canPort);
 		stateTracker = new StateTracker();
-		wpiTalon = new CANTalon(port.number);
-		wpiTalon.setPosition(0);
 		currentMode = "None";
 	}
 
@@ -46,9 +43,11 @@ public class CANTalonHardware implements Watchable {
 			wpiTalon.set(voltage);
 		};
 	}
-	public CANTalon getWrappedTalon(){
+
+	public CANTalon getWrappedTalon() {
 		return wpiTalon;
 	}
+
 	public OpenRangeOutput getSpeedOutput(PIDConfiguration config) {
 		State speedState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Speed);
@@ -62,26 +61,28 @@ public class CANTalonHardware implements Watchable {
 			@Override
 			public void set(double val) {
 				speedState.init();
-				wpiTalon.set(val);				
+				wpiTalon.set(val);
 			}
 
 			@Override
 			public double min() {
-				//TODO
+				// TODO
 				return 0;
 			}
 
 			@Override
 			public double max() {
-				//TODO
+				// TODO
 				return 0;
 			}
 
 		};
 	}
-	public void setInverted(boolean inverted){
+
+	public void setInverted(boolean inverted) {
 		wpiTalon.setInverted(inverted);
 	}
+
 	public OpenRangeOutput getPositionOutput(PIDConfiguration config) {
 		State positionState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Position);
@@ -94,7 +95,7 @@ public class CANTalonHardware implements Watchable {
 			@Override
 			public void set(double val) {
 				positionState.init();
-				wpiTalon.set(val);				
+				wpiTalon.set(val);
 			}
 
 			@Override
@@ -106,15 +107,15 @@ public class CANTalonHardware implements Watchable {
 			public double max() {
 				return 8192;
 			}
-		
+
 		};
 	}
 
 	public OpenRangeInput getSpeedInput() {
 		wpiTalon.configEncoderCodesPerRev(1023);
 		return
-				
-				new OpenRangeInput() {
+
+		new OpenRangeInput() {
 
 			@Override
 			public double get() {
@@ -134,7 +135,7 @@ public class CANTalonHardware implements Watchable {
 	}
 
 	public OpenRangeInput getPositionInput() {
-		//wpiTalon.configEncoderCodesPerRev(4096);
+		// wpiTalon.configEncoderCodesPerRev(4096);
 		return new OpenRangeInput() {
 
 			@Override
@@ -182,7 +183,7 @@ public class CANTalonHardware implements Watchable {
 	public Info[] getInfo() {
 		Map<String, String> info = new HashMap<>();
 		info.put("mode", currentMode);
-		switch(wpiTalon.getControlMode()){
+		switch (wpiTalon.getControlMode()) {
 		case Current:
 			break;
 		case Disabled:
@@ -203,10 +204,10 @@ public class CANTalonHardware implements Watchable {
 			break;
 		default:
 			break;
-		
+
 		}
-		//info.put("speed", "" + wpiTalon.getSpeed());
-		//info.put("voltage out", "" + wpiTalon.getOutputVoltage());
+		// info.put("speed", "" + wpiTalon.getSpeed());
+		// info.put("voltage out", "" + wpiTalon.getOutputVoltage());
 
 		return null;
 	}
