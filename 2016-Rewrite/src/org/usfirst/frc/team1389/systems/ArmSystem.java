@@ -1,8 +1,11 @@
 package org.usfirst.frc.team1389.systems;
 
-import com.team1389.hardware.inputs.LatchedDigitalInput;
+import org.usfirst.frc.team1389.util.ButtonEnumMap;
+
+import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
 import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
 import com.team1389.hardware.watch.Info;
+import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.StringInfo;
 import com.team1389.hardware.watch.Watchable;
 import com.team1389.system.System;
@@ -10,29 +13,22 @@ import com.team1389.system.System;
 public class ArmSystem implements System, Watchable {
 
 	OpenRangeOutput elevator;
-	ArmLocation armLocationTracker;
-	LatchedDigitalInput incrementer;
-	LatchedDigitalInput decrementer;
+	ButtonEnumMap<ArmLocation> buttons;
+	OpenRangeInput armVal;
 
-	public ArmSystem(OpenRangeOutput elevator, LatchedDigitalInput increment, LatchedDigitalInput decrement) {
-		this.elevator = OpenRangeOutput.mapToOpenRange(elevator, 0d, 360d);
-		this.incrementer = increment;
-		this.decrementer = decrement;
+	public ArmSystem(OpenRangeOutput elevator, ButtonEnumMap<ArmLocation> map,OpenRangeInput armVal) {
+		this.elevator = OpenRangeOutput.mapToOpenRange(OpenRangeOutput.applyProfile(OpenRangeOutput.invert(elevator),1638), 0d, 360d);
+		this.buttons=map;
+		this.armVal=armVal;
 	}
 
 	public void init() {
 		elevator.set(0);
-		armLocationTracker = ArmLocation.DOWN;
 	}
 
 	@Override
 	public void update() {
-		if (incrementer.get()) {
-			armLocationTracker = armLocationTracker.next();
-		} else if (decrementer.get()) {
-			armLocationTracker = armLocationTracker.previous();
-		}
-		elevator.set(armLocationTracker.angle);
+		elevator.set(buttons.getVal().angle);
 	}
 
 	public enum ArmLocation {
@@ -66,6 +62,9 @@ public class ArmSystem implements System, Watchable {
 
 	@Override
 	public Info[] getInfo() {
-		return new Info[]{new StringInfo("Position",()->{return armLocationTracker.name();})};
+		return new Info[]{
+					new StringInfo("Target Location",()->{return buttons.getVal().name();}),
+					new NumberInfo("Current Position",()->{return armVal.get();})
+				};
 	}
 }

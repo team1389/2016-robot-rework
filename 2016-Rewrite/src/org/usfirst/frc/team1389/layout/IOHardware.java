@@ -1,8 +1,10 @@
 package org.usfirst.frc.team1389.layout;
 
 import com.team1389.hardware.humaninputs.JoystickController;
+import com.team1389.hardware.inputs.SwitchHardware;
 import com.team1389.hardware.outputs.CANTalonGroup;
 import com.team1389.hardware.outputs.CANTalonHardware;
+import com.team1389.hardware.outputs.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
 public class IOHardware extends IOLayout{
@@ -20,8 +22,20 @@ public class IOHardware extends IOLayout{
 		rightDrive=new CANTalonGroup(rightA,rightB,rightC);
 		
 		elevationA=registry.registerCANHardware(RobotMap.elevatorMotorA_CAN, CANTalonHardware.constructor);
+		elevationA.getWrappedTalon().enableBrakeMode(false);
 		elevationB=registry.registerCANHardware(RobotMap.elevatorMotorB_CAN, CANTalonHardware.constructor);
+		elevationB.getWrappedTalon().enableBrakeMode(false);
+
 		elevation=new CANTalonGroup(elevationA,elevationB);
+		
+		IRsensor1=registry.registerDIOHardware(RobotMap.ballHolderIR1_DIO, SwitchHardware.constructor);
+		IRsensor2=registry.registerDIOHardware(RobotMap.ballHolderIR2_DIO, SwitchHardware.constructor);
+		IRsensor1.invert(true);
+		IRsensor2.invert(true);
+		IRsensors=SwitchHardware.combineSwitchOR(IRsensor1,IRsensor2);
+		
+		intake=registry.registerPWMHardware(RobotMap.intakeMotor_PWM, VictorHardware.constructor);
+		intake.invert(true);
 		
 		driveJoystick=new JoystickController(RobotMap.driveJoystickPort);
 		manipJoystick=new JoystickController(RobotMap.manipJoystickPort);

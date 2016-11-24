@@ -4,13 +4,17 @@ import com.team1389.hardware.inputs.DigitalInput;
 import com.team1389.hardware.interfaces.inputs.PercentRangeInput;
 import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
 import com.team1389.hardware.util.DriveSignal;
+import com.team1389.hardware.watch.BooleanInfo;
+import com.team1389.hardware.watch.Info;
+import com.team1389.hardware.watch.NumberInfo;
 
-public class CheesyDriveSystem implements System {
+public class CheesyDriveSystem implements System{
 	private PercentRangeOutput leftMotor;
 	private PercentRangeOutput rightMotor;
 	private PercentRangeInput throttle;
 	private PercentRangeInput wheel;
 	private DigitalInput quickTurnButton;
+	private boolean isQuickTurn;
 	private double mQuickStopAccumulator;
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
@@ -35,7 +39,8 @@ public class CheesyDriveSystem implements System {
 	}
 	@Override
 	public void update() {
-		mSignal = cheesyDrive(throttle.get(), wheel.get(), quickTurnButton.get());
+		isQuickTurn=quickTurnButton.get();
+		mSignal = cheesyDrive(throttle.get(), wheel.get(), isQuickTurn);
 		leftMotor.set(mSignal.leftMotor);
 		rightMotor.set(mSignal.rightMotor);
 	}
@@ -86,4 +91,19 @@ public class CheesyDriveSystem implements System {
 		mSignal.leftMotor = leftPwm;
 		return mSignal;
 	}
+
+	@Override
+	public String getName() {
+		return "Drive System";
+	}
+
+	@Override
+	public Info[] getInfo() {
+		return new Info[]{
+				new NumberInfo("leftWheels",()->{return mSignal.leftMotor;}),
+				new NumberInfo("rightWheels",()->{return mSignal.rightMotor;}),
+				new BooleanInfo("isQuickTurn",()->{return isQuickTurn;})
+		};
+	}
+
 }

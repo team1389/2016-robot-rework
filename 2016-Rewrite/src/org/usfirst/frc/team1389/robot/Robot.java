@@ -4,7 +4,13 @@ package org.usfirst.frc.team1389.robot;
 import org.usfirst.frc.team1389.layout.IOHardware;
 import org.usfirst.frc.team1389.operation.TeleopMain;
 
+import com.team1389.hardware.configuration.PIDConstants;
+import com.team1389.hardware.configuration.PIDController;
+import com.team1389.hardware.control.PIDConfiguration;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +29,8 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
     	robot=new IOHardware();
     	teleoperator=new TeleopMain(robot);
+    	pid=new PIDController(new PIDConstants(.5, 0, 0),0.0);
+    	LiveWindow.addActuator("Ungrouped", "pidController", pid);
     }
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
@@ -43,6 +51,9 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
 
     }
+    @Override public void disabledPeriodic(){
+    	teleoperator.teleopDisabled();
+    }
     @Override
     public void teleopInit(){
     	teleoperator.teleopInit();
@@ -53,12 +64,16 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         teleoperator.teleopPeriodic();
     }
-    
+    PIDController pid;
     /**
      * This function is called periodically during test mode
      */
+    @Override
+    public void testInit(){
+    }
     public void testPeriodic() {
-    
+    	robot.elevation.getPositionOutput(new PIDConfiguration(pid.getPID(),false,false)).set(pid.getSetpoint());
+    	///SmartDashboard.putData("test",pid);
     }
     
 }

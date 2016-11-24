@@ -13,6 +13,7 @@ import com.team1389.hardware.watch.Watchable;
 
 
 public class SwitchHardware implements Watchable{
+	boolean inverted;
 	public static final Constructor<DIOPort, SwitchHardware> constructor = (DIOPort port) -> {
 		return new SwitchHardware(port);
 	};
@@ -21,25 +22,49 @@ public class SwitchHardware implements Watchable{
 	
 	private SwitchHardware(DIOPort port) {
 		wpiSwitch = new edu.wpi.first.wpilibj.DigitalInput(port.number);
+		inverted=false;
 	}
-	
+	private boolean get(){
+		return inverted?!wpiSwitch.get():wpiSwitch.get();
+	}
 	public BooleanSource getRawSwitch(){
 		return ()->{
-			return wpiSwitch.get();
+			return get();
+		};
+	}
+	public static BooleanSource combineSwitchAND(SwitchHardware... switches){
+		return ()->{
+		boolean stillTrue=true;
+		for(SwitchHardware switchHardware:switches){
+			stillTrue=stillTrue&&switchHardware.get();
+		}
+		return stillTrue;
+		};
+	}
+	public static BooleanSource combineSwitchOR(SwitchHardware... switches){
+		return ()->{
+		boolean stillTrue=false;
+		for(SwitchHardware switchHardware:switches){
+			stillTrue=stillTrue||switchHardware.get();
+		}
+		return stillTrue;
 		};
 	}
 	public DigitalInput getSwitchAsInput(InputStyle style){
 		return DigitalInput.createInput(getRawSwitch(),style);
 	}
+	
 	@Override
 	public String getName() {
-		return "Switch" + wpiSwitch.getChannel();
+		return wpiSwitch.getSmartDashboardType() + wpiSwitch.getChannel();
 	}
-
+	public void invert(boolean inverted){
+		this.inverted=inverted;
+	}
 	@Override
 	public Info[] getInfo() {
 		return new Info[]{
-				new BooleanInfo("Switch "+wpiSwitch.getSmartDashboardType(),()->{return wpiSwitch.get();})
+				new BooleanInfo(getName(),()->{return wpiSwitch.get();})
 			};
 	}
 

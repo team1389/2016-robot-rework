@@ -50,12 +50,12 @@ public class CANTalonGroup implements Watchable{
 
 			@Override
 			public double min() {
-				return 0;
+				return mainOutput.min();
 			}
 
 			@Override
 			public double max() {
-				return 4096;
+				return mainOutput.max();
 			}
 		};
 	}
@@ -83,7 +83,9 @@ public class CANTalonGroup implements Watchable{
 			}
 		};
 	}
-
+	public CANTalonHardware getLeader(){
+		return main;
+	}
 	@Override
 	public String getName() {
 		return "CANTalon Group: "+main.getName()+" ";

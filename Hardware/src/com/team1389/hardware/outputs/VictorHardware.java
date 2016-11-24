@@ -32,7 +32,9 @@ public class VictorHardware implements Watchable {
 			wpiVictor.set(voltage);
 		};
 	}
-
+	public void invert(boolean inverted){
+		wpiVictor.setInverted(inverted);
+	}
 	@Override
 	public String getName() {
 		return "Victor " + wpiVictor.getChannel();

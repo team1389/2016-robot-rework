@@ -1,6 +1,9 @@
 package com.team1389.hardware.interfaces.inputs;
 
 import com.team1389.hardware.util.RangeUtil;
+import com.team1389.hardware.watch.Info;
+import com.team1389.hardware.watch.NumberInfo;
+import com.team1389.hardware.watch.Watchable;
 
 public interface OpenRangeInput {
 	public double get();
@@ -8,6 +11,41 @@ public interface OpenRangeInput {
 	public double min();
 
 	public double max();
+
+	public static WatchableOpenRangeInput getWatchableVersion(OpenRangeInput in, String name) {
+		return new WatchableOpenRangeInput() {
+			@Override
+			public String getName() {
+				return name;
+			}
+
+			@Override
+			public Info[] getInfo() {
+				return new Info[] { new NumberInfo(getName(), () -> {
+					return in.get();
+				}) };
+			}
+
+			@Override
+			public double get() {
+				return in.get();
+			}
+
+			@Override
+			public double min() {
+				return in.min();
+			}
+
+			@Override
+			public double max() {
+				return in.max();
+			}
+
+		};
+	}
+
+	public abstract class WatchableOpenRangeInput implements Watchable, OpenRangeInput {
+	}
 
 	public static OpenRangeInput mapToOpenRange(OpenRangeInput in, double min, double max) {
 		return new OpenRangeInput() {
@@ -54,7 +92,8 @@ public interface OpenRangeInput {
 
 		};
 	}
-	public static OpenRangeInput invert(OpenRangeInput in){
+
+	public static OpenRangeInput invert(OpenRangeInput in) {
 		return new OpenRangeInput() {
 
 			@Override
@@ -64,13 +103,11 @@ public interface OpenRangeInput {
 
 			@Override
 			public double min() {
-				// TODO Auto-generated method stub
 				return -in.max();
 			}
 
 			@Override
 			public double max() {
-				// TODO Auto-generated method stub
 				return -min();
 			}
 		};

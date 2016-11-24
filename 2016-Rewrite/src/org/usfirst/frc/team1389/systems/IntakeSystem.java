@@ -14,7 +14,10 @@ public class IntakeSystem implements System, Watchable{
 	DigitalInput IRSensors;
 	DigitalInput override;
 	public IntakeSystem(PercentRangeOutput motor,PercentRangeInput joystick, DigitalInput IRSensors,DigitalInput override){
-		
+		this.motor=motor;
+		this.joystick=joystick;
+		this.IRSensors=IRSensors;
+		this.override=override;
 	}
 	@Override
 	public String getName() {
@@ -31,7 +34,7 @@ public class IntakeSystem implements System, Watchable{
 	@Override
 	public void update() {
 		if(IRSensors.get()&&!override.get()){
-			motor.set(-.5);
+			motor.set(-.15);
 		}else{
 			motor.set(joystick.get());
 		}

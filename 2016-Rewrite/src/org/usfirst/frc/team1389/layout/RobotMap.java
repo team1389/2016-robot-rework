@@ -20,8 +20,8 @@ public class RobotMap {
 	public static final int elevatorMotorA_CAN = 12; public static final boolean elevatorMotorA_isInverted = true;
 	public static final int elevatorMotorB_CAN = 8; public static final boolean elevatorMotorB_isInverted = true;
 	//Ball Manipulator
-	public static final int intakeMotor_CAN = 0; public static final boolean intakeMotor_isInverted = true;
-	public static final int ballHolderIR1_DIO = 7; public static final boolean ballHolderIR1_isInverted = false;
+	public static final int intakeMotor_PWM = 0; public static final boolean intakeMotor_isInverted = true;
+	public static final int ballHolderIR1_DIO = 0; public static final boolean ballHolderIR1_isInverted = false;
 	public static final int ballHolderIR2_DIO = 1; public static final boolean ballHolderIR2_isInverted = false;
 
 	public static final int flywheelMotorA_CAN = 9; public static final boolean flywheelMotorA_isInverted = true;
