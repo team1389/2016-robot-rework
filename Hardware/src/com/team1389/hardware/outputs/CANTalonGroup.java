@@ -10,91 +10,64 @@ import com.team1389.hardware.interfaces.outputs.PercentOut;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
-public class CANTalonGroup implements Watchable{
-	
+public class CANTalonGroup implements Watchable {
+
 	private final CANTalonHardware main;
 	private final List<CANTalonFollower> followers;
 
-	public CANTalonGroup(CANTalonHardware main, CANTalonHardware ... followers) {
+	public CANTalonGroup(CANTalonHardware main, CANTalonHardware... followers) {
 		this.main = main;
-		
+
 		this.followers = new ArrayList<CANTalonFollower>();
-		for (CANTalonHardware talon : followers){
+		for (CANTalonHardware talon : followers) {
 			this.followers.add(talon.getFollower(main));
 		}
 	}
-	
-	private void setFollowers(){
-		for (CANTalonFollower follower : followers){
+
+	private void setFollowers() {
+		for (CANTalonFollower follower : followers) {
 			follower.follow();
 		}
 	}
 
-	public PercentOut getVoltageOutput(){
+	public PercentOut getVoltageOutput() {
 		PercentOut mainOutput = main.getVoltageOutput();
-		return (double voltage) -> {
+		return new PercentOut((double voltage) -> {
 			setFollowers();
 			mainOutput.set(voltage);
-		};
+		});
 	}
-	
-	public RangeOut getPositionOutput(PIDConfiguration config){
+
+	public RangeOut getPositionOutput(PIDConfiguration config) {
 		RangeOut mainOutput = main.getPositionOutput(config);
-		return new RangeOut() {
-
-			@Override
-			public void set(double val) {
-				setFollowers();
-				mainOutput.set(val);
-			}
-
-			@Override
-			public double min() {
-				return mainOutput.min();
-			}
-
-			@Override
-			public double max() {
-				return mainOutput.max();
-			}
-		};
+		return new RangeOut((double position) -> {
+			setFollowers();
+			mainOutput.set(position);
+		} , mainOutput.min(), mainOutput.max());
 	}
 
-	public RangeOut getSpeedOutput(PIDConfiguration config){
+	public RangeOut getSpeedOutput(PIDConfiguration config) {
 		RangeOut mainOutput = main.getSpeedOutput(config);
-		return new RangeOut() {
+		return new RangeOut((double speed) -> {
+			setFollowers();
+			mainOutput.set(speed);
+		} , mainOutput.min(), mainOutput.max());
 
-			@Override
-			public void set(double val) {
-				setFollowers();
-				mainOutput.set(val);
-			}
-
-			@Override
-			public double min() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public double max() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-		};
 	}
-	public CANTalonHardware getLeader(){
+
+	public CANTalonHardware getLeader() {
 		return main;
 	}
+
 	@Override
 	public String getName() {
-		return "CANTalon Group: "+main.getName()+" ";
-		//TODO add followers
+		return "CANTalon Group: " + main.getName() + " ";
+		// TODO add followers
 	}
 
 	@Override
 	public Info[] getInfo() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub0
 		return null;
 	}
 }

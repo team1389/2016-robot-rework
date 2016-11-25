@@ -26,9 +26,9 @@ public class VictorHardware implements Watchable {
 	}
 
 	public PercentOut getVoltageOutput() {
-		return (double voltage) -> {
+		return new PercentOut((double voltage) -> {
 			wpiVictor.set(voltage);
-		};
+		});
 	}
 
 	public void invert(boolean inverted) {

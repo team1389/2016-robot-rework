@@ -38,10 +38,10 @@ public class CANTalonHardware implements Watchable {
 			currentMode = "Voltage Control";
 		});
 
-		return (double voltage) -> {
+		return new PercentOut((double voltage) -> {
 			voltageState.init();
 			wpiTalon.set(voltage);
-		};
+		});
 	}
 
 	public CANTalon getWrappedTalon() {
@@ -56,27 +56,11 @@ public class CANTalonHardware implements Watchable {
 			currentMode = "Speed";
 		});
 
-		return new RangeOut() {
-
-			@Override
-			public void set(double val) {
-				speedState.init();
-				wpiTalon.set(val);
-			}
-
-			@Override
-			public double min() {
-				// TODO
-				return 0;
-			}
-
-			@Override
-			public double max() {
-				// TODO
-				return 0;
-			}
-
-		};
+		return new RangeOut((double speed) -> {
+			speedState.init();
+			wpiTalon.set(speed);
+		} , // TODO
+				0, 0);
 	}
 
 	public void setInverted(boolean inverted) {
@@ -90,35 +74,24 @@ public class CANTalonHardware implements Watchable {
 			wpiTalon.reverseSensor(config.isSensorReversed);
 			currentMode = "Position";
 		});
-		return new RangeOut() {
-
-			@Override
-			public void set(double val) {
-				positionState.init();
-				wpiTalon.set(val);
-			}
-
-			@Override
-			public double min() {
-				return 0;
-			}
-
-			@Override
-			public double max() {
-				return 8192;
-			}
-
-		};
+		return new RangeOut((double position) -> {
+			positionState.init();
+			wpiTalon.set(position);
+		} , 0, 8192);
 	}
 
 	public RangeIn getSpeedInput() {
 		wpiTalon.configEncoderCodesPerRev(1023);
-		return new RangeIn(()->{return wpiTalon.getSpeed();},0,1023);
+		return new RangeIn(() -> {
+			return wpiTalon.getSpeed();
+		} , 0, 1023);
 
 	}
 
 	public RangeIn getPositionInput() {
-		return new RangeIn(()->{return wpiTalon.getSpeed();},0,8912);
+		return new RangeIn(() -> {
+			return wpiTalon.getSpeed();
+		} , 0, 8912);
 	}
 
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {
