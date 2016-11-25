@@ -1,22 +1,19 @@
 package com.team1389.hardware.interfaces.outputs;
 
 import com.team1389.hardware.inputs.Timer;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
 
-public class ProfiledRangeOut implements RangeOut {
-	double maxPos, minPos, maxChange;
+public class ProfiledRangeOut implements ScalarOutput {
+	double max, min, maxChange;
 	Timer timer;
 	double setpoint, goalPoint;
-	RangeOut controller;
+	ScalarOutput controller;
 
-	protected ProfiledRangeOut(RangeOut controller, double maxChange) {
-		this.maxPos = controller.max();
-		this.minPos = controller.min();
+	protected ProfiledRangeOut(ScalarOutput controller,double min,double max, double maxChange) {
 		this.maxChange = maxChange;
 		this.controller = controller;
-
+		this.min=min;
+		this.max=max;
 		timer = new Timer();
-
 	}
 
 	@Override
@@ -38,23 +35,13 @@ public class ProfiledRangeOut implements RangeOut {
 			newSetpoint = setpoint - maxChangeInSetpoint;
 		}
 
-		if (newSetpoint > maxPos) {
-			newSetpoint = maxPos;
-		} else if (newSetpoint < minPos) {
-			newSetpoint = minPos;
+		if (newSetpoint > max) {
+			newSetpoint = max;
+		} else if (newSetpoint < min) {
+			newSetpoint = min;
 		}
 
 		return newSetpoint;
-	}
-
-	@Override
-	public double min() {
-		return minPos;
-	}
-
-	@Override
-	public double max() {
-		return maxPos;
 	}
 
 }

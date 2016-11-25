@@ -1,147 +1,53 @@
 package com.team1389.hardware.interfaces.outputs;
 
-import com.team1389.hardware.util.RangeUtil;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.NumberInfo;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.hardware.interfaces.inputs.WatchableRangeIn;
 
-public interface RangeOut {
-	public void set(double val);
-
-	public double min();
-
-	public double max();
-
-	public static RangeOut mapToOpenRange(RangeOut in, double min, double max) {
-		return new RangeOut() {
-
-			@Override
-			public void set(double val) {
-				in.set(RangeUtil.map(val, min, max, in.min(), in.max()));
-			}
-
-			@Override
-			public double min() {
-				return min;
-			}
-
-			@Override
-			public double max() {
-				return max;
-			}
-
-		};
+public class RangeOut {
+	protected ScalarOutput output;
+	protected double min,max;
+	public RangeOut(ScalarOutput out,double min,double max){
+		this.output=out;
+		this.min=min;
+		this.max=max;
 	}
-	public static RangeOut applyProfile(RangeOut o,double maxSpeed){
-		return new ProfiledRangeOut(o,maxSpeed);
+	public void set(double val){
+		output.set(val);
 	}
-	public static RangeOut mapToOpenRange(PercentOut in, double min, double max) {
-		return mapToOpenRange(getAsOpenRange(in), min, max);
+
+	public double min(){
+		return min;
 	}
-	public abstract class WatchableOpenRangeOutput implements RangeOut,Watchable{
+
+	public double max(){
+		return max;
+	}
+
+	public RangeOut mapToRange(double min, double max) {
+		this.output=ScalarOutput.mapToRange(output,min,max,this.min,this.max);
+		this.min=min;
+		this.max=max;
+		return this;
+	}
+	public WatchableRangeOut getWatchable(String name){
+		return new WatchableRangeOut(this,name);
+	}
+
+	public PercentOut mapToPercentOut() {
+		return new PercentOut(this);
+	}
+	public RangeOut invert(){
+		this.output=ScalarOutput.invert(output);
+		return this;
+	}
+	public RangeOut getProfiledOut(double maxChange){
+		output=new ProfiledRangeOut(output,min,max,maxChange);
+		return this;
+	}
+	
+	public static void main(String[] args){
+		RangeOut orig=new RangeOut((double set)->{System.out.println(set);},0,8192);
 		
-	}
-	public static WatchableOpenRangeOutput generateWatchable(RangeOut out,String name){
-		return new WatchableOpenRangeOutput(){
-			double val;
-			@Override
-			public void set(double val) {
-				out.set(val);
-				this.val=val;
-			}
-
-			@Override
-			public double min() {
-				return out.min();
-			}
-
-			@Override
-			public double max() {
-				return out.max();
-			}
-
-			@Override
-			public String getName() {
-				return name;
-			}
-
-			@Override
-			public Info[] getInfo() {
-				return new Info[]{new NumberInfo(getName(),()->{return val;})};
-			}
-			
-		};
-	}
-	public static WatchableOpenRangeOutput generatePrintOutput(double min,double max,String name){
-		return new WatchableOpenRangeOutput(){
-			double val=0.0;
-			@Override
-			public void set(double val) {
-				this.val=val;
-			}
-
-			@Override
-			public double min() {
-				return min;
-			}
-
-			@Override
-			public double max() {
-				return max;
-			}
-
-			@Override
-			public String getName() {
-				return name;
-			}
-
-			@Override
-			public Info[] getInfo() {
-				return new Info[]{
-						new NumberInfo(getName(),()->{return val;})
-				};
-			}
-			
-		};
-	}
-	public static RangeOut getAsOpenRange(PercentOut in) {
-		return new RangeOut() {
-
-			@Override
-			public void set(double val) {
-				in.set(val);
-			}
-
-			@Override
-			public double min() {
-				return -1;
-			}
-
-			@Override
-			public double max() {
-				return 1;
-			}
-
-		};
-	}
-	public static RangeOut invert(RangeOut in){
-		return new RangeOut() {
-
-			@Override
-			public void set(double val) {
-				in.set(-val);
-			}
-
-			@Override
-			public double min() {
-				return in.min();
-			}
-
-			@Override
-			public double max() {
-				return in.max();
-			}
-		};
+		orig.invert().mapToRange(0d,360d).set(45);
 	}
 
 }

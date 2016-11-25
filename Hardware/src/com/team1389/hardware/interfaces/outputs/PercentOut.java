@@ -1,38 +1,24 @@
 package com.team1389.hardware.interfaces.outputs;
 
-import com.team1389.hardware.util.RangeUtil;
-
 /**
  * An input that gives a value from -1 to 1
  * 
  * @author Jacob Prinz
  */
-public interface PercentOut {
-	/**
-	 * @return a value from -1 to 1
-	 */
-	public void set(double val);
-
-	public static PercentOut applyDeadband(PercentOut in, double deadband) {
-		return (double val) -> {
-			in.set(RangeUtil.applyDeadband(val, deadband));
-		};
+public class PercentOut extends RangeOut{
+	public PercentOut(ScalarOutput out){
+		super(out,-1,1);
+	}
+	public PercentOut(RangeOut out){
+		this(ScalarOutput.mapToRange(out.output, -1d, 1d, out.min, out.max));
+	}
+	public PercentOut applyDeadband(double deadband) {
+		output=ScalarOutput.applyDeadband(output, deadband);
+		return this;
 	}
 
-	public static PercentOut limitRange(PercentOut in, double limit) {
-		return (double val) -> {
-			in.set(RangeUtil.limit(val, limit));
-		};
-	}
-
-	public static PercentOut mapToPercentRange(RangeOut in) {
-		return (double val) -> {
-			in.set(RangeUtil.map(val, -1, 1, in.min(), in.max()));
-		};
-	}
-	public static PercentOut invert(PercentOut in){
-		return (double val) -> {
-			in.set(-val);
-		};
+	public PercentOut limitRange(double limit) {
+		output=ScalarOutput.limitRange(output,limit);
+		return this;
 	}
 }

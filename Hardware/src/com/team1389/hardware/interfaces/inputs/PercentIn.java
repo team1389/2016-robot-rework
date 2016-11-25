@@ -1,27 +1,24 @@
 package com.team1389.hardware.interfaces.inputs;
 
-import com.team1389.hardware.interfaces.ScalarValue;
-import com.team1389.hardware.util.RangeUtil;
-
 /**
  * An input that gives a value from -1 to 1
  * 
  * @author Jacob Prinz
  */
 public class PercentIn extends RangeIn{
-	public PercentIn(ScalarValue val){
+	public PercentIn(ScalarInput val){
 		super(val,-1,1);
 	}
-
+	public PercentIn(RangeIn in){
+		this(ScalarInput.mapToRange(in.input, -1d, 1d, in.min, in.max));
+	}
 	public PercentIn applyDeadband(double deadband) {
-		return new PercentIn(() -> {
-			return RangeUtil.applyDeadband(this.val.get(), deadband);
-		});
+		input=ScalarInput.applyDeadband(input, deadband);
+		return this;
 	}
 
 	public PercentIn limitRange(double limit) {
-		return new PercentIn(() -> {
-			return RangeUtil.limit(this.val.get(), limit);
-		});
+		input=ScalarInput.limitRange(input, limit);
+		return this;
 	}
 }
