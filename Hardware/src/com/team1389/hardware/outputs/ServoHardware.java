@@ -63,23 +63,8 @@ public class ServoHardware implements Watchable{
 		return null;
 	}
 	
+	//TODO check if this max val should be 180?
 	public RangeIn getPositionInput(){
-		return new RangeIn() {
-
-			@Override
-			public double get() {
-				return wpiServo.getPosition();
-			}
-
-			@Override
-			public double min() {
-				return 0;
-			}
-
-			@Override
-			public double max() {
-				return 1;
-			}
-		};
+		return new RangeIn(()->{return wpiServo.getPosition();},0,1);
 	}
 }

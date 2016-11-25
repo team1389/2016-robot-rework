@@ -78,8 +78,8 @@ public class TeleopMain {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
 		PercentOut right = robot.rightDrive.getVoltageOutput();
 
-		PercentIn throttle = PercentIn.applyDeadband(robot.driveJoystick.getAxis(1), .02);
-		PercentIn wheel = PercentIn.applyDeadband(robot.driveJoystick.getAxis(0), .02);
+		PercentIn throttle = robot.driveJoystick.getAxis(1).applyDeadband(.02);
+		PercentIn wheel = robot.driveJoystick.getAxis(0).applyDeadband(.02);
 		DigitalInput quickTurnButton = robot.driveJoystick.getButton(1, InputStyle.RAW);
 
 		return new CheesyDriveSystem(left, right, throttle, wheel, quickTurnButton);

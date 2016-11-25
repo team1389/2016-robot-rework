@@ -1,5 +1,6 @@
 package com.team1389.hardware.interfaces.inputs;
 
+import com.team1389.hardware.interfaces.ScalarValue;
 import com.team1389.hardware.util.RangeUtil;
 
 /**
@@ -7,32 +8,20 @@ import com.team1389.hardware.util.RangeUtil;
  * 
  * @author Jacob Prinz
  */
-public interface PercentIn {
-	/**
-	 * @return a value from -1 to 1
-	 */
-	public double get();
-
-	public static PercentIn applyDeadband(PercentIn in, double deadband) {
-		return () -> {
-			return RangeUtil.applyDeadband(in.get(), deadband);
-		};
+public class PercentIn extends RangeIn{
+	public PercentIn(ScalarValue val){
+		super(val,-1,1);
 	}
 
-	public static PercentIn limitRange(PercentIn in, double limit) {
-		return () -> {
-			return RangeUtil.limit(in.get(), limit);
-		};
+	public PercentIn applyDeadband(double deadband) {
+		return new PercentIn(() -> {
+			return RangeUtil.applyDeadband(this.val.get(), deadband);
+		});
 	}
 
-	public static PercentIn mapToPercentRange(RangeIn in) {
-		return () -> {
-			return RangeUtil.map(in.get(), in.min(), in.max(), -1, 1);
-		};
-	}
-	public static PercentIn invert(PercentIn in){
-		return () -> {
-			return -in.get();
-		};
+	public PercentIn limitRange(double limit) {
+		return new PercentIn(() -> {
+			return RangeUtil.limit(this.val.get(), limit);
+		});
 	}
 }

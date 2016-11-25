@@ -113,46 +113,12 @@ public class CANTalonHardware implements Watchable {
 
 	public RangeIn getSpeedInput() {
 		wpiTalon.configEncoderCodesPerRev(1023);
-		return
+		return new RangeIn(()->{return wpiTalon.getSpeed();},0,1023);
 
-		new RangeIn() {
-
-			@Override
-			public double get() {
-				return wpiTalon.getSpeed();
-			}
-
-			@Override
-			public double min() {
-				return 0;
-			}
-
-			@Override
-			public double max() {
-				return 1023;
-			}
-		};
 	}
 
 	public RangeIn getPositionInput() {
-		// wpiTalon.configEncoderCodesPerRev(4096);
-		return new RangeIn() {
-
-			@Override
-			public double get() {
-				return wpiTalon.getPosition();
-			}
-
-			@Override
-			public double min() {
-				return 0;
-			}
-
-			@Override
-			public double max() {
-				return 4096;
-			}
-		};
+		return new RangeIn(()->{return wpiTalon.getSpeed();},0,8912);
 	}
 
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {

@@ -2,9 +2,10 @@ package com.team1389.hardware.inputs;
 
 import com.team1389.hardware.interfaces.inputs.RangeIn;
 
-public class Timer implements RangeIn{
+public class Timer extends RangeIn{
 	edu.wpi.first.wpilibj.Timer timer;
 	public Timer(){
+		super(0d,Double.MAX_VALUE);
 		timer=new edu.wpi.first.wpilibj.Timer();
 		timer.start();
 	}
@@ -14,16 +15,6 @@ public class Timer implements RangeIn{
 	@Override
 	public double get() {
 		return timer.get();
-	}
-
-	@Override
-	public double min() {
-		return 0;
-	}
-
-	@Override
-	public double max() {
-		return Double.MAX_VALUE;
 	}
 	
 }

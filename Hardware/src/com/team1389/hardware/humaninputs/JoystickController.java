@@ -25,9 +25,9 @@ public class JoystickController{
 		};
 	}
 	public PercentIn getAxis(int axis){
-		return () -> {
+		return new PercentIn(() -> {
 			return wpiJoystick.getRawAxis(axis);
-		};
+		});
 	}
 	
 	public POVInput getPov(){
