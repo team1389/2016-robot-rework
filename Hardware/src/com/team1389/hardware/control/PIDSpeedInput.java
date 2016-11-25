@@ -1,6 +1,6 @@
 package com.team1389.hardware.control;
 
-import com.team1389.hardware.interfaces.inputs.RangeIn;
+import com.team1389.hardware.inputs.software.RangeIn;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;

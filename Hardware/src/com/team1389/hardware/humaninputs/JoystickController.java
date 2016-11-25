@@ -1,10 +1,10 @@
 package com.team1389.hardware.humaninputs;
 
-import com.team1389.hardware.inputs.DigitalInput;
-import com.team1389.hardware.inputs.DigitalInput.InputStyle;
-import com.team1389.hardware.interfaces.inputs.BooleanSource;
-import com.team1389.hardware.interfaces.inputs.POVInput;
-import com.team1389.hardware.interfaces.inputs.PercentIn;
+import com.team1389.hardware.inputs.interfaces.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.POVInput;
+import com.team1389.hardware.inputs.software.DigitalInput;
+import com.team1389.hardware.inputs.software.PercentIn;
+import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;

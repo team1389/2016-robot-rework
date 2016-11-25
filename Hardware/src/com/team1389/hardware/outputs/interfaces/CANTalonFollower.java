@@ -1,4 +1,4 @@
-package com.team1389.hardware.interfaces.outputs;
+package com.team1389.hardware.outputs.interfaces;
 
 public interface CANTalonFollower {
 	public void follow();

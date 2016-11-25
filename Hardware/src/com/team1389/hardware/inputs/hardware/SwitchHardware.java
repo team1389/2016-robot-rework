@@ -1,7 +1,8 @@
-package com.team1389.hardware.inputs;
+package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.hardware.inputs.DigitalInput.InputStyle;
-import com.team1389.hardware.interfaces.inputs.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.BooleanSource;
+import com.team1389.hardware.inputs.software.DigitalInput;
+import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.watch.BooleanInfo;
 import com.team1389.hardware.watch.Info;

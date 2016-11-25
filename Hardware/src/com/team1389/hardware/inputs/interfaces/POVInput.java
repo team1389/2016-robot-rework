@@ -1,4 +1,4 @@
-package com.team1389.hardware.interfaces.inputs;
+package com.team1389.hardware.inputs.interfaces;
 
 /**
  * The value of a POV on a joystick controller

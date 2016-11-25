@@ -1,5 +1,6 @@
-package com.team1389.hardware.interfaces.inputs;
+package com.team1389.hardware.inputs.software;
 
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.Watchable;

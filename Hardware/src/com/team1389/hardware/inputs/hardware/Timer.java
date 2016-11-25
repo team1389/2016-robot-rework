@@ -1,11 +1,10 @@
-package com.team1389.hardware.inputs;
+package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.hardware.interfaces.inputs.RangeIn;
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
 
-public class Timer extends RangeIn{
+public class Timer implements ScalarInput{
 	edu.wpi.first.wpilibj.Timer timer;
 	public Timer(){
-		super(0d,Double.MAX_VALUE);
 		timer=new edu.wpi.first.wpilibj.Timer();
 		timer.start();
 	}

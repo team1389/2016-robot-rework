@@ -1,4 +1,6 @@
-package com.team1389.hardware.interfaces.inputs;
+package com.team1389.hardware.inputs.software;
+
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
 
 public class RangeIn {
 	protected ScalarInput input;

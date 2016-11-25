@@ -1,6 +1,7 @@
-package com.team1389.hardware.interfaces.outputs;
+package com.team1389.hardware.outputs.software;
 
-import com.team1389.hardware.interfaces.inputs.WatchableRangeIn;
+import com.team1389.hardware.inputs.software.WatchableRangeIn;
+import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 
 public class RangeOut {
 	protected ScalarOutput output;

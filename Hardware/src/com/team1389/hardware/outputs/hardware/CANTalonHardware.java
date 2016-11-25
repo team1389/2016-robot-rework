@@ -1,14 +1,14 @@
-package com.team1389.hardware.outputs;
+package com.team1389.hardware.outputs.hardware;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.team1389.hardware.configuration.PIDConstants;
 import com.team1389.hardware.control.PIDConfiguration;
-import com.team1389.hardware.interfaces.inputs.RangeIn;
-import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
-import com.team1389.hardware.interfaces.outputs.PercentOut;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
+import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateTracker;

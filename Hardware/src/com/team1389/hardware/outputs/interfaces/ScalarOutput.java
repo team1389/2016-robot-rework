@@ -1,4 +1,4 @@
-package com.team1389.hardware.interfaces.outputs;
+package com.team1389.hardware.outputs.interfaces;
 
 import com.team1389.hardware.util.RangeUtil;
 

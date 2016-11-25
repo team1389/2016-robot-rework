@@ -1,4 +1,6 @@
-package com.team1389.hardware.interfaces.inputs;
+package com.team1389.hardware.inputs.software;
+
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
 
 /**
  * An input that gives a value from -1 to 1

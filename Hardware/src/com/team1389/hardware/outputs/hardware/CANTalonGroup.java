@@ -1,12 +1,12 @@
-package com.team1389.hardware.outputs;
+package com.team1389.hardware.outputs.hardware;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.team1389.hardware.control.PIDConfiguration;
-import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
-import com.team1389.hardware.interfaces.outputs.PercentOut;
+import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
+import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 

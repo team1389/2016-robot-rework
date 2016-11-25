@@ -1,10 +1,10 @@
-package com.team1389.hardware.outputs;
+package com.team1389.hardware.outputs.hardware;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.team1389.hardware.interfaces.inputs.RangeIn;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;

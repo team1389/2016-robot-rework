@@ -2,10 +2,10 @@ package example;
 
 import java.util.List;
 
-import com.team1389.hardware.inputs.SwitchHardware;
-import com.team1389.hardware.outputs.CANTalonHardware;
-import com.team1389.hardware.outputs.ServoHardware;
-import com.team1389.hardware.outputs.VictorHardware;
+import com.team1389.hardware.inputs.hardware.SwitchHardware;
+import com.team1389.hardware.outputs.hardware.CANTalonHardware;
+import com.team1389.hardware.outputs.hardware.ServoHardware;
+import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.watch.Watchable;
 

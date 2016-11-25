@@ -1,6 +1,6 @@
 package com.team1389.hardware.watch;
 
-import com.team1389.hardware.interfaces.inputs.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.BooleanSource;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

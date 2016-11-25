@@ -1,6 +1,6 @@
-package com.team1389.hardware.inputs;
+package com.team1389.hardware.inputs.software;
 
-import com.team1389.hardware.interfaces.inputs.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import com.team1389.hardware.watch.BooleanInfo;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;

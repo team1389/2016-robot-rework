@@ -1,8 +1,8 @@
 package com.team1389.hardware.control;
 
-import com.team1389.hardware.interfaces.inputs.RangeIn;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
-import com.team1389.hardware.interfaces.outputs.PercentOut;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateSetup;
 import com.team1389.hardware.util.state.StateTracker;

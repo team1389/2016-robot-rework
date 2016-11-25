@@ -1,6 +1,6 @@
 package com.team1389.hardware.control;
 
-import com.team1389.hardware.interfaces.outputs.PercentOut;
+import com.team1389.hardware.outputs.software.PercentOut;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 
