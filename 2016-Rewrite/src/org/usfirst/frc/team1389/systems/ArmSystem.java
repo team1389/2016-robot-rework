@@ -2,8 +2,8 @@ package org.usfirst.frc.team1389.systems;
 
 import org.usfirst.frc.team1389.util.ButtonEnumMap;
 
-import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
-import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
+import com.team1389.hardware.interfaces.inputs.RangeIn;
+import com.team1389.hardware.interfaces.outputs.RangeOut;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.StringInfo;
@@ -12,12 +12,12 @@ import com.team1389.system.System;
 
 public class ArmSystem implements System, Watchable {
 
-	OpenRangeOutput elevator;
+	RangeOut elevator;
 	ButtonEnumMap<ArmLocation> buttons;
-	OpenRangeInput armVal;
+	RangeIn armVal;
 
-	public ArmSystem(OpenRangeOutput elevator, ButtonEnumMap<ArmLocation> map,OpenRangeInput armVal) {
-		this.elevator = OpenRangeOutput.mapToOpenRange(OpenRangeOutput.applyProfile(OpenRangeOutput.invert(elevator),1638), 0d, 360d);
+	public ArmSystem(RangeOut elevator, ButtonEnumMap<ArmLocation> map,RangeIn armVal) {
+		this.elevator = RangeOut.mapToOpenRange(RangeOut.applyProfile(RangeOut.invert(elevator),1638), 0d, 360d);
 		this.buttons=map;
 		this.armVal=armVal;
 	}
