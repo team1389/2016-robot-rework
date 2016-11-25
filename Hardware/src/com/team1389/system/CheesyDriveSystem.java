@@ -1,26 +1,26 @@
 package com.team1389.system;
 
 import com.team1389.hardware.inputs.DigitalInput;
-import com.team1389.hardware.interfaces.inputs.PercentRangeInput;
-import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.interfaces.inputs.PercentIn;
+import com.team1389.hardware.interfaces.outputs.PercentOut;
 import com.team1389.hardware.util.DriveSignal;
 import com.team1389.hardware.watch.BooleanInfo;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 
 public class CheesyDriveSystem implements System{
-	private PercentRangeOutput leftMotor;
-	private PercentRangeOutput rightMotor;
-	private PercentRangeInput throttle;
-	private PercentRangeInput wheel;
+	private PercentOut leftMotor;
+	private PercentOut rightMotor;
+	private PercentIn throttle;
+	private PercentIn wheel;
 	private DigitalInput quickTurnButton;
 	private boolean isQuickTurn;
 	private double mQuickStopAccumulator;
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
 
-	public CheesyDriveSystem(PercentRangeOutput leftMotor, PercentRangeOutput rightMotor, PercentRangeInput throttle,
-			PercentRangeInput wheel, DigitalInput quickTurnButton, double turnSensitivity) {
+	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle,
+			PercentIn wheel, DigitalInput quickTurnButton, double turnSensitivity) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.throttle = throttle;
@@ -29,8 +29,8 @@ public class CheesyDriveSystem implements System{
 		this.kTurnSensitivity = turnSensitivity;
 	}
 
-	public CheesyDriveSystem(PercentRangeOutput leftMotor, PercentRangeOutput rightMotor, PercentRangeInput throttle,
-			PercentRangeInput wheel, DigitalInput quickTurnButton) {
+	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle,
+			PercentIn wheel, DigitalInput quickTurnButton) {
 		this(leftMotor, rightMotor, throttle, wheel, quickTurnButton, 1.0);
 	}
 	@Override

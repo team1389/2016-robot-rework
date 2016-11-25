@@ -4,7 +4,7 @@ import com.team1389.hardware.inputs.DigitalInput;
 import com.team1389.hardware.inputs.DigitalInput.InputStyle;
 import com.team1389.hardware.interfaces.inputs.BooleanSource;
 import com.team1389.hardware.interfaces.inputs.POVInput;
-import com.team1389.hardware.interfaces.inputs.PercentRangeInput;
+import com.team1389.hardware.interfaces.inputs.PercentIn;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;
@@ -24,7 +24,7 @@ public class JoystickController{
 			return wpiJoystick.getRawButton(button);
 		};
 	}
-	public PercentRangeInput getAxis(int axis){
+	public PercentIn getAxis(int axis){
 		return () -> {
 			return wpiJoystick.getRawAxis(axis);
 		};

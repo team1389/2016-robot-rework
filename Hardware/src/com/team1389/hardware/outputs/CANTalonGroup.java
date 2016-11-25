@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.team1389.hardware.control.PIDConfiguration;
 import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
-import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
-import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.interfaces.outputs.RangeOut;
+import com.team1389.hardware.interfaces.outputs.PercentOut;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
@@ -30,17 +30,17 @@ public class CANTalonGroup implements Watchable{
 		}
 	}
 
-	public PercentRangeOutput getVoltageOutput(){
-		PercentRangeOutput mainOutput = main.getVoltageOutput();
+	public PercentOut getVoltageOutput(){
+		PercentOut mainOutput = main.getVoltageOutput();
 		return (double voltage) -> {
 			setFollowers();
 			mainOutput.set(voltage);
 		};
 	}
 	
-	public OpenRangeOutput getPositionOutput(PIDConfiguration config){
-		OpenRangeOutput mainOutput = main.getPositionOutput(config);
-		return new OpenRangeOutput() {
+	public RangeOut getPositionOutput(PIDConfiguration config){
+		RangeOut mainOutput = main.getPositionOutput(config);
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {
@@ -60,9 +60,9 @@ public class CANTalonGroup implements Watchable{
 		};
 	}
 
-	public OpenRangeOutput getSpeedOutput(PIDConfiguration config){
-		OpenRangeOutput mainOutput = main.getSpeedOutput(config);
-		return new OpenRangeOutput() {
+	public RangeOut getSpeedOutput(PIDConfiguration config){
+		RangeOut mainOutput = main.getSpeedOutput(config);
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {

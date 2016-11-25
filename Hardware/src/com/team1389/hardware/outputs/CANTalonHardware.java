@@ -5,10 +5,10 @@ import java.util.Map;
 
 import com.team1389.hardware.configuration.PIDConstants;
 import com.team1389.hardware.control.PIDConfiguration;
-import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
+import com.team1389.hardware.interfaces.inputs.RangeIn;
 import com.team1389.hardware.interfaces.outputs.CANTalonFollower;
-import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
-import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.interfaces.outputs.RangeOut;
+import com.team1389.hardware.interfaces.outputs.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateTracker;
@@ -32,7 +32,7 @@ public class CANTalonHardware implements Watchable {
 		currentMode = "None";
 	}
 
-	public PercentRangeOutput getVoltageOutput() {
+	public PercentOut getVoltageOutput() {
 		State voltageState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.PercentVbus);
 			currentMode = "Voltage Control";
@@ -48,7 +48,7 @@ public class CANTalonHardware implements Watchable {
 		return wpiTalon;
 	}
 
-	public OpenRangeOutput getSpeedOutput(PIDConfiguration config) {
+	public RangeOut getSpeedOutput(PIDConfiguration config) {
 		State speedState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Speed);
 			setPidConstants(wpiTalon, config.pidConstants);
@@ -56,7 +56,7 @@ public class CANTalonHardware implements Watchable {
 			currentMode = "Speed";
 		});
 
-		return new OpenRangeOutput() {
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {
@@ -83,14 +83,14 @@ public class CANTalonHardware implements Watchable {
 		wpiTalon.setInverted(inverted);
 	}
 
-	public OpenRangeOutput getPositionOutput(PIDConfiguration config) {
+	public RangeOut getPositionOutput(PIDConfiguration config) {
 		State positionState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Position);
 			setPidConstants(wpiTalon, config.pidConstants);
 			wpiTalon.reverseSensor(config.isSensorReversed);
 			currentMode = "Position";
 		});
-		return new OpenRangeOutput() {
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {
@@ -111,11 +111,11 @@ public class CANTalonHardware implements Watchable {
 		};
 	}
 
-	public OpenRangeInput getSpeedInput() {
+	public RangeIn getSpeedInput() {
 		wpiTalon.configEncoderCodesPerRev(1023);
 		return
 
-		new OpenRangeInput() {
+		new RangeIn() {
 
 			@Override
 			public double get() {
@@ -134,9 +134,9 @@ public class CANTalonHardware implements Watchable {
 		};
 	}
 
-	public OpenRangeInput getPositionInput() {
+	public RangeIn getPositionInput() {
 		// wpiTalon.configEncoderCodesPerRev(4096);
-		return new OpenRangeInput() {
+		return new RangeIn() {
 
 			@Override
 			public double get() {

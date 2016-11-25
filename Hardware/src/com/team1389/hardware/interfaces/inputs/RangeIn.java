@@ -5,14 +5,14 @@ import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.Watchable;
 
-public interface OpenRangeInput {
+public interface RangeIn {
 	public double get();
 
 	public double min();
 
 	public double max();
 
-	public static WatchableOpenRangeInput getWatchableVersion(OpenRangeInput in, String name) {
+	public static WatchableOpenRangeInput getWatchableVersion(RangeIn in, String name) {
 		return new WatchableOpenRangeInput() {
 			@Override
 			public String getName() {
@@ -44,11 +44,11 @@ public interface OpenRangeInput {
 		};
 	}
 
-	public abstract class WatchableOpenRangeInput implements Watchable, OpenRangeInput {
+	public abstract class WatchableOpenRangeInput implements Watchable, RangeIn {
 	}
 
-	public static OpenRangeInput mapToOpenRange(OpenRangeInput in, double min, double max) {
-		return new OpenRangeInput() {
+	public static RangeIn mapToOpenRange(RangeIn in, double min, double max) {
+		return new RangeIn() {
 
 			@Override
 			public double get() {
@@ -68,12 +68,12 @@ public interface OpenRangeInput {
 		};
 	}
 
-	public static OpenRangeInput mapToOpenRange(PercentRangeInput in, double min, double max) {
+	public static RangeIn mapToOpenRange(PercentIn in, double min, double max) {
 		return mapToOpenRange(getAsOpenRange(in), min, max);
 	}
 
-	public static OpenRangeInput getAsOpenRange(PercentRangeInput in) {
-		return new OpenRangeInput() {
+	public static RangeIn getAsOpenRange(PercentIn in) {
+		return new RangeIn() {
 
 			@Override
 			public double get() {
@@ -93,8 +93,8 @@ public interface OpenRangeInput {
 		};
 	}
 
-	public static OpenRangeInput invert(OpenRangeInput in) {
-		return new OpenRangeInput() {
+	public static RangeIn invert(RangeIn in) {
+		return new RangeIn() {
 
 			@Override
 			public double get() {

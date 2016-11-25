@@ -3,8 +3,8 @@ package com.team1389.hardware.outputs;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
-import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
+import com.team1389.hardware.interfaces.inputs.RangeIn;
+import com.team1389.hardware.interfaces.outputs.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
@@ -31,8 +31,8 @@ public class ServoHardware implements Watchable{
 		return wpiServo.getChannel();
 	}
 	
-	public OpenRangeOutput getPositionOutput(){
-		return new OpenRangeOutput() {
+	public RangeOut getPositionOutput(){
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {
@@ -63,8 +63,8 @@ public class ServoHardware implements Watchable{
 		return null;
 	}
 	
-	public OpenRangeInput getPositionInput(){
-		return new OpenRangeInput() {
+	public RangeIn getPositionInput(){
+		return new RangeIn() {
 
 			@Override
 			public double get() {

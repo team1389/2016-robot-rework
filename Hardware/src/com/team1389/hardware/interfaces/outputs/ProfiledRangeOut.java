@@ -1,15 +1,15 @@
 package com.team1389.hardware.interfaces.outputs;
 
 import com.team1389.hardware.inputs.Timer;
-import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
+import com.team1389.hardware.interfaces.outputs.RangeOut;
 
-public class ProfiledOpenRangeOutput implements OpenRangeOutput {
+public class ProfiledRangeOut implements RangeOut {
 	double maxPos, minPos, maxChange;
 	Timer timer;
 	double setpoint, goalPoint;
-	OpenRangeOutput controller;
+	RangeOut controller;
 
-	protected ProfiledOpenRangeOutput(OpenRangeOutput controller, double maxChange) {
+	protected ProfiledRangeOut(RangeOut controller, double maxChange) {
 		this.maxPos = controller.max();
 		this.minPos = controller.min();
 		this.maxChange = maxChange;

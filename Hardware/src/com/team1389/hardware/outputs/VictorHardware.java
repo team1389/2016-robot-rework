@@ -3,7 +3,7 @@ package com.team1389.hardware.outputs;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.interfaces.outputs.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
@@ -25,7 +25,7 @@ public class VictorHardware implements Watchable {
 		wpiVictor = new Victor(pwmPort);
 	}
 
-	public PercentRangeOutput getVoltageOutput() {
+	public PercentOut getVoltageOutput() {
 		return (double voltage) -> {
 			wpiVictor.set(voltage);
 		};

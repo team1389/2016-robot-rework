@@ -1,14 +1,14 @@
 package com.team1389.hardware.control;
 
-import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.interfaces.outputs.PercentOut;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 
 public class PIDVoltageWrapper implements PIDOutput{
 	
-	PercentRangeOutput voltageOutput;
+	PercentOut voltageOutput;
 	
-	public PIDVoltageWrapper(PercentRangeOutput voltageOutput) {
+	public PIDVoltageWrapper(PercentOut voltageOutput) {
 		this.voltageOutput = voltageOutput;
 	}
 

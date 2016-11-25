@@ -5,15 +5,15 @@ import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.Watchable;
 
-public interface OpenRangeOutput {
+public interface RangeOut {
 	public void set(double val);
 
 	public double min();
 
 	public double max();
 
-	public static OpenRangeOutput mapToOpenRange(OpenRangeOutput in, double min, double max) {
-		return new OpenRangeOutput() {
+	public static RangeOut mapToOpenRange(RangeOut in, double min, double max) {
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {
@@ -32,16 +32,16 @@ public interface OpenRangeOutput {
 
 		};
 	}
-	public static OpenRangeOutput applyProfile(OpenRangeOutput o,double maxSpeed){
-		return new ProfiledOpenRangeOutput(o,maxSpeed);
+	public static RangeOut applyProfile(RangeOut o,double maxSpeed){
+		return new ProfiledRangeOut(o,maxSpeed);
 	}
-	public static OpenRangeOutput mapToOpenRange(PercentRangeOutput in, double min, double max) {
+	public static RangeOut mapToOpenRange(PercentOut in, double min, double max) {
 		return mapToOpenRange(getAsOpenRange(in), min, max);
 	}
-	public abstract class WatchableOpenRangeOutput implements OpenRangeOutput,Watchable{
+	public abstract class WatchableOpenRangeOutput implements RangeOut,Watchable{
 		
 	}
-	public static WatchableOpenRangeOutput generateWatchable(OpenRangeOutput out,String name){
+	public static WatchableOpenRangeOutput generateWatchable(RangeOut out,String name){
 		return new WatchableOpenRangeOutput(){
 			double val;
 			@Override
@@ -104,8 +104,8 @@ public interface OpenRangeOutput {
 			
 		};
 	}
-	public static OpenRangeOutput getAsOpenRange(PercentRangeOutput in) {
-		return new OpenRangeOutput() {
+	public static RangeOut getAsOpenRange(PercentOut in) {
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {
@@ -124,8 +124,8 @@ public interface OpenRangeOutput {
 
 		};
 	}
-	public static OpenRangeOutput invert(OpenRangeOutput in){
-		return new OpenRangeOutput() {
+	public static RangeOut invert(RangeOut in){
+		return new RangeOut() {
 
 			@Override
 			public void set(double val) {

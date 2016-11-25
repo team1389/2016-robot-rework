@@ -1,8 +1,8 @@
 package com.team1389.hardware.inputs;
 
-import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
+import com.team1389.hardware.interfaces.inputs.RangeIn;
 
-public class Timer implements OpenRangeInput{
+public class Timer implements RangeIn{
 	edu.wpi.first.wpilibj.Timer timer;
 	public Timer(){
 		timer=new edu.wpi.first.wpilibj.Timer();

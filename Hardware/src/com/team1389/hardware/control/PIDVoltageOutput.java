@@ -1,7 +1,7 @@
 package com.team1389.hardware.control;
-import com.team1389.hardware.interfaces.inputs.OpenRangeInput;
-import com.team1389.hardware.interfaces.outputs.OpenRangeOutput;
-import com.team1389.hardware.interfaces.outputs.PercentRangeOutput;
+import com.team1389.hardware.interfaces.inputs.RangeIn;
+import com.team1389.hardware.interfaces.outputs.RangeOut;
+import com.team1389.hardware.interfaces.outputs.PercentOut;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateSetup;
 import com.team1389.hardware.util.state.StateTracker;
@@ -21,14 +21,14 @@ import edu.wpi.first.wpilibj.PIDSource;
  */
 public class PIDVoltageOutput {
 	final StateTracker stateTracker;
-	final PercentRangeOutput voltageOutput;
+	final PercentOut voltageOutput;
 	
-	public PIDVoltageOutput(PercentRangeOutput voltageOutput) {
+	public PIDVoltageOutput(PercentOut voltageOutput) {
 		this.voltageOutput = voltageOutput;
 		stateTracker = new StateTracker();
 	}
 	
-	public OpenRangeOutput getSpeedOutput(OpenRangeInput speedSensor, PIDConfiguration config){
+	public RangeOut getSpeedOutput(RangeIn speedSensor, PIDConfiguration config){
 		PIDSource sensor = new PIDSpeedInput(speedSensor);
 		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
 		PIDController controller = makeController(config, sensor, motor);
@@ -46,7 +46,7 @@ public class PIDVoltageOutput {
 		});
 		
 		
-		return new OpenRangeOutput() {
+		return new RangeOut() {
 			
 			@Override
 			public void set(double speed) {
@@ -62,7 +62,7 @@ public class PIDVoltageOutput {
 		};
 	}
 	
-	public OpenRangeOutput getPositionOutput(OpenRangeInput positionSensor, PIDConfiguration config){
+	public RangeOut getPositionOutput(RangeIn positionSensor, PIDConfiguration config){
 		PIDSource sensor = new PIDPositionInput(positionSensor);
 		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
 		PIDController controller = makeController(config, sensor, motor);
@@ -79,7 +79,7 @@ public class PIDVoltageOutput {
 			}
 		});
 		
-		return new OpenRangeOutput() {
+		return new RangeOut() {
 			
 			@Override
 			public void set(double position) {
