@@ -17,7 +17,7 @@ public class BooleanInfo extends Info{
 
 	@Override
 	public String toString() {
-		return name+" "+in.get();
+		return name+": "+in.get();
 	}
 
 	@Override

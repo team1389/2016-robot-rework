@@ -17,7 +17,7 @@ public class NumberInfo extends Info{
 	}
 	@Override
 	public String toString() {
-		return name+" "+source.get();
+		return name+": "+source.get();
 	}
 	@Override
 	public double loggable() {

@@ -25,9 +25,14 @@ public class Watcher {
 	}
 	public void display(){
 		for(Watchable info:watchables){
-			for(Info e:info.getInfo()){
-				e.display();
-			}
+			info.display();
 		}
+	}
+	public String getPrintString(){
+		String s="";
+		for(Watchable w:watchables){
+			s=String.join(s,w.getPrintString()+"\n");
+		}
+		return s;
 	}
 }

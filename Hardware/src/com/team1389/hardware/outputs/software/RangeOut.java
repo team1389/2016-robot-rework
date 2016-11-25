@@ -1,7 +1,7 @@
 package com.team1389.hardware.outputs.software;
 
-import com.team1389.hardware.inputs.software.WatchableRangeIn;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
+import com.team1389.hardware.watch.Watchable;
 
 public class RangeOut {
 	protected ScalarOutput output;
@@ -43,12 +43,6 @@ public class RangeOut {
 	public RangeOut getProfiledOut(double maxChange){
 		output=new ProfiledRangeOut(output,min,max,maxChange);
 		return this;
-	}
-	
-	public static void main(String[] args){
-		RangeOut orig=new RangeOut((double set)->{System.out.println(set);},0,8192);
-		
-		orig.invert().mapToRange(0d,360d).set(45);
 	}
 
 }
