@@ -1,10 +1,10 @@
 package org.usfirst.frc.team1389.layout;
 
 import com.team1389.hardware.humaninputs.JoystickController;
-import com.team1389.hardware.inputs.SwitchHardware;
-import com.team1389.hardware.outputs.CANTalonGroup;
-import com.team1389.hardware.outputs.CANTalonHardware;
-import com.team1389.hardware.outputs.VictorHardware;
+import com.team1389.hardware.inputs.hardware.SwitchHardware;
+import com.team1389.hardware.outputs.hardware.CANTalonGroup;
+import com.team1389.hardware.outputs.hardware.CANTalonHardware;
+import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
 public class IOHardware extends IOLayout {

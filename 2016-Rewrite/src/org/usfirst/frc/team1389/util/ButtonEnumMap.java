@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.team1389.hardware.inputs.DigitalInput;
+import com.team1389.hardware.inputs.software.DigitalInput;
 
 @SuppressWarnings("rawtypes")
 public class ButtonEnumMap<E extends Enum> {

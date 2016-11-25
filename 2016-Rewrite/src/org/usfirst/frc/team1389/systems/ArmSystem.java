@@ -2,8 +2,8 @@ package org.usfirst.frc.team1389.systems;
 
 import org.usfirst.frc.team1389.util.ButtonEnumMap;
 
-import com.team1389.hardware.interfaces.inputs.RangeIn;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.StringInfo;
