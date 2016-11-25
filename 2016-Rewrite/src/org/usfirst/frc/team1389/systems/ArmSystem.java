@@ -17,7 +17,7 @@ public class ArmSystem implements System, Watchable {
 	RangeIn armVal;
 
 	public ArmSystem(RangeOut elevator, ButtonEnumMap<ArmLocation> map,RangeIn armVal) {
-		this.elevator = RangeOut.mapToOpenRange(RangeOut.applyProfile(RangeOut.invert(elevator),1638), 0d, 360d);
+		this.elevator = elevator.invert().getProfiledOut(1638).mapToRange(0d, 360d);
 		this.buttons=map;
 		this.armVal=armVal;
 	}

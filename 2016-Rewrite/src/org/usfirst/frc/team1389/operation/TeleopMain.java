@@ -7,20 +7,18 @@ import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.util.ButtonEnumMap;
 
 import com.team1389.hardware.configuration.PIDConstants;
-import com.team1389.hardware.configuration.PIDController;
 import com.team1389.hardware.control.PIDConfiguration;
 import com.team1389.hardware.inputs.DigitalInput;
 import com.team1389.hardware.inputs.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.LatchedDigitalInput;
-import com.team1389.hardware.interfaces.inputs.RangeIn;
 import com.team1389.hardware.interfaces.inputs.PercentIn;
-import com.team1389.hardware.interfaces.outputs.RangeOut;
-import com.team1389.hardware.interfaces.outputs.RangeOut.WatchableOpenRangeOutput;
+import com.team1389.hardware.interfaces.inputs.RangeIn;
 import com.team1389.hardware.interfaces.outputs.PercentOut;
+import com.team1389.hardware.interfaces.outputs.WatchableRangeOut;
 import com.team1389.hardware.watch.Watcher;
 import com.team1389.system.CheesyDriveSystem;
-import com.team1389.system.SystemManager;
 import com.team1389.system.System;
+import com.team1389.system.SystemManager;
 
 public class TeleopMain {
 	IOHardware robot;
@@ -49,8 +47,7 @@ public class TeleopMain {
 		debuggingPanel.display();
 	}
 	public System setupArmSystem() {
-		WatchableOpenRangeOutput elevator = RangeOut.generateWatchable(robot.elevation
-				.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)), "elevator");
+		WatchableRangeOut elevator = robot.elevation.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).getWatchable("elevator");
 		robot.elevation.getLeader().getWrappedTalon();
 		LatchedDigitalInput armDownButton = (LatchedDigitalInput) robot.manipJoystick.getButton(1, InputStyle.LATCHED);
 		LatchedDigitalInput armMidButton = (LatchedDigitalInput) robot.manipJoystick.getButton(2, InputStyle.LATCHED);

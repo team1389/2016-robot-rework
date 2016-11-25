@@ -7,6 +7,7 @@ import com.team1389.hardware.watch.Watchable;
 public class WatchableRangeOut extends RangeOut implements Watchable{
 	private String name;
 	double val;
+	//TODO could be a bug here when you do some action to a watchable rangeOut it loses its watchableNess so be careful
 	public WatchableRangeOut(ScalarOutput output, double min,double max,String name){
 		super(output,min,max);
 		this.name=name;
