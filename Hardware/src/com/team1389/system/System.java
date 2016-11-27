@@ -7,6 +7,10 @@ import com.team1389.watch.Watchable;
 public abstract class System implements Watchable {
 	public System() {
 		scheduler = new CommandScheduler();
+		enterDefaultMode();
+		defaultModeListener = () -> {
+			enterDefaultMode();
+		};
 	}
 
 	private CommandScheduler scheduler;
@@ -19,10 +23,15 @@ public abstract class System implements Watchable {
 			defaultUpdate();
 		} else {
 			scheduler.update();
-			inDefaultMode=scheduler.isFinished();
+			inDefaultMode = scheduler.isFinished();
 		}
 	}
-	
+
+	public final void enterDefaultMode() {
+		scheduler.cancelAll();
+		inDefaultMode = true;
+	}
+
 	public abstract void init();
 
 	public abstract void defaultUpdate();

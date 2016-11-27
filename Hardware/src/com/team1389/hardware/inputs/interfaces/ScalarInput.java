@@ -37,4 +37,8 @@ public interface ScalarInput<T extends Value> {
 			return (RangeUtil.limit(in.get(), limit));
 		};
 	}
+	
+	static <T extends Value> ScalarInput<T> getListeningInput(ScalarInput<T> in, Runnable onChange){
+		return new ListeningScalarInput<T>(in,onChange);
+	}
 }

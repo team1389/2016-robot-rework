@@ -33,6 +33,10 @@ public class RangeIn<T extends Value> {
 		this.max=max;
 		return this;
 	}
+	public RangeIn<T> addChangeListener(Runnable onChange){
+		input=ScalarInput.getListeningInput(input, onChange);
+		return this;
+	}
 	public PercentIn mapToPercentIn(){
 		return new PercentIn(this);
 	}
