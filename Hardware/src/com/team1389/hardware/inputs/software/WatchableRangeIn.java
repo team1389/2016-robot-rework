@@ -1,17 +1,18 @@
 package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
+import com.team1389.hardware.valueTypes.Value;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.Watchable;
 
-public class WatchableRangeIn extends RangeIn implements Watchable{
+public class WatchableRangeIn<T extends Value> extends RangeIn<T> implements Watchable{
 	private String name;
-	public WatchableRangeIn(ScalarInput val, double min,double max,String name){
+	protected WatchableRangeIn(ScalarInput<T> val, double min,double max,String name){
 		super(val,min,max);
 		this.name=name;
 	}
-	public WatchableRangeIn(RangeIn in,String name){
+	protected WatchableRangeIn(RangeIn<T> in,String name){
 		this(in.input,in.min,in.max,name);
 	}
 	@Override

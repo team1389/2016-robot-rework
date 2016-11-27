@@ -1,14 +1,15 @@
 package com.team1389.hardware.control;
 
 import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.valueTypes.Position;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class PIDPositionInput implements PIDSource{
-	RangeIn sensor;
+	RangeIn<Position> sensor;
 	
-	public PIDPositionInput(RangeIn sensor) {
+	public PIDPositionInput(RangeIn<Position> sensor) {
 		this.sensor = sensor;
 	}
 

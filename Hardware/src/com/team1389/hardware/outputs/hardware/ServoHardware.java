@@ -7,6 +7,7 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.valueTypes.Speed;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
@@ -54,8 +55,8 @@ public class ServoHardware implements Watchable {
 	}
 
 	// TODO check if this max val should be 180?
-	public RangeIn getPositionInput() {
-		return new RangeIn(() -> {
+	public RangeIn<Speed> getPositionInput() {
+		return new RangeIn<Speed>(() -> {
 			return wpiServo.getPosition();
 		} , 0, 1);
 	}

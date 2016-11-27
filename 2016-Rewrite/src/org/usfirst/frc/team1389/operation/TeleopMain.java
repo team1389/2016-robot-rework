@@ -9,12 +9,13 @@ import org.usfirst.frc.team1389.util.ButtonEnumMap;
 import com.team1389.hardware.configuration.PIDConstants;
 import com.team1389.hardware.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.DigitalInput;
+import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.software.LatchedDigitalInput;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
+import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.watch.Watcher;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
@@ -47,7 +48,7 @@ public class TeleopMain {
 		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 	public System setupArmSystem() {
-		WatchableRangeOut elevator = robot.elevation.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).getWatchable("elevator");		
+		WatchableRangeOut<Position> elevator = robot.elevation.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).getWatchable("elevator");		
 		LatchedDigitalInput armDownButton = (LatchedDigitalInput) robot.manipJoystick.getButton(1, InputStyle.LATCHED);
 		LatchedDigitalInput armMidButton = (LatchedDigitalInput) robot.manipJoystick.getButton(2, InputStyle.LATCHED);
 		LatchedDigitalInput armUpButton = (LatchedDigitalInput) robot.manipJoystick.getButton(3, InputStyle.LATCHED);
@@ -59,7 +60,7 @@ public class TeleopMain {
 				map.new ButtonEnum(armUpButton,ArmLocation.HIGH_GOAL),
 				map.new ButtonEnum(armTopButton,ArmLocation.LOW_GOAL));
 				
-		RangeIn armVal=robot.elevation.getLeader().getPositionInput();
+		RangeIn<Position> armVal=robot.elevation.getLeader().getPositionInput();
 		ArmSystem armSystem=new ArmSystem(elevator,map,armVal);
 		debuggingPanel.watch(elevator);
 		return armSystem;

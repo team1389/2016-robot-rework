@@ -4,6 +4,7 @@ import org.usfirst.frc.team1389.util.ButtonEnumMap;
 
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.StringInfo;
@@ -12,11 +13,11 @@ import com.team1389.system.System;
 
 public class ArmSystem implements System, Watchable {
 
-	RangeOut elevator;
+	RangeOut<Position> elevator;
 	ButtonEnumMap<ArmLocation> buttons;
-	RangeIn armVal;
+	RangeIn<Position> armVal;
 
-	public ArmSystem(RangeOut elevator, ButtonEnumMap<ArmLocation> map,RangeIn armVal) {
+	public ArmSystem(RangeOut<Position> elevator, ButtonEnumMap<ArmLocation> map,RangeIn<Position> armVal) {
 		this.elevator = elevator.invert().getProfiledOut(1638).mapToRange(0d, 360d);
 		this.buttons=map;
 		this.armVal=armVal;

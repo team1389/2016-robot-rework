@@ -1,14 +1,15 @@
 package com.team1389.hardware.control;
 
 import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.valueTypes.Speed;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class PIDSpeedInput implements PIDSource{
-	RangeIn sensor;
+	RangeIn<Speed> sensor;
 	
-	public PIDSpeedInput(RangeIn sensor) {
+	public PIDSpeedInput(RangeIn<Speed> sensor) {
 		this.sensor = sensor;
 	}
 

@@ -32,7 +32,7 @@ public class PIDVoltageOutput {
 		stateTracker = new StateTracker();
 	}
 
-	public RangeOut<Speed> getSpeedOutput(RangeIn speedSensor, PIDConfiguration config) {
+	public RangeOut<Speed> getSpeedOutput(RangeIn<Speed> speedSensor, PIDConfiguration config) {
 		PIDSource sensor = new PIDSpeedInput(speedSensor);
 		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
 		PIDController controller = makeController(config, sensor, motor);
@@ -55,7 +55,7 @@ public class PIDVoltageOutput {
 		} , speedSensor.min(), speedSensor.max());
 	}
 
-	public RangeOut<Position> getPositionOutput(RangeIn positionSensor, PIDConfiguration config) {
+	public RangeOut<Position> getPositionOutput(RangeIn<Position> positionSensor, PIDConfiguration config) {
 		PIDSource sensor = new PIDPositionInput(positionSensor);
 		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
 		PIDController controller = makeController(config, sensor, motor);

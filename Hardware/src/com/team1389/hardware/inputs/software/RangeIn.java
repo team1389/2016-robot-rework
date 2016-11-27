@@ -1,11 +1,12 @@
 package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
+import com.team1389.hardware.valueTypes.Value;
 
-public class RangeIn {
-	protected ScalarInput input;
+public class RangeIn<T extends Value> {
+	protected ScalarInput<T> input;
 	protected double max,min;
-	public RangeIn(ScalarInput val,double min,double max){
+	public RangeIn(ScalarInput<T> val,double min,double max){
 		this.input=val;
 		this.min=min;
 		this.max=max;
@@ -26,7 +27,7 @@ public class RangeIn {
 		return max;
 	}
 
-	public RangeIn mapToRange(double min, double max) {
+	public RangeIn<T> mapToRange(double min, double max) {
 		input=ScalarInput.mapToRange(input, this.min, this.max, min, max);
 		this.min=min;
 		this.max=max;
@@ -35,11 +36,11 @@ public class RangeIn {
 	public PercentIn mapToPercentIn(){
 		return new PercentIn(this);
 	}
-	public WatchableRangeIn getWatchable(String name){
-		return new WatchableRangeIn(this,name);
+	public WatchableRangeIn<T> getWatchable(String name){
+		return new WatchableRangeIn<T>(this,name);
 	}
 
-	public RangeIn invert() {
+	public RangeIn<T> invert() {
 		input=ScalarInput.invert(input); 
 		return this;
 	}
