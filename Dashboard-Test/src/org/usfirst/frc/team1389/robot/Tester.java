@@ -4,9 +4,9 @@ import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.hardware.watch.Watcher;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
+import com.team1389.watch.Watcher;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
