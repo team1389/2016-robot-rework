@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="NetworkTables-3.0.0-20160125.000943-1-desktop.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Hardware"/>
+	<classpathentry kind="lib" path="C:/Users/amind_000/wpilib/tools/sfx-2014.11.01/sfx.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.8.0_40/jre/lib/jfxswt.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
