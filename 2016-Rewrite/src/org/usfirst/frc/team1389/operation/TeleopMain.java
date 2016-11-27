@@ -6,8 +6,8 @@ import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.util.ButtonEnumMap;
 
-import com.team1389.hardware.configuration.PIDConstants;
-import com.team1389.hardware.control.PIDConfiguration;
+import com.team1389.configuration.PIDConstants;
+import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.software.LatchedDigitalInput;
@@ -16,10 +16,10 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
 import com.team1389.hardware.valueTypes.Position;
-import com.team1389.hardware.watch.Watcher;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
 import com.team1389.system.SystemManager;
+import com.team1389.watch.Watcher;
 
 public class TeleopMain {
 	IOHardware robot;

@@ -1,6 +1,6 @@
-package com.team1389.hardware.control;
+package com.team1389.control;
 
-import com.team1389.hardware.configuration.PIDConstants;
+import com.team1389.configuration.PIDConstants;
 
 /**
  * A {@link #PIDConfiguration} contains all of the necessary configuration

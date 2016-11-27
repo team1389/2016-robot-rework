@@ -1,4 +1,4 @@
-package com.team1389.hardware.control;
+package com.team1389.control;
 
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.valueTypes.Speed;

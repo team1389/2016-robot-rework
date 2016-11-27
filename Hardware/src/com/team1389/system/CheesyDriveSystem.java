@@ -4,9 +4,9 @@ import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.util.DriveSignal;
-import com.team1389.hardware.watch.BooleanInfo;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.NumberInfo;
+import com.team1389.watch.BooleanInfo;
+import com.team1389.watch.Info;
+import com.team1389.watch.NumberInfo;
 
 public class CheesyDriveSystem extends System {
 	private PercentOut leftMotor;

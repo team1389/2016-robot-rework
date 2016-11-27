@@ -1,4 +1,4 @@
-package com.team1389.hardware.configuration;
+package com.team1389.configuration;
 
 /**
  * PID control configuration constants 

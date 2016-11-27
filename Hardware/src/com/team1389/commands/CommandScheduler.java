@@ -20,6 +20,9 @@ public class CommandScheduler {
 		    }
 		}
 	}
+	public boolean isFinished(){
+		return executing.isEmpty();
+	}
 	class CommandWrapper {
 		boolean initialized;
 		Command command;

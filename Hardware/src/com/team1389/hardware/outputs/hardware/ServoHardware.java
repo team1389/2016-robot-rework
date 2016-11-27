@@ -8,8 +8,8 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.Info;
+import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Servo;
 

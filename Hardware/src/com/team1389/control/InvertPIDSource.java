@@ -1,4 +1,4 @@
-package com.team1389.hardware.control;
+package com.team1389.control;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;

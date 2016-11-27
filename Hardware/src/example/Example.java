@@ -7,7 +7,7 @@ import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.ServoHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.Watchable;
 
 public class Example {
 	public static void main(String[] args) {

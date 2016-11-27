@@ -4,9 +4,9 @@ import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.watch.BooleanInfo;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.BooleanInfo;
+import com.team1389.watch.Info;
+import com.team1389.watch.Watchable;
 
 public class SwitchHardware implements Watchable {
 	boolean inverted;

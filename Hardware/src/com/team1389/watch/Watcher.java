@@ -1,4 +1,4 @@
-package com.team1389.hardware.watch;
+package com.team1389.watch;
 
 import java.util.ArrayList;
 import java.util.Arrays;

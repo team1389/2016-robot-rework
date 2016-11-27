@@ -3,9 +3,9 @@ package org.usfirst.frc.team1389.systems;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.hardware.watch.BooleanInfo;
-import com.team1389.hardware.watch.Info;
 import com.team1389.system.System;
+import com.team1389.watch.BooleanInfo;
+import com.team1389.watch.Info;
 
 public class IntakeSystem extends System {
 	PercentIn joystick;

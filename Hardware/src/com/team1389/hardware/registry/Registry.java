@@ -2,8 +2,8 @@ package com.team1389.hardware.registry;
 
 import java.util.List;
 
-import com.team1389.hardware.watch.Watchable;
-import com.team1389.hardware.watch.Watcher;
+import com.team1389.watch.Watchable;
+import com.team1389.watch.Watcher;
 
 public class Registry {
 	private Watcher watcher;

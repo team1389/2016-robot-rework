@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.Info;
+import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Victor;
 

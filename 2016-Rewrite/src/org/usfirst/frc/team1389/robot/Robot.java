@@ -4,9 +4,7 @@ package org.usfirst.frc.team1389.robot;
 import org.usfirst.frc.team1389.layout.IOHardware;
 import org.usfirst.frc.team1389.operation.TeleopMain;
 
-import com.team1389.hardware.configuration.PIDConstants;
-import com.team1389.hardware.configuration.PIDController;
-import com.team1389.hardware.control.PIDConfiguration;
+import com.team1389.configuration.PIDController;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -28,7 +26,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
     	robot=new IOHardware();
     	teleoperator=new TeleopMain(robot);
-    	pid=new PIDController(new PIDConstants(.5, 0, 0),0.0);
     	LiveWindow.addActuator("Ungrouped", "pidController", pid);
     }
 	/**
@@ -71,8 +68,6 @@ public class Robot extends IterativeRobot {
     public void testInit(){
     }
     public void testPeriodic() {
-    	robot.elevation.getPositionOutput(new PIDConfiguration(pid.getPID(),false,false)).set(pid.getSetpoint());
-    	///SmartDashboard.putData("test",pid);
     }
     
 }

@@ -3,14 +3,14 @@ package com.team1389.hardware.outputs.hardware;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.team1389.hardware.control.PIDConfiguration;
+import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.Info;
+import com.team1389.watch.Watchable;
 
 public class CANTalonGroup implements Watchable {
 

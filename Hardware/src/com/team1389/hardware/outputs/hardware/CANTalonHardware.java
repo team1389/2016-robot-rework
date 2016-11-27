@@ -3,8 +3,8 @@ package com.team1389.hardware.outputs.hardware;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.team1389.hardware.configuration.PIDConstants;
-import com.team1389.hardware.control.PIDConfiguration;
+import com.team1389.configuration.PIDConstants;
+import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
@@ -14,8 +14,8 @@ import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateTracker;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.Info;
+import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;

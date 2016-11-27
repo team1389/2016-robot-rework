@@ -2,9 +2,9 @@ package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 import com.team1389.hardware.valueTypes.Value;
-import com.team1389.hardware.watch.Info;
-import com.team1389.hardware.watch.NumberInfo;
-import com.team1389.hardware.watch.Watchable;
+import com.team1389.watch.Info;
+import com.team1389.watch.NumberInfo;
+import com.team1389.watch.Watchable;
 
 public class WatchableRangeOut<T extends Value> extends RangeOut<T> implements Watchable{
 	private String name;

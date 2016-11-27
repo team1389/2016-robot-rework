@@ -3,8 +3,8 @@ package com.team1389.hardware.humaninputs;
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import com.team1389.hardware.inputs.interfaces.POVInput;
 import com.team1389.hardware.inputs.software.DigitalInput;
-import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
+import com.team1389.hardware.inputs.software.PercentIn;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;
