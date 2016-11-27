@@ -8,28 +8,41 @@ import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.StringInfo;
-import com.team1389.hardware.watch.Watchable;
 import com.team1389.system.System;
 
-public class ArmSystem implements System, Watchable {
+public class ArmSystem extends System {
 
 	RangeOut<Position> elevator;
 	ButtonEnumMap<ArmLocation> buttons;
 	RangeIn<Position> armVal;
 
-	public ArmSystem(RangeOut<Position> elevator, ButtonEnumMap<ArmLocation> map,RangeIn<Position> armVal) {
+	double inputAngle;
+
+	public ArmSystem(RangeOut<Position> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
 		this.elevator = elevator.invert().getProfiledOut(1638).mapToRange(0d, 360d);
-		this.buttons=map;
-		this.armVal=armVal;
+		this.buttons = map;
+		this.armVal = armVal;
+		this.inputAngle = 0;
 	}
 
 	public void init() {
-		elevator.set(0);
+		elevator.set(inputAngle);
+	}
+
+	public void getInput() {
+		inputAngle = buttons.getVal().angle;
 	}
 
 	@Override
-	public void update() {
-		elevator.set(buttons.getVal().angle);
+	public void defaultUpdate() {
+		elevator.set(inputAngle);
+	}
+
+	public void setArm(double angle) {
+		schedule(() -> {
+			elevator.set(angle);
+			return armVal.get() == angle;
+		});
 	}
 
 	public enum ArmLocation {
@@ -63,9 +76,10 @@ public class ArmSystem implements System, Watchable {
 
 	@Override
 	public Info[] getInfo() {
-		return new Info[]{
-					new StringInfo("Target Location",()->{return buttons.getVal().name();}),
-					new NumberInfo("Current Position",()->{return armVal.get();})
-				};
+		return new Info[] { new StringInfo("Target Location", () -> {
+			return buttons.getVal().name();
+		}), new NumberInfo("Current Position", () -> {
+			return armVal.get();
+		}) };
 	}
 }

@@ -8,7 +8,7 @@ import com.team1389.hardware.watch.BooleanInfo;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 
-public class CheesyDriveSystem implements System{
+public class CheesyDriveSystem extends System {
 	private PercentOut leftMotor;
 	private PercentOut rightMotor;
 	private PercentIn throttle;
@@ -19,8 +19,8 @@ public class CheesyDriveSystem implements System{
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
 
-	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle,
-			PercentIn wheel, DigitalInput quickTurnButton, double turnSensitivity) {
+	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
+			DigitalInput quickTurnButton, double turnSensitivity) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.throttle = throttle;
@@ -29,24 +29,32 @@ public class CheesyDriveSystem implements System{
 		this.kTurnSensitivity = turnSensitivity;
 	}
 
-	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle,
-			PercentIn wheel, DigitalInput quickTurnButton) {
+	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
+			DigitalInput quickTurnButton) {
 		this(leftMotor, rightMotor, throttle, wheel, quickTurnButton, 1.0);
 	}
+
 	@Override
-	public void init(){
+	public void getInput() {
+		isQuickTurn = quickTurnButton.get();
+		mSignal = cheesyDrive(throttle.get(), wheel.get(), isQuickTurn);
+	}
+
+	@Override
+	public void init() {
 		
 	}
+
 	@Override
-	public void update() {
-		isQuickTurn=quickTurnButton.get();
-		mSignal = cheesyDrive(throttle.get(), wheel.get(), isQuickTurn);
+	public void defaultUpdate() {
 		leftMotor.set(mSignal.leftMotor);
 		rightMotor.set(mSignal.rightMotor);
 	}
-	public void setTurnSensitivity(double val){
-		this.kTurnSensitivity=val;
+
+	public void setTurnSensitivity(double val) {
+		this.kTurnSensitivity = val;
 	}
+
 	public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
 
 		double overPower;
@@ -99,11 +107,13 @@ public class CheesyDriveSystem implements System{
 
 	@Override
 	public Info[] getInfo() {
-		return new Info[]{
-				new NumberInfo("leftWheels",()->{return mSignal.leftMotor;}),
-				new NumberInfo("rightWheels",()->{return mSignal.rightMotor;}),
-				new BooleanInfo("isQuickTurn",()->{return isQuickTurn;})
-		};
+		return new Info[] { new NumberInfo("leftWheels", () -> {
+			return mSignal.leftMotor;
+		}), new NumberInfo("rightWheels", () -> {
+			return mSignal.rightMotor;
+		}), new BooleanInfo("isQuickTurn", () -> {
+			return isQuickTurn;
+		}) };
 	}
 
 }
