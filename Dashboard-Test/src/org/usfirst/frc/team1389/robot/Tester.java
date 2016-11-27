@@ -1,29 +1,38 @@
 package org.usfirst.frc.team1389.robot;
 
-import com.team1389.hardware.watch.SendableWatchable;
+import com.team1389.hardware.inputs.software.DigitalInput;
+import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
+import com.team1389.hardware.inputs.software.PercentIn;
+import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.watch.Watcher;
+import com.team1389.system.CheesyDriveSystem;
+import com.team1389.system.System;
 
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.tables.ITable;
 
 public class Tester {
-	private static NetworkTable table;
 
 	public static void main(String[] args) {
 		NetworkTable.setIPAddress("127.0.0.1");
-		NetworkTable.setServerMode();
-		table=NetworkTable.getTable("SmartDashboard");
-
+		NetworkTable.setClientMode();
+		System drive=setupDriveSystem();
+		Watcher dash=new Watcher();
+		dash.watch(drive);
+		drive.init();
 		while (true) {
-			putData("hi",new SendableWatchable());
+			drive.update();
+			dash.publish(Watcher.DASHBOARD);
 		}
+	}
+	public static System setupDriveSystem() {
+		PercentOut left = new PercentOut((double val)->{});
+		PercentOut right = left;
+		
+		PercentIn throttle = new PercentIn(()->{return .25;}).applyDeadband(.02);
+		PercentIn wheel = new PercentIn(()->{return .25;}).applyDeadband(.02);
+		DigitalInput quickTurnButton = DigitalInput.createInput(()->{return true;}, InputStyle.RAW);
 
+		return new CheesyDriveSystem(left, right, throttle, wheel, quickTurnButton);
 	}
 
-	public static void putData(String key, Sendable data) {
-		table.getSubTables().add(key);
-		ITable dataTable = table.getSubTable(key);
-		dataTable.putString("~TYPE~", data.getSmartDashboardType());
-		data.initTable(dataTable);
-	}
 }

@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.tables.ITable;
+
 
 public class Watcher {
+	public static ITable DASHBOARD;
+
 	List<Watchable> watchables;
 	
 	public Watcher() {
+		DASHBOARD=NetworkTable.getTable("SmartDashboard");
 		watchables = new ArrayList<>();
 	}
 	
@@ -23,9 +29,9 @@ public class Watcher {
 	public List<Watchable> getWatchables(){
 		return watchables;
 	}
-	public void display(){
+	public void publish(ITable table){
 		for(Watchable info:watchables){
-			info.display();
+			info.publish(table);
 		}
 	}
 	public String getPrintString(){

@@ -41,10 +41,10 @@ public class TeleopMain {
 	}
 	public void teleopPeriodic() {
 		manager.update();
-		debuggingPanel.display();
+		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 	public void teleopDisabled(){
-		debuggingPanel.display();
+		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 	public System setupArmSystem() {
 		WatchableRangeOut elevator = robot.elevation.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).getWatchable("elevator");		
