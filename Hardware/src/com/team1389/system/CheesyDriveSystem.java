@@ -108,7 +108,7 @@ public class CheesyDriveSystem extends System {
 
 	@Override
 	public Info[] getInfo() {
-		//TODO info is useless when not in default mode;
+		// TODO info is useless when not in default mode;
 		return new Info[] { new NumberInfo("leftWheels", () -> {
 			return mSignal.leftMotor;
 		}), new NumberInfo("rightWheels", () -> {
