@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1389.systems;
 
-import org.usfirst.frc.team1389.util.ButtonEnumMap;
-
+import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.valueTypes.Position;
@@ -27,6 +26,7 @@ public class ArmSystem extends System {
 
 	public void init() {
 		elevator.set(inputAngle);
+		buttons.addChangeListener(defaultModeListener);
 	}
 
 	public void getInput() {

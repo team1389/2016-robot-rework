@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.util;
+package com.team1389.hardware.inputs.software;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,12 @@ import com.team1389.hardware.inputs.software.DigitalInput;
 @SuppressWarnings("rawtypes")
 public class ButtonEnumMap<E extends Enum> {
 	List<ButtonEnum> mappings;
+
+	public void addChangeListener(Runnable onChange) {
+		for (ButtonEnum mapping : mappings) {
+			mapping.button.addChangeListener(onChange);
+		}
+	}
 
 	public ButtonEnumMap(E defaultValue) {
 		currentVal = defaultValue;

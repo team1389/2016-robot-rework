@@ -28,7 +28,7 @@ public abstract class DigitalInput implements Watchable {
 	public Info[] getInfo() {
 		return new Info[] { new BooleanInfo(getName(), () -> {
 			return get();
-		})};
+		}) };
 	}
 
 	public DigitalInput(BooleanSource in) {
@@ -58,6 +58,11 @@ public abstract class DigitalInput implements Watchable {
 
 	public String toString() {
 		return name != null ? name : super.toString();
+	}
+
+	public DigitalInput addChangeListener(Runnable onChange) {
+		this.in = BooleanSource.getListeningSource(in, onChange);
+		return this;
 	}
 
 }

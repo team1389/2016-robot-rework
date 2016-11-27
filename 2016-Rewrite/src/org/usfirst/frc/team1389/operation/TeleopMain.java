@@ -4,10 +4,10 @@ import org.usfirst.frc.team1389.layout.IOHardware;
 import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 import org.usfirst.frc.team1389.systems.IntakeSystem;
-import org.usfirst.frc.team1389.util.ButtonEnumMap;
 
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDConfiguration;
+import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.software.LatchedDigitalInput;
