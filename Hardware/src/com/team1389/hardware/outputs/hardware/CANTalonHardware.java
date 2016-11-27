@@ -12,6 +12,8 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateTracker;
+import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.valueTypes.Speed;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
@@ -48,7 +50,7 @@ public class CANTalonHardware implements Watchable {
 		return wpiTalon;
 	}
 
-	public RangeOut getSpeedOutput(PIDConfiguration config) {
+	public RangeOut<Speed> getSpeedOutput(PIDConfiguration config) {
 		State speedState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Speed);
 			setPidConstants(wpiTalon, config.pidConstants);
@@ -56,7 +58,7 @@ public class CANTalonHardware implements Watchable {
 			currentMode = "Speed";
 		});
 
-		return new RangeOut((double speed) -> {
+		return new RangeOut<Speed>((double speed) -> {
 			speedState.init();
 			wpiTalon.set(speed);
 		} , // TODO
@@ -67,14 +69,14 @@ public class CANTalonHardware implements Watchable {
 		wpiTalon.setInverted(inverted);
 	}
 
-	public RangeOut getPositionOutput(PIDConfiguration config) {
+	public RangeOut<Position> getPositionOutput(PIDConfiguration config) {
 		State positionState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Position);
 			setPidConstants(wpiTalon, config.pidConstants);
 			wpiTalon.reverseSensor(config.isSensorReversed);
 			currentMode = "Position";
 		});
-		return new RangeOut((double position) -> {
+		return new RangeOut<Position>((double position) -> {
 			positionState.init();
 			wpiTalon.set(position);
 		} , 0, 8192);

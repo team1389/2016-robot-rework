@@ -2,14 +2,15 @@ package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
+import com.team1389.hardware.valueTypes.Value;
 
-public class ProfiledRangeOut implements ScalarOutput {
+public class ProfiledRangeOut<T extends Value> implements ScalarOutput<T> {
 	double max, min, maxChange;
 	Timer timer;
 	double setpoint, goalPoint;
-	ScalarOutput controller;
+	ScalarOutput<T> controller;
 
-	protected ProfiledRangeOut(ScalarOutput controller,double min,double max, double maxChange) {
+	protected ProfiledRangeOut(ScalarOutput<T> controller,double min,double max, double maxChange) {
 		this.maxChange = maxChange;
 		this.controller = controller;
 		this.min=min;

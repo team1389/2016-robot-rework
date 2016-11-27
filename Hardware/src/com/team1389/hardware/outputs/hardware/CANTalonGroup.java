@@ -7,6 +7,8 @@ import com.team1389.hardware.control.PIDConfiguration;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.valueTypes.Speed;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
@@ -38,17 +40,17 @@ public class CANTalonGroup implements Watchable {
 		});
 	}
 
-	public RangeOut getPositionOutput(PIDConfiguration config) {
-		RangeOut mainOutput = main.getPositionOutput(config);
-		return new RangeOut((double position) -> {
+	public RangeOut<Position> getPositionOutput(PIDConfiguration config) {
+		RangeOut<Position> mainOutput = main.getPositionOutput(config);
+		return new RangeOut<Position>((double position) -> {
 			setFollowers();
 			mainOutput.set(position);
 		} , mainOutput.min(), mainOutput.max());
 	}
 
-	public RangeOut getSpeedOutput(PIDConfiguration config) {
-		RangeOut mainOutput = main.getSpeedOutput(config);
-		return new RangeOut((double speed) -> {
+	public RangeOut<Speed> getSpeedOutput(PIDConfiguration config) {
+		RangeOut<Speed> mainOutput = main.getSpeedOutput(config);
+		return new RangeOut<Speed>((double speed) -> {
 			setFollowers();
 			mainOutput.set(speed);
 		} , mainOutput.min(), mainOutput.max());

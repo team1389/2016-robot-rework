@@ -1,15 +1,16 @@
 package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
+import com.team1389.hardware.valueTypes.Value;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.NumberInfo;
 import com.team1389.hardware.watch.Watchable;
 
-public class WatchableRangeOut extends RangeOut implements Watchable{
+public class WatchableRangeOut<T extends Value> extends RangeOut<T> implements Watchable{
 	private String name;
 	double val;
 	//TODO could be a bug here when you do some action to a watchable rangeOut it loses its watchableNess so be careful
-	public WatchableRangeOut(ScalarOutput output, double min,double max,String name){
+	public WatchableRangeOut(ScalarOutput<T> output, double min,double max,String name){
 		super(output,min,max);
 		this.name=name;
 	}
@@ -18,7 +19,7 @@ public class WatchableRangeOut extends RangeOut implements Watchable{
 		super.set(val);
 		this.val=val;
 	}
-	public WatchableRangeOut(RangeOut in,String name){
+	public WatchableRangeOut(RangeOut<T> in,String name){
 		this(in.output,in.min,in.max,name);
 	}
 	@Override

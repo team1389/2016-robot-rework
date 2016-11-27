@@ -6,6 +6,8 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateSetup;
 import com.team1389.hardware.util.state.StateTracker;
+import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.valueTypes.Speed;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -30,7 +32,7 @@ public class PIDVoltageOutput {
 		stateTracker = new StateTracker();
 	}
 
-	public RangeOut getSpeedOutput(RangeIn speedSensor, PIDConfiguration config) {
+	public RangeOut<Speed> getSpeedOutput(RangeIn speedSensor, PIDConfiguration config) {
 		PIDSource sensor = new PIDSpeedInput(speedSensor);
 		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
 		PIDController controller = makeController(config, sensor, motor);
@@ -47,13 +49,13 @@ public class PIDVoltageOutput {
 			}
 		});
 
-		return new RangeOut((double speed) -> {
+		return new RangeOut<Speed>((double speed) -> {
 			controller.setSetpoint(speed);
 			speedControlState.init();
 		} , speedSensor.min(), speedSensor.max());
 	}
 
-	public RangeOut getPositionOutput(RangeIn positionSensor, PIDConfiguration config) {
+	public RangeOut<Position> getPositionOutput(RangeIn positionSensor, PIDConfiguration config) {
 		PIDSource sensor = new PIDPositionInput(positionSensor);
 		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
 		PIDController controller = makeController(config, sensor, motor);
@@ -70,7 +72,7 @@ public class PIDVoltageOutput {
 			}
 		});
 
-		return new RangeOut((double position) -> {
+		return new RangeOut<Position>((double position) -> {
 			controller.setSetpoint(position);
 			positionControlState.init();
 		} , positionSensor.min(), positionSensor.max());

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
+import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.watch.Info;
 import com.team1389.hardware.watch.Watchable;
 
@@ -34,8 +35,8 @@ public class ServoHardware implements Watchable {
 		return wpiServo.getChannel();
 	}
 
-	public RangeOut getPositionOutput() {
-		return new RangeOut((double val) -> {
+	public RangeOut<Position> getPositionOutput() {
+		return new RangeOut<Position>((double val) -> {
 			wpiServo.set(val);
 		} , 0, 1);
 	}
