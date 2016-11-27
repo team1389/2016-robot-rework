@@ -2,7 +2,7 @@ package com.team1389.hardware.watch;
 
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.ITable;
 
 public class BooleanInfo extends Info{
 	BooleanSource in;
@@ -11,8 +11,8 @@ public class BooleanInfo extends Info{
 		this.in=in;
 	}
 	@Override
-	public void display() {
-		SmartDashboard.putBoolean(name, in.get());
+	public void publish(ITable subtable) {
+		subtable.putBoolean(name, in.get());
 	}
 
 	@Override

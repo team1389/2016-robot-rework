@@ -47,8 +47,7 @@ public class TeleopMain {
 		debuggingPanel.display();
 	}
 	public System setupArmSystem() {
-		WatchableRangeOut elevator = robot.elevation.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).getWatchable("elevator");
-		robot.elevation.getLeader().getWrappedTalon();
+		WatchableRangeOut elevator = robot.elevation.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).getWatchable("elevator");		
 		LatchedDigitalInput armDownButton = (LatchedDigitalInput) robot.manipJoystick.getButton(1, InputStyle.LATCHED);
 		LatchedDigitalInput armMidButton = (LatchedDigitalInput) robot.manipJoystick.getButton(2, InputStyle.LATCHED);
 		LatchedDigitalInput armUpButton = (LatchedDigitalInput) robot.manipJoystick.getButton(3, InputStyle.LATCHED);
@@ -59,6 +58,7 @@ public class TeleopMain {
 				map.new ButtonEnum(armMidButton,ArmLocation.DEFENSE),
 				map.new ButtonEnum(armUpButton,ArmLocation.HIGH_GOAL),
 				map.new ButtonEnum(armTopButton,ArmLocation.LOW_GOAL));
+				
 		RangeIn armVal=robot.elevation.getLeader().getPositionInput();
 		ArmSystem armSystem=new ArmSystem(elevator,map,armVal);
 		debuggingPanel.watch(elevator);
@@ -74,7 +74,7 @@ public class TeleopMain {
 	public System setupDriveSystem() {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
 		PercentOut right = robot.rightDrive.getVoltageOutput();
-
+		
 		PercentIn throttle = robot.driveJoystick.getAxis(1).applyDeadband(.02);
 		PercentIn wheel = robot.driveJoystick.getAxis(0).applyDeadband(.02);
 		DigitalInput quickTurnButton = robot.driveJoystick.getButton(1, InputStyle.RAW);

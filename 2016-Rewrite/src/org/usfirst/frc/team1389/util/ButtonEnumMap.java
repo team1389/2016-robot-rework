@@ -9,31 +9,35 @@ import com.team1389.hardware.inputs.software.DigitalInput;
 @SuppressWarnings("rawtypes")
 public class ButtonEnumMap<E extends Enum> {
 	List<ButtonEnum> mappings;
-	public ButtonEnumMap(E defaultValue){
-		currentVal=defaultValue;
-		this.mappings=new ArrayList<ButtonEnum>();
-	}
-	@SafeVarargs
-	public final void setMappings(ButtonEnum... mappings){
-		this.mappings.addAll(Arrays.asList(mappings));
 
+	public ButtonEnumMap(E defaultValue) {
+		currentVal = defaultValue;
+		this.mappings = new ArrayList<ButtonEnum>();
 	}
+
+	@SafeVarargs
+	public final void setMappings(ButtonEnum... mappings) {
+		this.mappings.addAll(Arrays.asList(mappings));
+	}
+
 	E currentVal;
-	public E getVal(){
-		for(ButtonEnum mapping:mappings){
-			if(mapping.button.get()){
-				currentVal=mapping.val;
-				System.out.println(currentVal);
+
+	public E getVal() {
+		for (ButtonEnum mapping : mappings) {
+			if (mapping.button.get()) {
+				currentVal = mapping.val;
 			}
 		}
 		return currentVal;
 	}
-	public class ButtonEnum{
+
+	public class ButtonEnum {
 		DigitalInput button;
 		E val;
-		public ButtonEnum(DigitalInput button,E val){
-			this.button=button;
-			this.val=val;
+
+		public ButtonEnum(DigitalInput button, E val) {
+			this.button = button;
+			this.val = val;
 		}
 	}
 }

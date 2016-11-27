@@ -5,7 +5,7 @@ import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 /**
  * An input that gives a value from -1 to 1
  * 
- * @author Jacob Prinz
+ * @author Ari Mindell
  */
 public class PercentOut extends RangeOut{
 	public PercentOut(ScalarOutput out){

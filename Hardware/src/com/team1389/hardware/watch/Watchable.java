@@ -1,11 +1,13 @@
 package com.team1389.hardware.watch;
 
+import edu.wpi.first.wpilibj.tables.ITable;
+
 public interface Watchable {
 	public String getName();
 	public Info[] getInfo();
-	public default void display(){
+	public default void publish(ITable table){
 		for(Info e:getInfo()){
-			e.display();
+			e.publish(table);
 		}
 	}
 	public default String getPrintString(){

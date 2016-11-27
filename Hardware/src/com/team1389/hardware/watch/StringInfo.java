@@ -1,6 +1,6 @@
 package com.team1389.hardware.watch;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.ITable;
 
 public class StringInfo extends Info{
 	StringSource source;
@@ -13,8 +13,8 @@ public class StringInfo extends Info{
 		public String get();
 	}
 	@Override
-	public void display() {
-		SmartDashboard.putString(name, source.get());
+	public void publish(ITable table) {
+		table.putString(name, source.get());
 	}
 	@Override
 	public String toString() {

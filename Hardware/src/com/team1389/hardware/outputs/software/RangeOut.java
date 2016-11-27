@@ -1,7 +1,6 @@
 package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
-import com.team1389.hardware.watch.Watchable;
 
 public class RangeOut {
 	protected ScalarOutput output;
@@ -44,5 +43,4 @@ public class RangeOut {
 		output=new ProfiledRangeOut(output,min,max,maxChange);
 		return this;
 	}
-
 }
