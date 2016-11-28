@@ -1,11 +1,14 @@
 package org.usfirst.frc.team1389.layout;
 
 import com.team1389.hardware.humaninputs.JoystickController;
+import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
+
+import edu.wpi.first.wpilibj.SPI;
 
 public class IOHardware extends IOLayout {
 	public IOHardware() {
@@ -21,6 +24,8 @@ public class IOHardware extends IOLayout {
 		rightC = new CANTalonHardware(rightMotorC_CAN, registry);
 		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
 
+		navX=new NavXHardware(SPI.Port.kMXP);
+		
 		elevationA = new CANTalonHardware(elevatorMotorA_CAN, registry);
 		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
 

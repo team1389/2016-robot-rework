@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1389.layout;
 import com.team1389.hardware.humaninputs.JoystickController;
+import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
@@ -18,7 +19,8 @@ public class IOLayout extends RobotMap{
 	CANTalonHardware leftB;
 	CANTalonHardware leftC;
 	public CANTalonGroup leftDrive;
-
+	public NavXHardware navX;
+	
 	CANTalonHardware rightA;
 	CANTalonHardware rightB;
 	CANTalonHardware rightC;
