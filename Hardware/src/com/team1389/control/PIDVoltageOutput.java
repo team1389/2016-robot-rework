@@ -1,11 +1,13 @@
 package com.team1389.control;
 
+import com.team1389.control.pid_wrappers.output.PIDControlledRange;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.util.state.State;
 import com.team1389.hardware.util.state.StateSetup;
 import com.team1389.hardware.util.state.StateTracker;
+import com.team1389.hardware.valueTypes.Percent;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
 
@@ -34,8 +36,8 @@ public class PIDVoltageOutput {
 
 	public RangeOut<Speed> getSpeedOutput(RangeIn<Speed> speedSensor, PIDConfiguration config) {
 		PIDSource sensor = new PIDSpeedInput(speedSensor);
-		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
-		PIDController controller = makeController(config, sensor, motor);
+		PIDOutput motor = new PIDControlledRange<Percent>(voltageOutput);
+		PIDController controller = PIDSystemCreator.makeController(config, sensor, motor);
 
 		State speedControlState = stateTracker.newState(new StateSetup() {
 			@Override
@@ -57,8 +59,8 @@ public class PIDVoltageOutput {
 
 	public RangeOut<Position> getPositionOutput(RangeIn<Position> positionSensor, PIDConfiguration config) {
 		PIDSource sensor = new PIDPositionInput(positionSensor);
-		PIDOutput motor = new PIDVoltageWrapper(voltageOutput);
-		PIDController controller = makeController(config, sensor, motor);
+		PIDOutput motor = new PIDControlledRange<Percent>(voltageOutput);
+		PIDController controller = PIDSystemCreator.makeController(config, sensor, motor);
 
 		State positionControlState = stateTracker.newState(new StateSetup() {
 			@Override
@@ -76,18 +78,5 @@ public class PIDVoltageOutput {
 			controller.setSetpoint(position);
 			positionControlState.init();
 		} , positionSensor.min(), positionSensor.max());
-	}
-
-	private static PIDController makeController(PIDConfiguration config, PIDSource source, PIDOutput output) {
-		PIDSource finalSource;
-		if (config.isSensorReversed) {
-			finalSource = new InvertPIDSource(source);
-		} else {
-			finalSource = source;
-		}
-		PIDController controller = new PIDController(config.pidConstants.p, config.pidConstants.i,
-				config.pidConstants.d, finalSource, output);
-		controller.setContinuous(config.isContinuous);
-		return controller;
 	}
 }

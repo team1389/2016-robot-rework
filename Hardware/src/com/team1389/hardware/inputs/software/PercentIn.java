@@ -10,7 +10,7 @@ import com.team1389.hardware.valueTypes.Percent;
  */
 public class PercentIn extends RangeIn<Percent>{
 	public PercentIn(ScalarInput<Percent> val){
-		super(val,-1,1);
+		super(Percent.class,val,-1,1);
 	}
 	protected PercentIn(RangeIn<?> in){
 		this(ScalarInput.mapToPercent(in.input, in.min, in.max));

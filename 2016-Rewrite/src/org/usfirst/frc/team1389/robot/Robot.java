@@ -4,10 +4,7 @@ package org.usfirst.frc.team1389.robot;
 import org.usfirst.frc.team1389.layout.IOHardware;
 import org.usfirst.frc.team1389.operation.TeleopMain;
 
-import com.team1389.configuration.PIDController;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,7 +23,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
     	robot=new IOHardware();
     	teleoperator=new TeleopMain(robot);
-    	LiveWindow.addActuator("Ungrouped", "pidController", pid);
     }
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
@@ -60,7 +56,6 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         teleoperator.teleopPeriodic();
     }
-    PIDController pid;
     /**
      * This function is called periodically during test mode
      */

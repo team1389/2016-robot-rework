@@ -84,14 +84,14 @@ public class CANTalonHardware implements Watchable {
 
 	public RangeIn<Speed> getSpeedInput() {
 		wpiTalon.configEncoderCodesPerRev(1023);
-		return new RangeIn<Speed>(() -> {
+		return new RangeIn<Speed>(Speed.class,() -> {
 			return wpiTalon.getSpeed();
 		} , 0, 1023);
 
 	}
 
 	public RangeIn<Position> getPositionInput() {
-		return new RangeIn<Position>(() -> {
+		return new RangeIn<Position>(Position.class,() -> {
 			return wpiTalon.getPosition();
 		} , 0, 8912);
 	}

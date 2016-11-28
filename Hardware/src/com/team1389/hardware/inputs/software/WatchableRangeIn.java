@@ -8,12 +8,12 @@ import com.team1389.watch.Watchable;
 
 public class WatchableRangeIn<T extends Value> extends RangeIn<T> implements Watchable{
 	private String name;
-	protected WatchableRangeIn(ScalarInput<T> val, double min,double max,String name){
-		super(val,min,max);
+	protected WatchableRangeIn(Class<T> type,ScalarInput<T> val, double min,double max,String name){
+		super(type,val,min,max);
 		this.name=name;
 	}
-	protected WatchableRangeIn(RangeIn<T> in,String name){
-		this(in.input,in.min,in.max,name);
+	protected WatchableRangeIn(Class<T> type,RangeIn<T> in,String name){
+		this(type,in.input,in.min,in.max,name);
 	}
 	@Override
 	public String getName() {

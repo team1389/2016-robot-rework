@@ -55,8 +55,8 @@ public class ServoHardware implements Watchable {
 	}
 
 	// TODO check if this max val should be 180?
-	public RangeIn<Speed> getPositionInput() {
-		return new RangeIn<Speed>(() -> {
+	public RangeIn<Position> getPositionInput() {
+		return new RangeIn<Position>(Position.class,() -> {
 			return wpiServo.getPosition();
 		} , 0, 1);
 	}

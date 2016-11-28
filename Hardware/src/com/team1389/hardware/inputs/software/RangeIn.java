@@ -4,15 +4,17 @@ import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.valueTypes.Value;
 
 public class RangeIn<T extends Value> {
+	public Class<T> type;
 	protected ScalarInput<T> input;
 	protected double max,min;
-	public RangeIn(ScalarInput<T> val,double min,double max){
+	public RangeIn(Class<T> type,ScalarInput<T> val,double min,double max){
 		this.input=val;
 		this.min=min;
 		this.max=max;
+		this.type=type;
 	}
-	public RangeIn(double min,double max){
-		this(()->{return 0.0;},min,max);
+	public RangeIn(Class<T> type,double min,double max){
+		this(type,()->{return 0.0;},min,max);
 	}
 	
 	public double get(){
@@ -41,7 +43,7 @@ public class RangeIn<T extends Value> {
 		return new PercentIn(this);
 	}
 	public WatchableRangeIn<T> getWatchable(String name){
-		return new WatchableRangeIn<T>(this,name);
+		return new WatchableRangeIn<T>(type,this,name);
 	}
 
 	public RangeIn<T> invert() {
