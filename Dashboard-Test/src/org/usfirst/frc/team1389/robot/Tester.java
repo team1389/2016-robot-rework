@@ -27,7 +27,7 @@ public class Tester {
 		NetworkTable.globalDeleteAll();
 		System drive=setupDriveSystem();
 		WatchableRangeOut<Position> profile=new RangeOut<Position>((double val)->{},0,8192).mapToRange(0, 1).scale(2*Math.PI*8*0.0254).getWatchable("bam");
-		Command e=new FollowProfileCommand(new TrapezoidalMotionProfile(50, 5, 5, 8), profile);
+		Command e=new FollowProfileCommand(new TrapezoidalMotionProfile(50, 2, 2, 100), profile);
 		Watcher dash=new Watcher();
 		dash.watch(drive,profile);
 		drive.init();

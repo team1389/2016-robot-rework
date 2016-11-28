@@ -2,11 +2,11 @@ package com.team1389.hardware.valueTypes;
 
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-public class Angle extends PIDTunableValue {
+public class AngularVelocity extends PIDTunableValue{
 
 	@Override
 	public PIDSourceType getValueType() {
-		return PIDSourceType.kDisplacement;
+		return PIDSourceType.kRate;
 	}
 	
 }
