@@ -3,6 +3,7 @@ package org.usfirst.frc.team1389.systems;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.valueTypes.Angle;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.system.System;
 import com.team1389.watch.Info;
@@ -11,14 +12,14 @@ import com.team1389.watch.StringInfo;
 
 public class ArmSystem extends System {
 
-	RangeOut<Position> elevator;
+	RangeOut<Angle> elevator;
 	ButtonEnumMap<ArmLocation> buttons;
 	RangeIn<Position> armVal;
 
 	double inputAngle;
 
-	public ArmSystem(RangeOut<Position> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
-		this.elevator = elevator.invert().getProfiledOut(1638).mapToRange(0d, 360d);
+	public ArmSystem(RangeOut<Angle> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
+		this.elevator = elevator.invert().getProfiledOut(72);
 		this.buttons = map;
 		this.armVal = armVal;
 		this.inputAngle = 0;
@@ -46,7 +47,7 @@ public class ArmSystem extends System {
 	}
 
 	public enum ArmLocation {
-		DOWN(0), DEFENSE(45), LOW_GOAL(25), HIGH_GOAL(35);
+		DOWN(0), DEFENSE(45), LOW_GOAL(25), VERTICAL(90);
 
 		ArmLocation(double angle) {
 			this.angle = angle;

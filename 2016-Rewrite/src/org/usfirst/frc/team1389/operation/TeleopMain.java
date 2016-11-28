@@ -15,6 +15,7 @@ import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
+import com.team1389.hardware.valueTypes.Angle;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
@@ -37,7 +38,7 @@ public class TeleopMain {
 		System intakeSystem = setupIntakeSystem();
 		manager = new SystemManager(driveSystem, intakeSystem, armSystem);
 		manager.init();
-		//TODO this line is to test system sharing design, remove when tested
+		// TODO this line is to test system sharing design, remove when tested
 		robot.driveJoystick.getButton(8, InputStyle.LATCHED).addChangeListener(() -> {
 			armSystem.setArm(26);
 		});
@@ -56,8 +57,8 @@ public class TeleopMain {
 	}
 
 	public ArmSystem setupArmSystem() {
-		WatchableRangeOut<Position> elevator = robot.elevation
-				.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false))
+		WatchableRangeOut<Angle> elevator = robot.elevation
+				.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).mapToAngle()
 				.getWatchable("elevator");
 		LatchedDigitalInput armDownButton = (LatchedDigitalInput) robot.manipJoystick.getButton(1, InputStyle.LATCHED);
 		LatchedDigitalInput armMidButton = (LatchedDigitalInput) robot.manipJoystick.getButton(2, InputStyle.LATCHED);
@@ -66,7 +67,7 @@ public class TeleopMain {
 		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
 		map.setMappings(map.new ButtonEnum(armDownButton, ArmLocation.DOWN),
 				map.new ButtonEnum(armMidButton, ArmLocation.DEFENSE),
-				map.new ButtonEnum(armUpButton, ArmLocation.HIGH_GOAL),
+				map.new ButtonEnum(armUpButton, ArmLocation.VERTICAL),
 				map.new ButtonEnum(armTopButton, ArmLocation.LOW_GOAL));
 
 		RangeIn<Position> armVal = robot.elevation.getLeader().getPositionInput();

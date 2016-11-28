@@ -1,6 +1,7 @@
 package com.team1389.hardware.outputs.interfaces;
 
 import com.team1389.hardware.util.RangeUtil;
+import com.team1389.hardware.valueTypes.Angle;
 import com.team1389.hardware.valueTypes.Percent;
 import com.team1389.hardware.valueTypes.Value;
 
@@ -14,18 +15,30 @@ public interface ScalarOutput<T extends Value> {
 		};
 	}
 
+	public static ScalarOutput<Angle> mapToAngle(ScalarOutput<?> out, double outMin, double outMax) {
+		return new ScalarOutput<Angle>() {
+			@Override
+			public void set(double val) {
+				out.set(RangeUtil.map(val, 0, 360, outMin, outMax));
+			}
+
+		};
+	}
+
 	public static ScalarOutput<Percent> mapToPercent(ScalarOutput<?> out, double outMin, double outMax) {
 		return (double val) -> {
 			out.set(RangeUtil.map(val, -1, 1, outMin, outMax));
 		};
 
 	}
+
 	public static <T extends Value> ScalarOutput<T> scale(ScalarOutput<T> out, double scale) {
 		return (double val) -> {
-			out.set(val/scale);
+			out.set(val / scale);
 		};
 
 	}
+
 	public static <T extends Value> ScalarOutput<T> invert(ScalarOutput<T> out) {
 		return (double val) -> {
 			out.set(-val);

@@ -24,9 +24,11 @@ public class IOHardware extends IOLayout {
 		rightC = new CANTalonHardware(rightMotorC_CAN, registry);
 		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
 
-		navX=new NavXHardware(SPI.Port.kMXP);
-		
+		navX = new NavXHardware(SPI.Port.kMXP);
+
 		elevationA = new CANTalonHardware(elevatorMotorA_CAN, registry);
+		elevationA.getWrappedTalon().setPosition(0);
+
 		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
 
 		elevation = new CANTalonGroup(elevationA, elevationB);
