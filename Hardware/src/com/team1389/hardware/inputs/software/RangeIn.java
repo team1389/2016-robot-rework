@@ -50,5 +50,11 @@ public class RangeIn<T extends Value> {
 		input=ScalarInput.invert(input); 
 		return this;
 	}
+	public RangeIn<T> scale(double factor) {
+		input = ScalarInput.scale(input, factor);
+		max *= factor;
+		min *= factor;
+		return this;
+	}
 
 }

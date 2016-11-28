@@ -9,11 +9,11 @@ package org.usfirst.frc.team1389.layout;
 public class RobotMap {
 	//Outputs:
 	//Drivetrain
-	public static final int leftMotorA_CAN = 6; public static final boolean leftMotorA_isInverted = true;
-	public static final int leftMotorB_CAN = 4; public static final boolean leftMotorB_isInverted = true;
-	public static final int leftMotorC_CAN = 5; public static final boolean leftMotorC_isInverted = true;
-	public static final int rightMotorA_CAN = 1; public static final boolean rightMotorA_isInverted = false;
-	public static final int rightMotorB_CAN = 2; public static final boolean rightMotorB_isInverted = false;
+	public static final int leftMotorA_CAN = 4; public static final boolean leftMotorA_isInverted = true;
+	public static final int leftMotorB_CAN = 5; public static final boolean leftMotorB_isInverted = true;
+	public static final int leftMotorC_CAN = 6; public static final boolean leftMotorC_isInverted = true;
+	public static final int rightMotorA_CAN = 2; public static final boolean rightMotorA_isInverted = false;
+	public static final int rightMotorB_CAN = 1; public static final boolean rightMotorB_isInverted = false;
 	public static final int rightMotorC_CAN = 3; public static final boolean rightMotorC_isInverted = false;
 	//Arm
 	public static final int turntableMotor_CAN = 10; public static final boolean turntableMotor_isInverted = false;

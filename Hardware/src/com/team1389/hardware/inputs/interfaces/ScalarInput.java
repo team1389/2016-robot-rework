@@ -41,4 +41,10 @@ public interface ScalarInput<T extends Value> {
 	static <T extends Value> ScalarInput<T> getListeningInput(ScalarInput<T> in, Runnable onChange){
 		return new ListeningScalarInput<T>(in,onChange);
 	}
+
+	public static <T extends Value> ScalarInput<T> scale(ScalarInput<T> input, double factor) {
+		return () -> {
+			return input.get()/ factor;
+		};
+	}
 }

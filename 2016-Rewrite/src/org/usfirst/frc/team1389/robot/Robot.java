@@ -2,12 +2,8 @@
 package org.usfirst.frc.team1389.robot;
 
 import org.usfirst.frc.team1389.layout.IOHardware;
+import org.usfirst.frc.team1389.operation.AutonomousMain;
 import org.usfirst.frc.team1389.operation.TeleopMain;
-
-import com.team1389.autonomous.DriveCommands;
-import com.team1389.commands.CommandScheduler;
-import com.team1389.configuration.PIDConstants;
-import com.team1389.control.PIDConfiguration;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -20,7 +16,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  */
 public class Robot extends IterativeRobot {
 	IOHardware robot;
-	TeleopMain teleoperator;
+	TeleopMain teleOperator;
+	AutonomousMain autonOperator;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -28,7 +25,8 @@ public class Robot extends IterativeRobot {
 	 */
 	public void robotInit() {
 		robot = new IOHardware();
-		teleoperator = new TeleopMain(robot);
+		teleOperator = new TeleopMain(robot);
+		autonOperator = new AutonomousMain(robot);
 	}
 
 	/**
@@ -42,37 +40,33 @@ public class Robot extends IterativeRobot {
 	 * switch structure below with additional strings. If using the
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
-	CommandScheduler scheduler;
 
 	public void autonomousInit() {
-		scheduler = new CommandScheduler();
-		PIDConfiguration config = new PIDConfiguration(new PIDConstants(0.3, 0.0, 0.0), false, false);
-		scheduler.schedule(new DriveCommands(8, config).turnAngleCommand(90, 2, robot.navX.getAngleInput(),
-				robot.leftDrive.getSpeedOutput(config), robot.rightDrive.getSpeedOutput(config)));
+		autonOperator.initOperation();
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-		scheduler.update();
+		autonOperator.periodicOperation();
 	}
 
 	@Override
 	public void disabledPeriodic() {
-		teleoperator.teleopDisabled();
+		teleOperator.disabledOperation();
 	}
 
 	@Override
 	public void teleopInit() {
-		teleoperator.teleopInit();
+		teleOperator.initOperation();
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		teleoperator.teleopPeriodic();
+		teleOperator.periodicOperation();
 	}
 
 	/**

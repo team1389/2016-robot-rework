@@ -22,17 +22,15 @@ import com.team1389.system.System;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
-public class TeleopMain {
-	IOHardware robot;
+public class TeleopMain extends Operator {
 	SystemManager manager;
-	Watcher debuggingPanel;
 
 	public TeleopMain(IOHardware robot) {
-		this.robot = robot;
+		super(robot);
 		debuggingPanel = new Watcher();
 	}
 
-	public void teleopInit() {
+	protected void init() {
 		System driveSystem = setupDriveSystem();
 		ArmSystem armSystem = setupArmSystem();
 		System intakeSystem = setupIntakeSystem();
@@ -47,12 +45,12 @@ public class TeleopMain {
 
 	}
 
-	public void teleopPeriodic() {
+	protected void periodic() {
 		manager.update();
 		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 
-	public void teleopDisabled() {
+	protected void disabled() {
 		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 
@@ -94,5 +92,4 @@ public class TeleopMain {
 
 		return new CheesyDriveSystem(left, right, throttle, wheel, quickTurnButton);
 	}
-
 }

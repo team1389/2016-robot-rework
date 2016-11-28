@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class CommandScheduler {
+import com.team1389.watch.Info;
+import com.team1389.watch.StringInfo;
+import com.team1389.watch.Watchable;
+
+public class CommandScheduler implements Watchable {
 	List<CommandWrapper> executing;
 
 	public CommandScheduler() {
@@ -62,10 +66,25 @@ public class CommandScheduler {
 		public void reset() {
 			initialized = false;
 		}
+
+		public String toString() {
+			return command.toString();
+		}
 	}
 
 	public void cancelAll() {
-		// TODO check if command need to do something before they die
 		executing = new ArrayList<CommandWrapper>();
+	}
+
+	@Override
+	public String getName() {
+		return null;
+	}
+
+	@Override
+	public Info[] getInfo() {
+		return new Info[] { new StringInfo("Current Command list", () -> {
+			return executing.toString();
+		}) };
 	}
 }

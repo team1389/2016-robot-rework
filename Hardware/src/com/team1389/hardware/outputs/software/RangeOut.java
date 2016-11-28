@@ -55,6 +55,15 @@ public class RangeOut<T extends Value> {
 		return this;
 	}
 
+	public RangeOut<T> addFollowers(RangeOut<T> outFollow) {
+		ScalarOutput<T> out = this.output;
+		output = (double val) -> {
+			out.set(val);
+			outFollow.mapToRange(min, max).set(val);
+		};
+		return this;
+	}
+
 	public RangeOut<T> scale(double factor) {
 		output = ScalarOutput.scale(output, factor);
 		max *= factor;

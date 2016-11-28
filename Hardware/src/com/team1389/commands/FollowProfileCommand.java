@@ -8,11 +8,16 @@ public class FollowProfileCommand implements Command{
 	MotionProfile profile;
 	Timer timer;
 	RangeOut<?> out;
+	double initialPos;
 	
 	public FollowProfileCommand(MotionProfile profile, RangeOut<?> out) {
+		this(profile,out,0);
+	}
+	public FollowProfileCommand(MotionProfile profile, RangeOut<?> out,double initialPos){
 		this.profile = profile;
 		this.out=out;
 		timer = new Timer();
+		this.initialPos=initialPos;
 	}
 	
 	@Override
@@ -22,7 +27,7 @@ public class FollowProfileCommand implements Command{
 
 	@Override
 	public boolean execute() {
-		out.set(profile.getPosition(timer.get()));
+		out.set(profile.getPosition(timer.get())+initialPos);
 		return timer.get() >= profile.getDuration();
 	}
 }

@@ -15,11 +15,15 @@ public class IOHardware extends IOLayout {
 		registry = new Registry();
 		leftA = new CANTalonHardware(leftMotorA_CAN, registry);
 		leftA.setInverted(true);
+		leftA.getWrappedTalon().setPosition(0);
+
 		leftB = new CANTalonHardware(leftMotorB_CAN, registry);
 		leftC = new CANTalonHardware(leftMotorC_CAN, registry);
 		leftDrive = new CANTalonGroup(leftA, leftB, leftC);
 
 		rightA = new CANTalonHardware(rightMotorA_CAN, registry);
+		rightA.getWrappedTalon().setPosition(0);
+
 		rightB = new CANTalonHardware(rightMotorB_CAN, registry);
 		rightC = new CANTalonHardware(rightMotorC_CAN, registry);
 		rightDrive = new CANTalonGroup(rightA, rightB, rightC);

@@ -1,6 +1,7 @@
 package com.team1389.autonomous;
 
 import com.team1389.commands.Command;
+import com.team1389.commands.CommandUtil;
 import com.team1389.commands.FollowProfileCommand;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.control.PIDSystemCreator;
@@ -24,14 +25,26 @@ public class DriveCommands {
 	double topSpeed;
 	PIDConfiguration turnPID;
 
-	public DriveCommands(double wheelDiameter, PIDConfiguration turnPID) {
+	public DriveCommands(double wheelDiameter, PIDConfiguration turnPID, double maxAcceleration, double topSpeed) {
 		this.wheelCircumference = wheelDiameter * Math.PI * inchesToMeters;
+		this.topSpeed = topSpeed;
+		this.maxAcceleration = maxAcceleration;
+		this.turnPID = turnPID;
 	}
 
-	public Command driveMetersCommand(double meters, RangeOut<Position> bothWheels) {
-		RangeOut<Position> encoderTicksToMeters = bothWheels.mapToRange(0, 1).scale(wheelCircumference);
-		return new FollowProfileCommand(
-				new TrapezoidalMotionProfile(meters, maxAcceleration, maxAcceleration, topSpeed), encoderTicksToMeters);
+	public Command driveMetersCommand(double meters, RangeOut<Position> left, RangeOut<Position> right,
+			RangeIn<Position> leftIn, RangeIn<Position> rightIn) {
+
+		left.mapToRange(0, 1).scale(wheelCircumference);
+		right.mapToRange(0, 1).scale(wheelCircumference);
+		leftIn.mapToRange(0, 1).scale(wheelCircumference);
+		rightIn.mapToRange(0, 1).scale(wheelCircumference);
+		TrapezoidalMotionProfile profile = new TrapezoidalMotionProfile(meters, maxAcceleration, maxAcceleration,
+				topSpeed);
+		double initialPosLeft = leftIn.get();
+		double initialPosRight = rightIn.get();
+		return CommandUtil.combineSimultaneous(new FollowProfileCommand(profile, left, initialPosLeft),
+				new FollowProfileCommand(profile, right, initialPosRight));
 	}
 
 	public Command turnAngleCommand(double angle, double tolerance, RangeIn<Angle> gyro, RangeOut<Speed> left,
