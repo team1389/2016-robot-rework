@@ -44,4 +44,10 @@ public class RangeOut<T extends Value> {
 		output=new ProfiledRangeOut<T>(output,min,max,maxChange);
 		return this;
 	}
+	public RangeOut<T> scale(double factor){
+		output=ScalarOutput.scale(output,factor);
+		max*=factor;
+		min*=factor;
+		return this;
+	}
 }

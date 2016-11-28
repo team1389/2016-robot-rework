@@ -20,7 +20,12 @@ public interface ScalarOutput<T extends Value> {
 		};
 
 	}
+	public static <T extends Value> ScalarOutput<T> scale(ScalarOutput<T> out, double scale) {
+		return (double val) -> {
+			out.set(val/scale);
+		};
 
+	}
 	public static <T extends Value> ScalarOutput<T> invert(ScalarOutput<T> out) {
 		return (double val) -> {
 			out.set(-val);

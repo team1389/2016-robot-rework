@@ -39,7 +39,7 @@ public abstract class System implements Watchable {
 	public abstract void getInput();
 
 	protected void schedule(Command command) {
-		scheduler.Schedule(command);
+		scheduler.schedule(command);
 		inDefaultMode = false;
 	}
 

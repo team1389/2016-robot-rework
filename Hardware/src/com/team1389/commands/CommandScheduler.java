@@ -11,7 +11,7 @@ public class CommandScheduler {
 		executing = new ArrayList<CommandWrapper>();
 	}
 
-	public void Schedule(Command command) {
+	public void schedule(Command command) {
 		executing.add(new CommandWrapper(command));
 	}
 

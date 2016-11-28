@@ -30,7 +30,6 @@ public class TrapezoidalMotionProfile extends MotionProfile {
 			tCruise=3*dx/(2*vCruise)-tAcc-tDec;
 		}
 		tCruise=xCruise/vCruise;
-		
 	}
 
 	@Override
