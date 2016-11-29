@@ -22,10 +22,6 @@ public class FollowProfileCommand extends Command{
 		timer = new Timer();
 		this.initialPos=initialPos;
 	}
-	public FollowProfileCommand(MotionProfile profile,RangeOut<Position> out,RangeIn<Position> initial){
-		this(profile,out);
-		this.pos=initial;
-	}
 	
 	@Override
 	public void initialize() {
@@ -33,18 +29,12 @@ public class FollowProfileCommand extends Command{
 		initialPos=pos.get();
 		}
 		timer.zero();
-		System.out.println("zeroing");
 	}
 
 	@Override
 	public boolean execute() {
 		double position = profile.getPosition(timer.get());
-		System.out.println(position);
-		System.out.println(initialPos);
 		out.set(Math.abs(initialPos+position));
 		return timer.get() >= profile.getDuration();
-	}
-	public String toString(){
-		return "hi";
 	}
 }

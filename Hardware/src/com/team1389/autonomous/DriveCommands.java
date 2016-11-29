@@ -43,7 +43,6 @@ public class DriveCommands {
 				topSpeed);
 		double initialPosLeft = leftIn.get();
 		double initialPosRight = rightIn.get();
-		System.out.println(initialPosRight);
 		return CommandUtil.combineSimultaneous(new FollowProfileCommand(profile, left, initialPosLeft),
 				new FollowProfileCommand(profile, right, initialPosRight));
 	}

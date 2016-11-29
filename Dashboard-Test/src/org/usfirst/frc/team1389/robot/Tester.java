@@ -1,15 +1,11 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.commands.CommandScheduler;
-import com.team1389.hardware.inputs.software.DigitalInput;
-import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
-import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.inputs.software.WatchableRangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
 import com.team1389.hardware.valueTypes.Position;
-import com.team1389.system.CheesyDriveSystem;
-import com.team1389.system.System;
 import com.team1389.watch.Watcher;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -18,41 +14,28 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class Tester {
 
 	public static void main(String[] args) {
+		initNetworkTablesAsRobot();
+		
 		Timer.SetImplementation(new TestTimer());
-		NetworkTable.setServerMode();
-		NetworkTable.initialize();
-		NetworkTable.globalDeleteAll();
-		System drive = setupDriveSystem();
-		WatchableRangeOut<Position> wheels = new RangeOut<Position>((double val) -> {
-		}, 0, 8192).mapToRange(0, 1).getWatchable("drivePosition");
-		wheels.scale(Math.PI * 8 * 0.0254);
 
+		
+		WatchableRangeOut<Position> wheels = new RangeOut<Position>((double val) -> {
+		}, 0, 8192).mapToRange(0,360).getWatchable("drivePosition");
+		WatchableRangeIn<Position> posIn = new RangeIn<Position>(Position.class,()->{return 1024;},0,8192).getWatchable("test").mapToRange(0,360);
 		Watcher dash = new Watcher();
-		dash.watch(drive, wheels);
-		drive.init();
+		dash.watch(wheels,posIn);
 		CommandScheduler s = new CommandScheduler();
 		while (true) {
 			s.update();
+			wheels.set(45);
 			dash.publish(Watcher.DASHBOARD);
+			posIn.get();
 		}
 	}
-
-	public static System setupDriveSystem() {
-		PercentOut left = new PercentOut((double val) -> {
-		});
-		PercentOut right = left;
-
-		PercentIn throttle = new PercentIn(() -> {
-			return .25;
-		}).applyDeadband(.02);
-		PercentIn wheel = new PercentIn(() -> {
-			return .25;
-		}).applyDeadband(.02);
-		DigitalInput quickTurnButton = DigitalInput.createInput(() -> {
-			return true;
-		}, InputStyle.RAW);
-
-		return new CheesyDriveSystem(left, right, throttle, wheel, quickTurnButton);
+	public static void initNetworkTablesAsRobot(){
+		NetworkTable.setServerMode();
+		NetworkTable.initialize();
+		NetworkTable.globalDeleteAll();
 	}
 
 }

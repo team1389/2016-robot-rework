@@ -25,9 +25,6 @@ public class CommandScheduler implements Watchable {
 		while (iter.hasNext()) {
 			if (iter.next().exec()) {
 				iter.remove();
-				if(isFinished()){
-					System.out.println("finished running all commands");
-				}
 			}
 		}
 
@@ -36,7 +33,6 @@ public class CommandScheduler implements Watchable {
 	public boolean isFinished() {
 		return executing.isEmpty();
 	}
-
 
 	public void cancelAll() {
 		executing = new ArrayList<Command>();

@@ -11,17 +11,13 @@ public class WatchableRangeOut<T extends Value> extends RangeOut<T> implements W
 	private String name;
 	double val;
 
-	// TODO could be a bug here when you do some action to a watchable rangeOut
-	// it loses its watchableNess so be careful
 	public WatchableRangeOut(ScalarOutput<T> output, double min, double max, String name) {
-		super(output, min, max);
+		super(null, min, max);
+		this.output = (double val) -> {
+			this.val = val;
+			output.set(val);
+		};
 		this.name = name;
-	}
-
-	@Override
-	public void set(double val) {
-		super.set(val);
-		this.val = val;
 	}
 
 	public WatchableRangeOut(RangeOut<T> in, String name) {
@@ -32,7 +28,8 @@ public class WatchableRangeOut<T extends Value> extends RangeOut<T> implements W
 	public String getName() {
 		return name;
 	}
-	public WatchableRangeOut<T> mapToRange(double min, double max) {	
+
+	public WatchableRangeOut<T> mapToRange(double min, double max) {
 		super.mapToRange(min, max);
 		return this;
 	}
