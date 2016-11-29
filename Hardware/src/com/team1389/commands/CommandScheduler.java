@@ -4,76 +4,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.team1389.commands.command_base.Command;
 import com.team1389.watch.Info;
 import com.team1389.watch.StringInfo;
 import com.team1389.watch.Watchable;
 
 public class CommandScheduler implements Watchable {
-	List<CommandWrapper> executing;
+	List<Command> executing;
 
 	public CommandScheduler() {
-		executing = new ArrayList<CommandWrapper>();
+		executing = new ArrayList<Command>();
 	}
 
 	public void schedule(Command command) {
-		executing.add(new CommandWrapper(command));
+		executing.add(command);
 	}
 
 	public void update() {
-		ListIterator<CommandWrapper> iter = executing.listIterator();
+		ListIterator<Command> iter = executing.listIterator();
 		while (iter.hasNext()) {
-			if (iter.next().execute()) {
+			if (iter.next().exec()) {
 				iter.remove();
+				if(isFinished()){
+					System.out.println("finished running all commands");
+				}
 			}
 		}
+
 	}
 
 	public boolean isFinished() {
 		return executing.isEmpty();
 	}
 
-	class CommandWrapper {
-		boolean initialized;
-		Command command;
-
-		public CommandWrapper(Command command) {
-			reset();
-			this.command = command;
-		}
-
-		public void init() {
-			initialized = true;
-			command.init();
-		}
-
-		/**
-		 * This will be run at a repeated interval by the controller until it
-		 * returns true
-		 * 
-		 * @return whether the command is finished
-		 */
-		public boolean execute() {
-			if (!initialized) {
-				init();
-			}
-			boolean isFinished = command.execute();
-			if (isFinished) {
-				reset();
-			}
-			return isFinished;
-		}
-
-		public void reset() {
-			initialized = false;
-		}
-
-		public String toString() {
-			return command.toString();
-		}
-	}
 
 	public void cancelAll() {
-		executing = new ArrayList<CommandWrapper>();
+		executing = new ArrayList<Command>();
 	}
 
 	@Override

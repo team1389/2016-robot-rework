@@ -1,7 +1,9 @@
 
 package com.team1389.commands;
 
-public class DoNothingCommand implements Command {
+import com.team1389.commands.command_base.Command;
+
+public class DoNothingCommand extends Command {
 
 	@Override
 	public boolean execute() {

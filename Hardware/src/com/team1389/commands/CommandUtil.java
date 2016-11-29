@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.team1389.commands.command_base.Command;
+
 public class CommandUtil {
 	public static Command combineSequential(Command...commands){
-		System.out.println(commands);
 		return new Command(){
 			int currentIndex=0;
 			@Override
@@ -15,8 +16,9 @@ public class CommandUtil {
 				if(currentIndex>=commands.length){
 					return true;
 				}
-				boolean isFinished=commands[currentIndex].execute();
+				boolean isFinished=commands[currentIndex].exec();
 				if(isFinished){
+					System.out.println("next command");
 					isFinished=false;
 					currentIndex++;
 				}
@@ -25,7 +27,7 @@ public class CommandUtil {
 		
 		};
 	}
-	public static Command combineSimultaneous(Command...commands){
+	/*public static Command combineSimultaneous(Command...commands){
 
 		return new Command(){
 			List<Command> runningCommands;
@@ -33,6 +35,9 @@ public class CommandUtil {
 			public void init(){
 				runningCommands=new ArrayList<>();
 				runningCommands.addAll(Arrays.asList(commands));
+				for(Command c:runningCommands){
+					c.init();
+				}
 			}
 			@Override
 			public boolean execute() {
@@ -54,7 +59,7 @@ public class CommandUtil {
 	public static void executeCommand(Command command){
 		boolean isFinished=false;
 		if(!isFinished){
-			isFinished=command.execute();
+			isFinished=command.exec();
 		}
 	}
 }
