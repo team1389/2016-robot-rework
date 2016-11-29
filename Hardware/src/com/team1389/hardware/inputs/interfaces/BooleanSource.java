@@ -1,7 +1,5 @@
 package com.team1389.hardware.inputs.interfaces;
 
-import com.team1389.hardware.util.LatchedBoolean;
-
 public interface BooleanSource {
 	public boolean get();
 

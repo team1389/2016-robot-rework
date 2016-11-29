@@ -3,8 +3,8 @@ package org.usfirst.frc.team1389.operation;
 import org.usfirst.frc.team1389.layout.IOHardware;
 
 import com.team1389.autonomous.DriveCommands;
-import com.team1389.commands.Command;
 import com.team1389.commands.CommandScheduler;
+import com.team1389.commands.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.WatchableRangeIn;

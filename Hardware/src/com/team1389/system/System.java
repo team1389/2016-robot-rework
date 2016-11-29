@@ -1,7 +1,7 @@
 package com.team1389.system;
 
-import com.team1389.commands.Command;
 import com.team1389.commands.CommandScheduler;
+import com.team1389.commands.command_base.Command;
 import com.team1389.watch.Watchable;
 
 public abstract class System implements Watchable {

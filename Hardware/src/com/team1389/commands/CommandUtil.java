@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.team1389.commands.command_base.Command;
+import com.team1389.commands.command_base.CommandSource;
 
 public class CommandUtil {
 	public static Command combineSequential(Command...commands){
@@ -27,12 +28,12 @@ public class CommandUtil {
 		
 		};
 	}
-	/*public static Command combineSimultaneous(Command...commands){
+	public static Command combineSimultaneous(Command...commands){
 
 		return new Command(){
 			List<Command> runningCommands;
 			@Override
-			public void init(){
+			public void initialize(){
 				runningCommands=new ArrayList<>();
 				runningCommands.addAll(Arrays.asList(commands));
 				for(Command c:runningCommands){
@@ -43,13 +44,21 @@ public class CommandUtil {
 			public boolean execute() {
 				ListIterator<Command> iter = runningCommands.listIterator();
 				while(iter.hasNext()){
-				    if(iter.next().execute()){
+				    if(iter.next().exec()){
 				        iter.remove();
 				    }
 				}
 				return runningCommands.isEmpty();
 			}
 		
+		};
+	}
+	public static Command createCommand(CommandSource execute){
+		return new Command(){
+			@Override
+			protected boolean execute() {
+				return execute.execute();
+			}
 		};
 	}
 	/**

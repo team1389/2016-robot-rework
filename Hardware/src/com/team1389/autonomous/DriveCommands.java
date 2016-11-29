@@ -1,8 +1,8 @@
 package com.team1389.autonomous;
 
-import com.team1389.commands.Command;
 import com.team1389.commands.CommandUtil;
 import com.team1389.commands.FollowProfileCommand;
+import com.team1389.commands.command_base.Command;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.control.PIDSystemCreator;
 import com.team1389.control.pid_wrappers.input.PIDRangeSource;
@@ -56,7 +56,7 @@ public class DriveCommands {
 		PIDController pid = PIDSystemCreator.makeController(turnPID, gyroSource, wheels);
 		return new Command() {
 			@Override
-			public void init() {
+			public void initialize() {
 				pid.setSetpoint(angle);
 				pid.setAbsoluteTolerance(tolerance);
 				pid.enable();

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1389.systems;
 
+import com.team1389.commands.CommandUtil;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
@@ -40,10 +41,10 @@ public class ArmSystem extends System {
 	}
 
 	public void setArm(double angle) {
-		schedule(() -> {
+		schedule(CommandUtil.createCommand(() -> {
 			elevator.set(angle);
 			return armVal.get() == angle;
-		});
+		}));
 	}
 
 	public enum ArmLocation {

@@ -1,7 +1,5 @@
 package com.team1389.hardware.util;
 
-import com.team1389.hardware.inputs.interfaces.BooleanSource;
-
 /**
  * An iterative boolean latch.
  * 
@@ -30,31 +28,5 @@ public class LatchedBoolean {
     public boolean get(boolean newVal){
     	return update(newVal);
     }
-	public static void main(String[] args){
-		BooleanSource b=()->{return System.currentTimeMillis()%1000>500;};
-		BooleanSource latchedB=new BooleanSource(){
-			LatchedBoolean latched=new LatchedBoolean();
-			boolean toggled;
-			@Override
-			public boolean get() {
-				return latched.get(b.get());
-			}
-			
-		};
-		BooleanSource toggledB=new BooleanSource(){
-			boolean toggled;
-			@Override
-			public boolean get() {
-				if(latchedB.get()){
-					toggled=!toggled;
-				}
-				return toggled;
-			}
-			
-		};
-		while(true){
-			System.out.println(toggledB.get());
-		}
-	}
 
 }
