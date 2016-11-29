@@ -43,7 +43,7 @@ public class IntakeSystem extends System {
 
 	@Override
 	public void defaultUpdate() {
-		if (IRSensors.get() && !isOverride) {
+		if (IRSensors.get() && !isOverride && joyVal>=0) {
 			motor.set(-.15);
 		} else {
 			motor.set(joyVal);

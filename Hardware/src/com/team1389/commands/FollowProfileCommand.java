@@ -27,7 +27,10 @@ public class FollowProfileCommand implements Command{
 
 	@Override
 	public boolean execute() {
-		out.set(profile.getPosition(timer.get())+initialPos);
+		double position = profile.getPosition(timer.get());
+		System.out.println(position);
+		System.out.println(initialPos);
+		out.set(Math.abs(initialPos+position));
 		return timer.get() >= profile.getDuration();
 	}
 }

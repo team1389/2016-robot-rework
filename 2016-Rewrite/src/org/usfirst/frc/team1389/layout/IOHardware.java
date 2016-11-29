@@ -36,6 +36,8 @@ public class IOHardware extends IOLayout {
 		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
 
 		elevation = new CANTalonGroup(elevationA, elevationB);
+		
+		turret = new CANTalonHardware(turntableMotor_CAN, registry );
 
 		IRsensor1 = new SwitchHardware(ballHolderIR1_DIO, registry);
 		IRsensor2 = new SwitchHardware(ballHolderIR2_DIO, registry);

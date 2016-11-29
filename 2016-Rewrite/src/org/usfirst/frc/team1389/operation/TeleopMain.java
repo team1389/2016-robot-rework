@@ -4,6 +4,7 @@ import org.usfirst.frc.team1389.layout.IOHardware;
 import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 import org.usfirst.frc.team1389.systems.IntakeSystem;
+import org.usfirst.frc.team1389.systems.TurretSystem;
 
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDConfiguration;
@@ -34,15 +35,23 @@ public class TeleopMain extends Operator {
 		System driveSystem = setupDriveSystem();
 		ArmSystem armSystem = setupArmSystem();
 		System intakeSystem = setupIntakeSystem();
-		manager = new SystemManager(driveSystem, intakeSystem, armSystem);
+		System turretSystem = setupTurretSystem();
+		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
 		// TODO this line is to test system sharing design, remove when tested
-		robot.driveJoystick.getButton(8, InputStyle.LATCHED).addChangeListener(() -> {
+		robot.manipJoystick.getButton(8, InputStyle.LATCHED).addChangeListener(() -> {
 			armSystem.setArm(26);
 		});
 
 		debuggingPanel.watch(driveSystem, armSystem, intakeSystem, robot.IRsensor1, robot.IRsensor2);
 
+	}
+
+	private System setupTurretSystem() {
+		PercentOut turretVoltage = robot.turret.getVoltageOutput();
+		PercentIn joy = robot.manipJoystick.getAxis(4); 
+		TurretSystem turret = new TurretSystem(turretVoltage,joy);
+		return turret;
 	}
 
 	protected void periodic() {

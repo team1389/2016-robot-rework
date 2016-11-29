@@ -30,6 +30,7 @@ public class IOLayout extends RobotMap{
 	CANTalonHardware elevationB;
 	public CANTalonGroup elevation;
 	
+	public CANTalonHardware turret;
 	public VictorHardware intake;
 	
 	public JoystickController manipJoystick;

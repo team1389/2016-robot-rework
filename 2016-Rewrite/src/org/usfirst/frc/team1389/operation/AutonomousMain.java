@@ -10,6 +10,7 @@ import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.WatchableRangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.valueTypes.Speed;
 
 public class AutonomousMain extends Operator {
 	CommandScheduler autonomousScheduler;
@@ -34,7 +35,7 @@ public class AutonomousMain extends Operator {
 		RangeOut<Position> right = robot.rightDrive.getPositionOutput(configright).invert();
 		WatchableRangeIn<Position> leftIn=robot.leftDrive.getLeader().getPositionInput().getWatchable("leftPos");
 		WatchableRangeIn<Position> rigthIn=robot.rightDrive.getLeader().getPositionInput().getWatchable("rightPos");
-
+		WatchableRangeIn<Speed> rightInSpeed=robot.rightDrive.getLeader().getSpeedInput().getWatchable("speed");
 		Command go = new DriveCommands(8, configleft, .5, 1).driveMetersCommand(5, left,right,leftIn,rigthIn);
 		/*
 		 * turnAngleCommand(90, 2, robot.navX.getAngleInput(),
@@ -43,7 +44,7 @@ public class AutonomousMain extends Operator {
 		 */
 
 		autonomousScheduler.schedule(go);
-		debuggingPanel.watch(autonomousScheduler, leftIn,rigthIn);
+		debuggingPanel.watch(autonomousScheduler, leftIn,rigthIn,rightInSpeed);
 	}
 
 	@Override
