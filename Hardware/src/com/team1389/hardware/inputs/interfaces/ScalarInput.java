@@ -44,7 +44,7 @@ public interface ScalarInput<T extends Value> {
 
 	public static <T extends Value> ScalarInput<T> scale(ScalarInput<T> input, double factor) {
 		return () -> {
-			return input.get()/ factor;
+			return input.get()* factor;
 		};
 	}
 }
