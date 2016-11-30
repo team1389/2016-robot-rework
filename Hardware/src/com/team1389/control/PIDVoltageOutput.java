@@ -4,12 +4,12 @@ import com.team1389.control.pid_wrappers.output.PIDControlledRange;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.util.state.State;
-import com.team1389.hardware.util.state.StateSetup;
-import com.team1389.hardware.util.state.StateTracker;
 import com.team1389.hardware.valueTypes.Percent;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
+import com.team1389.util.state.State;
+import com.team1389.util.state.StateSetup;
+import com.team1389.util.state.StateTracker;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;

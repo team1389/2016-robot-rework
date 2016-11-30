@@ -1,4 +1,4 @@
-package com.team1389.hardware.util;
+package com.team1389.util;
 /**
  * A drivetrain command consisting of the left, right motor settings and whether
  * the brake mode is enabled.

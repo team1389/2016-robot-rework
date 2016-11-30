@@ -43,8 +43,8 @@ public class WatchableRangeOut<T extends Value> extends RangeOut<T> implements W
 		return this;
 	}
 
-	public WatchableRangeOut<T> getProfiledOut(double maxChange) {
-		super.getProfiledOut(maxChange);
+	public WatchableRangeOut<T> getProfiledOut(double maxChange,double initialPos) {
+		super.getProfiledOut(maxChange,initialPos);
 		return this;
 	}
 

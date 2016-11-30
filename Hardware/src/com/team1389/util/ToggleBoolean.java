@@ -1,4 +1,4 @@
-package com.team1389.hardware.util;
+package com.team1389.util;
 
 public class ToggleBoolean extends LatchedBoolean{
 	boolean toggle;

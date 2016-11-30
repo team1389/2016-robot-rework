@@ -1,9 +1,9 @@
 package com.team1389.hardware.outputs.interfaces;
 
-import com.team1389.hardware.util.RangeUtil;
 import com.team1389.hardware.valueTypes.Angle;
 import com.team1389.hardware.valueTypes.Percent;
 import com.team1389.hardware.valueTypes.Value;
+import com.team1389.util.RangeUtil;
 
 public interface ScalarOutput<T extends Value> {
 	public void set(double val);

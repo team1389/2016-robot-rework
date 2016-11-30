@@ -1,7 +1,7 @@
 package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
-import com.team1389.hardware.util.ToggleBoolean;
+import com.team1389.util.ToggleBoolean;
 
 public class ToggledDigitalInput extends DigitalInput {
 	ToggleBoolean toggleIn;

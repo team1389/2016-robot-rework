@@ -1,4 +1,4 @@
-package com.team1389.hardware.util.state;
+package com.team1389.util.state;
 
 public interface State {
 	public void init();

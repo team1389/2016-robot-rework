@@ -10,11 +10,13 @@ public class ProfiledRangeOut<T extends Value> implements ScalarOutput<T> {
 	double setpoint, goalPoint;
 	ScalarOutput<T> controller;
 
-	protected ProfiledRangeOut(ScalarOutput<T> controller,double min,double max, double maxChange) {
+	protected ProfiledRangeOut(ScalarOutput<T> controller, double min, double max, double maxChange,
+			double initialPos) {
 		this.maxChange = maxChange;
 		this.controller = controller;
-		this.min=min;
-		this.max=max;
+		this.min = min;
+		this.max = max;
+		this.setpoint = initialPos;
 		timer = new Timer();
 	}
 
@@ -28,7 +30,6 @@ public class ProfiledRangeOut<T extends Value> implements ScalarOutput<T> {
 	private double getNextSetpoint(double goalPoint, double timeDiff) {
 		double maxChangeInSetpoint = maxChange * timeDiff;
 		double newSetpoint;
-
 		if (Math.abs(goalPoint - setpoint) < maxChangeInSetpoint) {
 			newSetpoint = goalPoint;
 		} else if (goalPoint > setpoint) {

@@ -10,10 +10,10 @@ import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.util.state.State;
-import com.team1389.hardware.util.state.StateTracker;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
+import com.team1389.util.state.State;
+import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Info;
 import com.team1389.watch.Watchable;
 

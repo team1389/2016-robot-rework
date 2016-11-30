@@ -1,7 +1,7 @@
 package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
-import com.team1389.hardware.util.LatchedBoolean;
+import com.team1389.util.LatchedBoolean;
 
 public class LatchedDigitalInput extends DigitalInput{
 	LatchedBoolean latchedIn;

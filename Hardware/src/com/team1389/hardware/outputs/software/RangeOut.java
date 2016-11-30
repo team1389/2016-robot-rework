@@ -50,8 +50,8 @@ public class RangeOut<T extends Value> {
 		return this;
 	}
 
-	public RangeOut<T> getProfiledOut(double maxChange) {
-		output = new ProfiledRangeOut<T>(output, min, max, maxChange);
+	public RangeOut<T> getProfiledOut(double maxChange,double initialPos) {
+		output = new ProfiledRangeOut<T>(output, min, max, maxChange,initialPos);
 		return this;
 	}
 
