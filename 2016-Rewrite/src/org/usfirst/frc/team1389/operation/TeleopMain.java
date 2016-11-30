@@ -50,7 +50,9 @@ public class TeleopMain extends Operator {
 	private System setupTurretSystem() {
 		PercentOut turretVoltage = robot.turret.getVoltageOutput();
 		PercentIn joy = robot.manipJoystick.getAxis(4); 
-		TurretSystem turret = new TurretSystem(turretVoltage,joy);
+		RangeIn<Angle> navX=robot.navX.getAngleInput();
+		LatchedDigitalInput zeroButton=(LatchedDigitalInput) robot.manipJoystick.getButton(8, InputStyle.LATCHED);
+		TurretSystem turret = new TurretSystem(turretVoltage,joy,navX,zeroButton);
 		return turret;
 	}
 
