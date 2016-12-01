@@ -1,1 +1,0 @@
-The purpose of this file is so that the ant task inside Team1389-Base-Project-Template can check if correct location for this repo
