@@ -1,13 +1,13 @@
 package org.usfirst.frc.team1389.operation;
 
-import org.usfirst.frc.team1389.layout.IOHardware;
+import org.usfirst.frc.team1389.layout.robot.RobotHardware;
 
 import com.team1389.watch.Watcher;
 
 public abstract class Operator {
-	IOHardware robot;
+	RobotHardware robot;
 	Watcher debuggingPanel;
-	public Operator(IOHardware robot){
+	public Operator(RobotHardware robot){
 		this.robot=robot;
 		debuggingPanel=new Watcher();
 	}

@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.layout.IOHardware;
+import org.usfirst.frc.team1389.layout.robot.RobotHardware;
 import org.usfirst.frc.team1389.operation.AutonomousMain;
 import org.usfirst.frc.team1389.operation.TeleopMain;
 
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	IOHardware robot;
+	RobotHardware robot;
 	TeleopMain teleOperator;
 	AutonomousMain autonOperator;
 
@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		robot = new IOHardware();
+		robot = RobotHardware.getInstance();
 		teleOperator = new TeleopMain(robot);
 		autonOperator = new AutonomousMain(robot);
 	}

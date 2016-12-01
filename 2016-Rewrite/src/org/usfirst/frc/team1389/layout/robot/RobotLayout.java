@@ -1,5 +1,4 @@
-package org.usfirst.frc.team1389.layout;
-import com.team1389.hardware.humaninputs.JoystickController;
+package org.usfirst.frc.team1389.layout.robot;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
@@ -10,7 +9,7 @@ import com.team1389.hardware.registry.Registry;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
-public class IOLayout extends RobotMap{
+public class RobotLayout extends RobotMap{
 	public Registry registry;
 	
 	public SwitchHardware IRsensor1;
@@ -34,7 +33,4 @@ public class IOLayout extends RobotMap{
 	
 	public CANTalonHardware turret;
 	public VictorHardware intake;
-	
-	public JoystickController manipJoystick;
-	public JoystickController driveJoystick;
 }

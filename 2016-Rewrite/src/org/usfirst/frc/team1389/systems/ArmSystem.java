@@ -19,8 +19,8 @@ public class ArmSystem extends System {
 
 	double inputAngle;
 
-	public ArmSystem(RangeOut<Angle> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
-		this.elevator = elevator.invert().getProfiledOut(72,0);
+	public ArmSystem(RangeOut<Position> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
+		this.elevator = elevator.invert().getProfiledOut(72,0).mapToAngle();
 		this.buttons = map;
 		this.armVal = armVal;
 		this.inputAngle = 0;

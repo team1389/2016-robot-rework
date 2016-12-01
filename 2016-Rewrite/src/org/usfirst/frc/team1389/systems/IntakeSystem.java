@@ -16,7 +16,7 @@ public class IntakeSystem extends System {
 	boolean isOverride;
 	double joyVal;
 
-	public IntakeSystem(PercentOut motor, PercentIn joystick, DigitalInput IRSensors, DigitalInput override) {
+	public IntakeSystem(PercentOut motor, DigitalInput IRSensors, PercentIn joystick, DigitalInput override) {
 		this.motor = motor;
 		this.joystick = joystick;
 		this.IRSensors = IRSensors;
@@ -43,7 +43,7 @@ public class IntakeSystem extends System {
 
 	@Override
 	public void defaultUpdate() {
-		if (IRSensors.get() && !isOverride && joyVal>=0) {
+		if (IRSensors.get() && !isOverride && joyVal >= 0) {
 			motor.set(-.15);
 		} else {
 			motor.set(joyVal);

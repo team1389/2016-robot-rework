@@ -33,7 +33,7 @@ public class TurretSystem extends System {
 	LatchedDigitalInput zeroButton;
 	boolean toZero;
 
-	public TurretSystem(PercentOut voltageSystem, PercentIn joystickIn, RangeIn<Angle> turretAngle,
+	public TurretSystem(PercentOut voltageSystem, RangeIn<Angle> turretAngle, PercentIn joystickIn,
 			LatchedDigitalInput zeroButton) {
 		this.voltRange = voltageSystem;
 		this.joystick = joystickIn.scale(.2);

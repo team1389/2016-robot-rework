@@ -1,15 +1,13 @@
 package org.usfirst.frc.team1389.operation;
 
-import org.usfirst.frc.team1389.layout.IOHardware;
+import org.usfirst.frc.team1389.layout.robot.RobotHardware;
 
 import com.team1389.commands.CommandScheduler;
-import com.team1389.commands.CommandUtil;
 import com.team1389.commands.FollowProfileCommand;
 import com.team1389.commands.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.WatchableRangeIn;
-import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.hardware.valueTypes.Speed;
@@ -18,7 +16,7 @@ import com.team1389.motion_profile.TrapezoidalMotionProfile;
 public class AutonomousMain extends Operator {
 	CommandScheduler autonomousScheduler;
 
-	public AutonomousMain(IOHardware robot) {
+	public AutonomousMain(RobotHardware robot) {
 		super(robot);
 	}
 

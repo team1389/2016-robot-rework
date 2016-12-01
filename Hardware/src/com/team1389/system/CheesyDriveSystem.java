@@ -7,7 +7,11 @@ import com.team1389.util.DriveSignal;
 import com.team1389.watch.BooleanInfo;
 import com.team1389.watch.Info;
 import com.team1389.watch.NumberInfo;
-
+/**
+ * hellow
+ * @author amind
+ *
+ */
 public class CheesyDriveSystem extends System {
 	private PercentOut leftMotor;
 	private PercentOut rightMotor;

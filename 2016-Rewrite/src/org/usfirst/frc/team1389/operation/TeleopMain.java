@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1389.operation;
 
-import org.usfirst.frc.team1389.layout.IOHardware;
+import org.usfirst.frc.team1389.layout.controls.ControlBoard;
+import org.usfirst.frc.team1389.layout.robot.RobotHardware;
 import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 import org.usfirst.frc.team1389.systems.IntakeSystem;
@@ -11,11 +12,9 @@ import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
-import com.team1389.hardware.inputs.software.LatchedDigitalInput;
-import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.hardware.outputs.software.WatchableRangeOut;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.valueTypes.Angle;
 import com.team1389.hardware.valueTypes.Position;
 import com.team1389.system.CheesyDriveSystem;
@@ -27,35 +26,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TeleopMain extends Operator {
 	SystemManager manager;
+	ControlBoard controls;
 
-	public TeleopMain(IOHardware robot) {
+	public TeleopMain(RobotHardware robot) {
 		super(robot);
-		debuggingPanel = new Watcher();
 	}
 
 	protected void init() {
+		controls = ControlBoard.getInstance();
 		System driveSystem = setupDriveSystem();
-		ArmSystem armSystem = setupArmSystem();
+		System armSystem = setupArmSystem();
 		System intakeSystem = setupIntakeSystem();
 		System turretSystem = setupTurretSystem();
+
 		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
-		// TODO this line is to test system sharing design, remove when tested
-		robot.manipJoystick.getButton(8, InputStyle.LATCHED).addChangeListener(() -> {
-			armSystem.setArm(26);
-		});
-
 		debuggingPanel.watch(driveSystem, armSystem, intakeSystem, robot.IRsensor1, robot.IRsensor2);
 
-	}
-
-	private System setupTurretSystem() {
-		PercentOut turretVoltage = robot.turret.getVoltageOutput();
-		PercentIn joy = robot.manipJoystick.getAxis(4); 
-		RangeIn<Angle> navX=robot.navX.getAngleInput();
-		LatchedDigitalInput zeroButton=(LatchedDigitalInput) robot.manipJoystick.getButton(8, InputStyle.LATCHED);
-		TurretSystem turret = new TurretSystem(turretVoltage,joy,navX,zeroButton);
-		return turret;
 	}
 
 	protected void periodic() {
@@ -68,42 +55,37 @@ public class TeleopMain extends Operator {
 		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 
-	public ArmSystem setupArmSystem() {
-		WatchableRangeOut<Angle> elevator = robot.elevation
-				.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false)).mapToAngle()
-				.getWatchable("elevator");
-		LatchedDigitalInput armDownButton = (LatchedDigitalInput) robot.manipJoystick.getButton(1, InputStyle.LATCHED);
-		LatchedDigitalInput armMidButton = (LatchedDigitalInput) robot.manipJoystick.getButton(2, InputStyle.LATCHED);
-		LatchedDigitalInput armUpButton = (LatchedDigitalInput) robot.manipJoystick.getButton(3, InputStyle.LATCHED);
-		LatchedDigitalInput armTopButton = (LatchedDigitalInput) robot.manipJoystick.getButton(4, InputStyle.LATCHED);
-		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
-		map.setMappings(map.new ButtonEnum(armDownButton, ArmLocation.DOWN),
-				map.new ButtonEnum(armMidButton, ArmLocation.DEFENSE),
-				map.new ButtonEnum(armUpButton, ArmLocation.VERTICAL),
-				map.new ButtonEnum(armTopButton, ArmLocation.LOW_GOAL));
+	private TurretSystem setupTurretSystem() {
+		PercentOut turretVoltage = robot.turret.getVoltageOutput();
+		RangeIn<Angle> turretAngle = robot.navX.getAngleInput();
+		TurretSystem turret = new TurretSystem(turretVoltage, turretAngle, controls.getTurretManual(),
+				controls.getTurretZero());
+		return turret;
+	}
 
+	public ArmSystem setupArmSystem() {
+		RangeOut<Position> elevator = robot.elevation
+				.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false));
+		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
+		map.setMappings(map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
+				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
+				map.new ButtonEnum(controls.getArmPositionC(), ArmLocation.VERTICAL),
+				map.new ButtonEnum(controls.getArmPositionD(), ArmLocation.LOW_GOAL));
 		RangeIn<Position> armVal = robot.elevation.getLeader().getPositionInput();
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
-		debuggingPanel.watch(elevator);
 		return armSystem;
 	}
 
 	public System setupIntakeSystem() {
 		PercentOut motor = robot.intake.getVoltageOutput();
-		PercentIn joy = robot.manipJoystick.getAxis(1);
 		DigitalInput IRsensors = DigitalInput.createInput(robot.IRsensors, InputStyle.RAW);
-		DigitalInput manualOverride = robot.manipJoystick.getButton(9, InputStyle.RAW);
-		return new IntakeSystem(motor, joy, IRsensors, manualOverride);
+		return new IntakeSystem(motor, IRsensors, controls.getIntakeAxis(), controls.getIntakeOverride());
 	}
 
 	public System setupDriveSystem() {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
 		PercentOut right = robot.rightDrive.getVoltageOutput();
 
-		PercentIn throttle = robot.driveJoystick.getAxis(1).applyDeadband(.02);
-		PercentIn wheel = robot.driveJoystick.getAxis(0).applyDeadband(.02);
-		DigitalInput quickTurnButton = robot.driveJoystick.getButton(1, InputStyle.RAW);
-
-		return new CheesyDriveSystem(left, right, throttle, wheel, quickTurnButton);
+		return new CheesyDriveSystem(left, right, controls.getThrottle(), controls.getWheel(), controls.getQuickTurn());
 	}
 }
