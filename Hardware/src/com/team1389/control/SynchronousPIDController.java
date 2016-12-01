@@ -1,7 +1,7 @@
 package com.team1389.control;
 
-import com.team1389.commands.CommandUtil;
-import com.team1389.commands.command_base.Command;
+import com.team1389.command_framework.CommandUtil;
+import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import com.team1389.hardware.inputs.software.RangeIn;

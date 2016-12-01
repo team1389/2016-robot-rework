@@ -1,11 +1,6 @@
 package org.usfirst.frc.team1389.robot;
 
-import com.team1389.commands.CommandScheduler;
-import com.team1389.commands.FollowProfileCommand;
-import com.team1389.commands.command_base.Command;
-import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.outputs.software.WatchableRangeOut;
-import com.team1389.hardware.value_types.Position;
+import com.team1389.command_framework.CommandScheduler;
 import com.team1389.motion_profile.TrapezoidalMotionProfile;
 import com.team1389.watch.Watcher;
 
@@ -25,7 +20,6 @@ public class Tester2 {
 
 	public static void init() {
 		TrapezoidalMotionProfile trapezoidalMotionProfile = new TrapezoidalMotionProfile(5,1,1,2);
-		scheduler.schedule(new FollowProfileCommand(trapezoidalMotionProfile,new RangeOut<Position>((double val)->{System.out.println(val);},0,1).scale(Math.PI*.0254*8).mapToRange(0,1).scale(Math.PI*.0254*8)));
 		System.out.println(trapezoidalMotionProfile.getPosition(trapezoidalMotionProfile.getDuration()));
 	}
 

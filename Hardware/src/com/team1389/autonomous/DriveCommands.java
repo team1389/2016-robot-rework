@@ -1,8 +1,9 @@
 package com.team1389.autonomous;
 
-import com.team1389.commands.CommandUtil;
-import com.team1389.commands.FollowProfileCommand;
-import com.team1389.commands.command_base.Command;
+import com.team1389.autonomous.command.FollowProfileCommand;
+import com.team1389.autonomous.command.TurnAngleCommand;
+import com.team1389.command_framework.CommandUtil;
+import com.team1389.command_framework.command_base.Command;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.control.SynchronousPIDController;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -48,20 +49,6 @@ public class DriveCommands {
 
 	public Command turnAngleCommand(double angle, double tolerance, RangeIn<Angle> gyro, RangeOut<Speed> left,
 			RangeOut<Speed> right, PIDConfiguration turnPID) {
-		SynchronousPIDController<Speed, Angle> pid = new SynchronousPIDController<Speed, Angle>(turnPID, gyro,
-				left.addFollowers(right.invert()));
-		return new Command() {
-			@Override
-			public void initialize() {
-				pid.setSetpoint(angle);
-			}
-
-			@Override
-			public boolean execute() {
-				pid.update();
-				return pid.onTarget(tolerance);
-			}
-
-		};
+		return new TurnAngleCommand<Speed>(0, true, 2, gyro, left.addFollowers(right.invert()), turnPID);
 	}
 }

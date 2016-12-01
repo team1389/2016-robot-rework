@@ -1,6 +1,6 @@
-package com.team1389.commands;
+package com.team1389.autonomous.command;
 
-import com.team1389.commands.command_base.Command;
+import com.team1389.command_framework.command_base.Command;
 import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;

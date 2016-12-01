@@ -1,6 +1,6 @@
 package com.team1389.autonomous;
 
-import com.team1389.commands.command_base.Command;
+import com.team1389.command_framework.command_base.Command;
 
 /**
  * An abstract class that is the basis of the robot's autonomous routines. This

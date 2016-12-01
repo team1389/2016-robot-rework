@@ -1,12 +1,12 @@
-package com.team1389.commands;
+package com.team1389.command_framework;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.team1389.commands.command_base.Command;
-import com.team1389.commands.command_base.CommandSource;
+import com.team1389.command_framework.command_base.Command;
+import com.team1389.command_framework.command_base.CommandSource;
 
 public class CommandUtil {
 	public static Command combineSequential(Command...commands){

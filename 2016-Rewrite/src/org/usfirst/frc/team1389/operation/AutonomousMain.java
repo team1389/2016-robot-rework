@@ -2,9 +2,9 @@ package org.usfirst.frc.team1389.operation;
 
 import org.usfirst.frc.team1389.layout.robot.RobotHardware;
 
-import com.team1389.commands.CommandScheduler;
-import com.team1389.commands.FollowProfileCommand;
-import com.team1389.commands.command_base.Command;
+import com.team1389.autonomous.command.FollowProfileCommand;
+import com.team1389.command_framework.CommandScheduler;
+import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.WatchableRangeIn;
@@ -40,13 +40,6 @@ public class AutonomousMain extends Operator {
 		//Command go = new DriveCommands(8, configleft, .5, 1).driveMetersCommand(5, left,right,leftIn,rigthIn);
 		Command go2=new FollowProfileCommand(new TrapezoidalMotionProfile(10, .5, .7, .5), right,rightPos);
 
-		/*
-		 * turnAngleCommand(90, 2, robot.navX.getAngleInput(),
-		 * robot.leftDrive.getSpeedOutput(config),
-		 * robot.rightDrive.getSpeedOutput(config));
-		 */
-
-		autonomousScheduler.schedule(go2);
 		debuggingPanel.watch(autonomousScheduler, rightPos,rightSpeed,right);
 	}
 

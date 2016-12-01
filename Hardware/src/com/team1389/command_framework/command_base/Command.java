@@ -1,4 +1,4 @@
-package com.team1389.commands.command_base;
+package com.team1389.command_framework.command_base;
 
 public abstract class Command {
 	boolean initialized;
