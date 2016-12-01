@@ -14,14 +14,13 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.motion_profile.TrapezoidalMotionProfile;
 
 public class DriveCommands {
-	static final double inchesToMeters = .0245;
 	double wheelCircumference; // meters
 	double maxAcceleration;
-	double topSpeed;
+	double maxVelocity;
 
-	public DriveCommands(double wheelDiameter, double maxAcceleration, double topSpeed) {
-		this.wheelCircumference = wheelDiameter * Math.PI * inchesToMeters;
-		this.topSpeed = topSpeed;
+	public DriveCommands(double wheelCircumference, double maxAcceleration, double topSpeed) {
+		this.wheelCircumference = wheelCircumference;
+		this.maxVelocity = topSpeed;
 		this.maxAcceleration = maxAcceleration;
 	}
 
@@ -41,7 +40,7 @@ public class DriveCommands {
 	public Command driveMetersCommand(double meters, RangeOut<Position> left, RangeOut<Position> right,
 			RangeIn<Position> leftIn, RangeIn<Position> rightIn) {
 		TrapezoidalMotionProfile profile = new TrapezoidalMotionProfile(meters, maxAcceleration, maxAcceleration,
-				topSpeed);
+				maxVelocity);
 		Command leftFollowCommand = new FollowProfileCommand(profile, left, leftIn);
 		Command rightFollowCommand = new FollowProfileCommand(profile, right, rightIn);
 		return CommandUtil.combineSimultaneous(leftFollowCommand, rightFollowCommand);
