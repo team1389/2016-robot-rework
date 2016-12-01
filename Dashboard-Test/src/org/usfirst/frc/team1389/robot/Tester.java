@@ -1,17 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.systems.TurretSystem;
+import org.usfirst.frc.team1389.watchers.DashboardInput;
 
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.hardware.inputs.software.DigitalInput;
-import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
-import com.team1389.hardware.inputs.software.LatchedDigitalInput;
-import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.inputs.software.WatchableRangeIn;
-import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.hardware.value_types.Angle;
-import com.team1389.system.System;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -24,26 +15,13 @@ public class Tester {
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
-	static double pos=45;
-	static double vltg;
 
 	public static void init() {
-		WatchableRangeIn<Angle> turretAngle = new RangeIn<Angle>(Angle.class, () -> {
-			return pos;
-		}, 0, 360).getWatchable("turret Angle");
-		PercentOut voltRange = new PercentOut((double val) -> {
-			vltg = val;
-		});
-		dash.watch(voltRange.getWatchable("turret PWR"));
-		PercentIn joy=new PercentIn(()->{return 0;});
-		LatchedDigitalInput in=(LatchedDigitalInput) DigitalInput.createInput(()->{return true;}, InputStyle.LATCHED);
-		System turret=new TurretSystem(voltRange, turretAngle,joy, in);
-		dash.watch(turretAngle);
-		manager.register(turret);
+		DashboardInput.getInstance().init();
 	}
 
 	public static void update() {
-		pos += 3 * vltg - .5 * (2 * Math.random() - 1);
+		DashboardInput.getInstance().getSelectedAutonMode();
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -70,7 +48,7 @@ public class Tester {
 			}
 		});
 		dash = new Watcher();
-		manager=new SystemManager();
+		manager = new SystemManager();
 		scheduler = new CommandScheduler();
 		init();
 		while (true) {

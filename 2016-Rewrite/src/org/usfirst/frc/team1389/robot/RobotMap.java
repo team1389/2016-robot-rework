@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.layout.robot;
+package org.usfirst.frc.team1389.robot;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into

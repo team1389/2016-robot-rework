@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1389.operation;
 
-import org.usfirst.frc.team1389.layout.controls.ControlBoard;
-import org.usfirst.frc.team1389.layout.robot.RobotHardware;
+import org.usfirst.frc.team1389.robot.RobotHardware;
+import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 import org.usfirst.frc.team1389.systems.IntakeSystem;

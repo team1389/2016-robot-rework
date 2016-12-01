@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.layout.controls;
+package org.usfirst.frc.team1389.robot.controls;
 
 public class ControlMap {
 	//Driver Controls

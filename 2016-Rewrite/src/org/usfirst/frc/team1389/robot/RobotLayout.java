@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.layout.robot;
+package org.usfirst.frc.team1389.robot;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.inputs.interfaces.BooleanSource;

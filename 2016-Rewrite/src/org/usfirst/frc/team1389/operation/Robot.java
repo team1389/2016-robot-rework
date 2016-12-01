@@ -1,9 +1,11 @@
 
-package org.usfirst.frc.team1389.robot;
+package org.usfirst.frc.team1389.operation;
 
-import org.usfirst.frc.team1389.layout.robot.RobotHardware;
-import org.usfirst.frc.team1389.operation.TeleopMain;
+import org.usfirst.frc.team1389.robot.RobotHardware;
+import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
+
+import com.team1389.autonomous.AutoModeExecuter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -17,6 +19,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public class Robot extends IterativeRobot {
 	RobotHardware robot;
 	TeleopMain teleOperator;
+    AutoModeExecuter autoModeExecuter;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -26,9 +29,13 @@ public class Robot extends IterativeRobot {
 		DebugDash.getInstance().clearWatchers();
 		robot = RobotHardware.getInstance();
 		teleOperator = new TeleopMain(robot);
+		autoModeExecuter = new AutoModeExecuter();
 	}
 
 	public void autonomousInit() {
+        autoModeExecuter.stop();
+        autoModeExecuter.setAutoMode(DashboardInput.getInstance().getSelectedAutonMode());
+        autoModeExecuter.start();
 		DebugDash.getInstance().clearWatchers();
 	}
 
@@ -46,6 +53,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+        autoModeExecuter.stop();
 		DebugDash.getInstance().clearWatchers();
 		teleOperator.init();
 	}

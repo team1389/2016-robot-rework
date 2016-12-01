@@ -19,7 +19,7 @@ public class DriveCommands {
 	double maxAcceleration;
 	double topSpeed;
 
-	public DriveCommands(double wheelDiameter, PIDConfiguration turnPID, double maxAcceleration, double topSpeed) {
+	public DriveCommands(double wheelDiameter, double maxAcceleration, double topSpeed) {
 		this.wheelCircumference = wheelDiameter * Math.PI * inchesToMeters;
 		this.topSpeed = topSpeed;
 		this.maxAcceleration = maxAcceleration;
