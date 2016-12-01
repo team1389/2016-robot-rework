@@ -3,7 +3,7 @@ package org.usfirst.frc.team1389.watchers;
 import org.usfirst.frc.team1389.autonomous.AutonModeSelector;
 import org.usfirst.frc.team1389.autonomous.AutonOption;
 
-import com.team1389.autonomous.AutoModeBase;
+import com.team1389.auto.AutoModeBase;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

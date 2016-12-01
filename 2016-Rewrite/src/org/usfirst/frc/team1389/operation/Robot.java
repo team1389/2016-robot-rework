@@ -5,7 +5,7 @@ import org.usfirst.frc.team1389.robot.RobotHardware;
 import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
-import com.team1389.autonomous.AutoModeExecuter;
+import com.team1389.auto.AutoModeExecuter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 

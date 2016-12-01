@@ -2,7 +2,7 @@ package org.usfirst.frc.team1389.autonomous;
 
 import org.usfirst.frc.team1389.autonomous.modes.DriveStraight;
 
-import com.team1389.autonomous.AutoModeBase;
+import com.team1389.auto.AutoModeBase;
 
 public class AutonModeSelector {
 	public static AutoModeBase createAutoMode(AutonOption autonOption) {

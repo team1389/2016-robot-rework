@@ -3,7 +3,7 @@ package org.usfirst.frc.team1389.autonomous.command;
 import org.usfirst.frc.team1389.robot.RobotConstants;
 import org.usfirst.frc.team1389.robot.RobotHardware;
 
-import com.team1389.autonomous.DriveCommands;
+import com.team1389.auto.DriveCommands;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
