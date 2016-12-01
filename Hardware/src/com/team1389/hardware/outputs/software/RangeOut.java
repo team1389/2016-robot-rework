@@ -57,7 +57,10 @@ public class RangeOut<T extends Value> {
 		output = new ProfiledRangeOut<T>(output, min, max, maxChange,initialPos);
 		return this;
 	}
-
+	public RangeOut<T> addChangeListener(Runnable onChange){
+		output=ScalarOutput.getListeningOutput(output, onChange);
+		return this;
+	}
 	public RangeOut<T> addFollowers(RangeOut<T> outFollow) {
 		ScalarOutput<T> out = this.output;
 		output = (double val) -> {

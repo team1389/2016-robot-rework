@@ -57,4 +57,8 @@ public interface ScalarOutput<T extends Value> {
 		};
 	}
 
+	public static <T extends Value> ScalarOutput<T> getListeningOutput(ScalarOutput<T> output, Runnable onChange) {
+		return new ListeningScalarOutput<T>(output, onChange);
+	}
+
 }

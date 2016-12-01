@@ -1,6 +1,5 @@
 package com.team1389.control;
 
-import com.team1389.control.pid_wrappers.output.PIDControlledRange;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
@@ -10,10 +9,6 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateSetup;
 import com.team1389.util.state.StateTracker;
-
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
 
 /**
  * Can PID control a voltage controlled motor given a sensor. Can do either
@@ -25,19 +20,17 @@ import edu.wpi.first.wpilibj.PIDSource;
  * 
  * @author Jacob Prinz
  */
-public class PIDVoltageOutput {
+public class PIDVoltageHardware{
 	final StateTracker stateTracker;
 	final PercentOut voltageOutput;
 
-	public PIDVoltageOutput(PercentOut voltageOutput) {
+	public PIDVoltageHardware(PercentOut voltageOutput) {
 		this.voltageOutput = voltageOutput;
 		stateTracker = new StateTracker();
 	}
 
 	public RangeOut<Speed> getSpeedOutput(RangeIn<Speed> speedSensor, PIDConfiguration config) {
-		PIDSource sensor = new PIDSpeedInput(speedSensor);
-		PIDOutput motor = new PIDControlledRange<Percent>(voltageOutput);
-		PIDController controller = PIDSystemCreator.makeController(config, sensor, motor);
+		PIDController<Percent,Speed> controller = new PIDController<Percent,Speed>(config,speedSensor,voltageOutput);
 
 		State speedControlState = stateTracker.newState(new StateSetup() {
 			@Override
@@ -51,16 +44,11 @@ public class PIDVoltageOutput {
 			}
 		});
 
-		return new RangeOut<Speed>((double speed) -> {
-			controller.setSetpoint(speed);
-			speedControlState.init();
-		} , speedSensor.min(), speedSensor.max());
+		return controller.getSetpointSetter().addChangeListener(()->{speedControlState.init();});
 	}
 
 	public RangeOut<Position> getPositionOutput(RangeIn<Position> positionSensor, PIDConfiguration config) {
-		PIDSource sensor = new PIDPositionInput(positionSensor);
-		PIDOutput motor = new PIDControlledRange<Percent>(voltageOutput);
-		PIDController controller = PIDSystemCreator.makeController(config, sensor, motor);
+		PIDController<Percent,Position> controller = new PIDController<Percent,Position>(config,positionSensor,voltageOutput);
 
 		State positionControlState = stateTracker.newState(new StateSetup() {
 			@Override
@@ -74,9 +62,7 @@ public class PIDVoltageOutput {
 			}
 		});
 
-		return new RangeOut<Position>((double position) -> {
-			controller.setSetpoint(position);
-			positionControlState.init();
-		} , positionSensor.min(), positionSensor.max());
+		return controller.getSetpointSetter().addChangeListener(()->{positionControlState.init();});
+
 	}
 }
