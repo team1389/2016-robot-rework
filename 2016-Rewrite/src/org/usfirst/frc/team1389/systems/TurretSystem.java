@@ -77,7 +77,7 @@ public class TurretSystem extends System {
 	public void defaultUpdate() {
 		voltRange.set(joyVal);
 		if (toZero) {
-
+			zero();
 		}
 	}
 

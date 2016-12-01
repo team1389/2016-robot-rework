@@ -8,6 +8,7 @@ import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SPI;
 
 public class IOHardware extends IOLayout {
@@ -27,7 +28,8 @@ public class IOHardware extends IOLayout {
 		rightB = new CANTalonHardware(rightMotorB_CAN, registry);
 		rightC = new CANTalonHardware(rightMotorC_CAN, registry);
 		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
-
+		armPot=new AnalogPotentiometer(1);
+		
 		navX = new NavXHardware(SPI.Port.kMXP);
 
 		elevationA = new CANTalonHardware(elevatorMotorA_CAN, registry);

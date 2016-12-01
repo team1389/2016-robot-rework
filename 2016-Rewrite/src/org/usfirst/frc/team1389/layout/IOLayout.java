@@ -8,6 +8,8 @@ import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+
 public class IOLayout extends RobotMap{
 	public Registry registry;
 	
@@ -20,7 +22,7 @@ public class IOLayout extends RobotMap{
 	CANTalonHardware leftC;
 	public CANTalonGroup leftDrive;
 	public NavXHardware navX;
-	
+	public AnalogPotentiometer armPot;
 	CANTalonHardware rightA;
 	CANTalonHardware rightB;
 	CANTalonHardware rightC;

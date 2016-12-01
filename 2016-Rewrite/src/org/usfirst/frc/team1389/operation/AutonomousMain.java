@@ -34,13 +34,13 @@ public class AutonomousMain extends Operator {
 		autonomousScheduler = new CommandScheduler();
 		autonomousScheduler.cancelAll();
 		PIDConfiguration configleft = new PIDConfiguration(new PIDConstants(0.3, 0.0, 0.0), true, false);
-		PIDConfiguration configright = new PIDConfiguration(new PIDConstants(0.3, 0.0, 0.0), true, false);
+		PIDConfiguration configright = new PIDConfiguration(new PIDConstants(0.3, 0.0001, 0.0), true, false);
 		
 		right = robot.rightDrive.getPositionOutput(configright).invert().mapToRange(0, 1).scale(Math.PI * 8 * 0.0254).getWatchable("rightVal");
-		rightPos=robot.rightDrive.getLeader().getPositionInput().mapToRange(0,1).scale(Math.PI*8*.0254).getWatchable("rightPos");
+		rightPos=robot.rightDrive.getLeader().getPositionInput().mapToRange(0,1).scale(Math.PI*8*.0254).invert().getWatchable("rightPos");
 		rightSpeed=robot.rightDrive.getLeader().getSpeedInput().getWatchable("rightSpeed");
 		//Command go = new DriveCommands(8, configleft, .5, 1).driveMetersCommand(5, left,right,leftIn,rigthIn);
-		Command go2=new FollowProfileCommand(new TrapezoidalMotionProfile(10, .5, .5, 1), right);
+		Command go2=new FollowProfileCommand(new TrapezoidalMotionProfile(10, .5, .7, .5), right,rightPos);
 
 		/*
 		 * turnAngleCommand(90, 2, robot.navX.getAngleInput(),

@@ -23,6 +23,8 @@ import com.team1389.system.System;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TeleopMain extends Operator {
 	SystemManager manager;
 
@@ -58,6 +60,7 @@ public class TeleopMain extends Operator {
 
 	protected void periodic() {
 		manager.update();
+		SmartDashboard.putNumber("pot", robot.armPot.get());
 		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 
