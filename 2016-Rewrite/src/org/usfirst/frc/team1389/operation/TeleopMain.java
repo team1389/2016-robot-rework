@@ -16,7 +16,6 @@ import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
@@ -53,8 +52,7 @@ public class TeleopMain {
 
 	private TurretSystem setupTurretSystem() {
 		PercentOut turretVoltage = robot.turret.getVoltageOutput();
-		RangeIn<Angle> turretAngle = robot.navX.getAngleInput();
-		TurretSystem turret = new TurretSystem(turretVoltage, turretAngle, controls.getTurretManual(),
+		TurretSystem turret = new TurretSystem(turretVoltage, robot.turretAngle, controls.getTurretManual(),
 				controls.getTurretZero());
 		return turret;
 	}

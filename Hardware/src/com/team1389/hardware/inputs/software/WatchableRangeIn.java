@@ -22,10 +22,12 @@ public class WatchableRangeIn<T extends Value> extends RangeIn<T> implements Wat
 	protected WatchableRangeIn(Class<T> type, RangeIn<T> in, String name) {
 		this(type, in.input, in.min, in.max, name);
 	}
+
 	public WatchableRangeIn<T> mapToRange(double min, double max) {
 		super.mapToRange(min, max);
 		return this;
 	}
+
 	public RangeIn<T> addChangeListener(Runnable onChange) {
 		super.addChangeListener(onChange);
 		return this;
@@ -36,8 +38,18 @@ public class WatchableRangeIn<T extends Value> extends RangeIn<T> implements Wat
 		return this;
 	}
 
-	public RangeIn<T> scale(double factor) {
+	public WatchableRangeIn<T> scale(double factor) {
 		super.scale(factor);
+		return this;
+	}
+
+	public WatchableRangeIn<T> getWrapped() {
+		super.getWrapped();
+		return this;
+	}
+	
+	public WatchableRangeIn<T> sumInputs(WatchableRangeIn<T> rngIn) {
+		input = ScalarInput.sum(input, rngIn.input);
 		return this;
 	}
 

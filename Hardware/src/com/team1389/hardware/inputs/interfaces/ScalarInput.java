@@ -37,14 +37,28 @@ public interface ScalarInput<T extends Value> {
 			return (RangeUtil.limit(in.get(), limit));
 		};
 	}
-	
-	static <T extends Value> ScalarInput<T> getListeningInput(ScalarInput<T> in, Runnable onChange){
-		return new ListeningScalarInput<T>(in,onChange);
+
+	static <T extends Value> ScalarInput<T> getListeningInput(ScalarInput<T> in, Runnable onChange) {
+		return new ListeningScalarInput<T>(in, onChange);
 	}
 
-	public static <T extends Value> ScalarInput<T> scale(ScalarInput<T> input, double factor) {
+	static <T extends Value> ScalarInput<T> scale(ScalarInput<T> input, double factor) {
 		return () -> {
-			return input.get()* factor;
+			return input.get() * factor;
 		};
 	}
+
+	static <T extends Value> ScalarInput<T> getWrapped(ScalarInput<T> input, double min, double max) {
+		return () -> {
+			double val = input.get();
+			return min + (val - min) % (max - min);
+		};
+	}
+
+	static <T extends Value> ScalarInput<T> sum(ScalarInput<T> input, ScalarInput<T> input2) {
+		return () -> {
+			return input.get() + input2.get();
+		};
+	}
+
 }

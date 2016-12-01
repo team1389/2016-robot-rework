@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1389.robot;
 
+import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
@@ -8,17 +9,21 @@ import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
 
 import edu.wpi.first.wpilibj.SPI;
+
 /**
- * responsible for initializing and storing hardware objects defined in {@link RobotLayout}
+ * responsible for initializing and storing hardware objects defined in
+ * {@link RobotLayout}
+ * 
  * @author amind
  * @see RobotLayout
  * @see RobotMap
  */
 public class RobotHardware extends RobotLayout {
 	private static RobotHardware mInstance = new RobotHardware();
-	
-	/** 
+
+	/**
 	 * Returns the initialized instance of the set all robot hardware
+	 * 
 	 * @return an initialized instance of RobotHardware
 	 */
 	public static RobotHardware getInstance() {
@@ -26,13 +31,13 @@ public class RobotHardware extends RobotLayout {
 	}
 
 	/**
-	 * Initializes robot hardware by subsystem. 
-	 * <br> note: use this method as an index
-	 * to show hardware initializations that occur, and to find the
-	 * init code for a particular system's hardware
+	 * Initializes robot hardware by subsystem. <br>
+	 * note: use this method as an index to show hardware initializations that
+	 * occur, and to find the init code for a particular system's hardware
 	 */
 	private RobotHardware() {
 		registry = new Registry();
+		navX = new NavXHardware(SPI.Port.kMXP);
 		initDriveTrain();
 		initArm();
 		initTurret();
@@ -40,8 +45,9 @@ public class RobotHardware extends RobotLayout {
 	}
 
 	private void initTurret() {
-		navX = new NavXHardware(SPI.Port.kMXP);
-		turret = new CANTalonHardware(turntableMotor_CAN, registry);
+		turretGyro = new GyroHardware(turretGyro_ANALOG);
+		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).getWrapped();
+		turret = new CANTalonHardware(turretMotor_CAN, registry);
 	}
 
 	private void initArm() {
