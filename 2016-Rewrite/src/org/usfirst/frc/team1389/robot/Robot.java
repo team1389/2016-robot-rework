@@ -2,8 +2,8 @@
 package org.usfirst.frc.team1389.robot;
 
 import org.usfirst.frc.team1389.layout.robot.RobotHardware;
-import org.usfirst.frc.team1389.operation.AutonomousMain;
 import org.usfirst.frc.team1389.operation.TeleopMain;
+import org.usfirst.frc.team1389.watchers.DebugDash;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -17,56 +17,45 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public class Robot extends IterativeRobot {
 	RobotHardware robot;
 	TeleopMain teleOperator;
-	AutonomousMain autonOperator;
 
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+		DebugDash.getInstance().clearWatchers();
 		robot = RobotHardware.getInstance();
 		teleOperator = new TeleopMain(robot);
-		autonOperator = new AutonomousMain(robot);
 	}
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString line to get the auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional comparisons to the
-	 * switch structure below with additional strings. If using the
-	 * SendableChooser make sure to add them to the chooser code above as well.
-	 */
-
 	public void autonomousInit() {
-		autonOperator.initOperation();
+		DebugDash.getInstance().clearWatchers();
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-		autonOperator.periodicOperation();
+		DebugDash.getInstance().display();
 	}
 
 	@Override
 	public void disabledPeriodic() {
-		teleOperator.disabledOperation();
+		DebugDash.getInstance().display();
 	}
 
 	@Override
 	public void teleopInit() {
-		teleOperator.initOperation();
+		DebugDash.getInstance().clearWatchers();
+		teleOperator.init();
 	}
 
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		teleOperator.periodicOperation();
+		teleOperator.periodic();
+		DebugDash.getInstance().display();
 	}
 
 	/**

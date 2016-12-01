@@ -1,5 +1,7 @@
-package com.team1389.control;
+package com.team1389.hardware.outputs.hardware;
 
+import com.team1389.configuration.PIDConfiguration;
+import com.team1389.control.PIDController;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;

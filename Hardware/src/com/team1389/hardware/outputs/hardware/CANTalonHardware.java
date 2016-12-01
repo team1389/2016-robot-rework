@@ -3,8 +3,8 @@ package com.team1389.hardware.outputs.hardware;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
-import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;

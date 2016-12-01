@@ -1,7 +1,7 @@
 package com.team1389.autonomous.command;
 
 import com.team1389.command_framework.command_base.Command;
-import com.team1389.control.PIDConfiguration;
+import com.team1389.configuration.PIDConfiguration;
 import com.team1389.control.SynchronousPIDController;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;

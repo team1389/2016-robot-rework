@@ -6,9 +6,10 @@ import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.systems.TurretSystem;
+import org.usfirst.frc.team1389.watchers.DebugDash;
 
+import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
-import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
@@ -20,19 +21,19 @@ import com.team1389.hardware.value_types.Position;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
 import com.team1389.system.SystemManager;
-import com.team1389.watch.Watcher;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TeleopMain extends Operator {
+public class TeleopMain {
 	SystemManager manager;
 	ControlBoard controls;
+	RobotHardware robot;
 
 	public TeleopMain(RobotHardware robot) {
-		super(robot);
+		this.robot = robot;
 	}
 
-	protected void init() {
+	public void init() {
 		controls = ControlBoard.getInstance();
 		System driveSystem = setupDriveSystem();
 		System armSystem = setupArmSystem();
@@ -41,18 +42,13 @@ public class TeleopMain extends Operator {
 
 		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
-		debuggingPanel.watch(driveSystem, armSystem, intakeSystem, robot.IRsensor1, robot.IRsensor2);
+		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem, robot.IRsensor1, robot.IRsensor2);
 
 	}
 
-	protected void periodic() {
+	public void periodic() {
 		manager.update();
 		SmartDashboard.putNumber("pot", robot.armPot.get());
-		debuggingPanel.publish(Watcher.DASHBOARD);
-	}
-
-	protected void disabled() {
-		debuggingPanel.publish(Watcher.DASHBOARD);
 	}
 
 	private TurretSystem setupTurretSystem() {

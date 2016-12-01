@@ -1,5 +1,6 @@
 package com.team1389.control;
 
+import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;

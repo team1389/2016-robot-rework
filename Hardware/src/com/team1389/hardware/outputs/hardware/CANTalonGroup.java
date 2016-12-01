@@ -3,7 +3,7 @@ package com.team1389.hardware.outputs.hardware;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.team1389.control.PIDConfiguration;
+import com.team1389.configuration.PIDConfiguration;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
