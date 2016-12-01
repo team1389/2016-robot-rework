@@ -2,7 +2,7 @@ package com.team1389.hardware.inputs.hardware;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.valueTypes.Angle;
+import com.team1389.hardware.value_types.Angle;
 
 import edu.wpi.first.wpilibj.SPI;
 

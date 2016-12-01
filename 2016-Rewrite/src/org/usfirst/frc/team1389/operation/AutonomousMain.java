@@ -9,8 +9,8 @@ import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.inputs.software.WatchableRangeIn;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
-import com.team1389.hardware.valueTypes.Position;
-import com.team1389.hardware.valueTypes.Speed;
+import com.team1389.hardware.value_types.Position;
+import com.team1389.hardware.value_types.Speed;
 import com.team1389.motion_profile.TrapezoidalMotionProfile;
 
 public class AutonomousMain extends Operator {

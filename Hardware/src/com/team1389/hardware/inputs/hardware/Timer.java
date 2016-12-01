@@ -1,7 +1,7 @@
 package com.team1389.hardware.inputs.hardware;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Value;
 
 public class Timer implements ScalarInput<Value>{
 	edu.wpi.first.wpilibj.Timer timer;

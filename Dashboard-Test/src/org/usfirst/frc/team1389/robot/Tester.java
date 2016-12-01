@@ -2,7 +2,7 @@ package org.usfirst.frc.team1389.robot;
 
 import com.team1389.commands.CommandScheduler;
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.watch.Watcher;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;

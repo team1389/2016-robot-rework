@@ -1,8 +1,8 @@
 package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
-import com.team1389.hardware.valueTypes.Angle;
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Angle;
+import com.team1389.hardware.value_types.Value;
 
 public class RangeOut<T extends Value> {
 	protected ScalarOutput<T> output;

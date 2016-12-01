@@ -1,7 +1,7 @@
 package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Value;
 
 public class RangeIn<T extends Value> {
 	public Class<T> type;

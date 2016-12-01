@@ -1,8 +1,8 @@
 package com.team1389.hardware.outputs.interfaces;
 
-import com.team1389.hardware.valueTypes.Angle;
-import com.team1389.hardware.valueTypes.Percent;
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Angle;
+import com.team1389.hardware.value_types.Percent;
+import com.team1389.hardware.value_types.Value;
 import com.team1389.util.RangeUtil;
 
 public interface ScalarOutput<T extends Value> {

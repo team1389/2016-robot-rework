@@ -2,7 +2,7 @@ package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Value;
 
 public class ProfiledRangeOut<T extends Value> implements ScalarOutput<T> {
 	double max, min, maxChange;

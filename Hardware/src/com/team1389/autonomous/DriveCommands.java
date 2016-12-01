@@ -9,9 +9,9 @@ import com.team1389.control.pid_wrappers.input.PIDRangeSource;
 import com.team1389.control.pid_wrappers.output.PIDControlledRange;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.valueTypes.Angle;
-import com.team1389.hardware.valueTypes.Position;
-import com.team1389.hardware.valueTypes.Speed;
+import com.team1389.hardware.value_types.Angle;
+import com.team1389.hardware.value_types.Position;
+import com.team1389.hardware.value_types.Speed;
 import com.team1389.motion_profile.TrapezoidalMotionProfile;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -44,7 +44,7 @@ public class DriveCommands {
 	}
 
 	public Command turnAngleCommand(double angle, double tolerance, RangeIn<Angle> gyro, RangeOut<Speed> left,
-			RangeOut<Speed> right,	PIDConfiguration turnPID) {
+			RangeOut<Speed> right, PIDConfiguration turnPID) {
 		PIDOutput wheels = PIDSystemCreator.combine(new PIDControlledRange<Speed>(left),
 				new PIDControlledRange<Speed>(right.invert()));
 		PIDSource gyroSource = new PIDRangeSource<Angle>(gyro);

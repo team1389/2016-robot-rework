@@ -1,7 +1,7 @@
 package com.team1389.control.pid_wrappers.output;
 
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Value;
 
 public class PIDControlledRange<T extends Value> implements edu.wpi.first.wpilibj.PIDOutput{
 	

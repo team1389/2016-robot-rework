@@ -22,10 +22,12 @@ public abstract class Command {
 		}
 		boolean isFinished=execute();
 		if(isFinished){
+			done();
 			reset();
 		}
 		return isFinished;
 	}
+	public void done(){}
 	public void reset(){
 		initialized=false;
 	}

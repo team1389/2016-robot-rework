@@ -4,7 +4,7 @@ import com.team1389.commands.command_base.Command;
 import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.motion_profile.MotionProfile;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

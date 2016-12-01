@@ -1,6 +1,6 @@
 package com.team1389.hardware.inputs.interfaces;
 
-import com.team1389.hardware.valueTypes.Value;
+import com.team1389.hardware.value_types.Value;
 
 public class ListeningScalarInput<T extends Value> implements ScalarInput<T>{
 	private ScalarInput<T> in;

@@ -1,7 +1,7 @@
 package com.team1389.control.pid_wrappers.input;
 
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.valueTypes.PIDTunableValue;
+import com.team1389.hardware.value_types.PIDTunableValue;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;

@@ -1,7 +1,7 @@
 package com.team1389.control;
 
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.valueTypes.Speed;
+import com.team1389.hardware.value_types.Speed;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;

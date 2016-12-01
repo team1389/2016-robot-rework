@@ -5,7 +5,7 @@ import com.team1389.commands.FollowProfileCommand;
 import com.team1389.commands.command_base.Command;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
-import com.team1389.hardware.valueTypes.Position;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.motion_profile.TrapezoidalMotionProfile;
 import com.team1389.watch.Watcher;
 

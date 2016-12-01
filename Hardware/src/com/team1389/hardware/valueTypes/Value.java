@@ -1,5 +1,0 @@
-package com.team1389.hardware.valueTypes;
-
-public abstract class Value {
-
-}

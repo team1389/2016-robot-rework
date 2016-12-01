@@ -7,8 +7,8 @@ import com.team1389.control.PIDConfiguration;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.valueTypes.Position;
-import com.team1389.hardware.valueTypes.Speed;
+import com.team1389.hardware.value_types.Position;
+import com.team1389.hardware.value_types.Speed;
 import com.team1389.watch.Info;
 import com.team1389.watch.Watchable;
 

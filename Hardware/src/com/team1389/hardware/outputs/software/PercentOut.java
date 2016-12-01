@@ -1,7 +1,7 @@
 package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
-import com.team1389.hardware.valueTypes.Percent;
+import com.team1389.hardware.value_types.Percent;
 
 /**
  * An input that gives a value from -1 to 1
