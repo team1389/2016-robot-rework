@@ -23,13 +23,11 @@ public class DriveCommands {
 	double wheelCircumference; // meters
 	double maxAcceleration;
 	double topSpeed;
-	PIDConfiguration turnPID;
 
 	public DriveCommands(double wheelDiameter, PIDConfiguration turnPID, double maxAcceleration, double topSpeed) {
 		this.wheelCircumference = wheelDiameter * Math.PI * inchesToMeters;
 		this.topSpeed = topSpeed;
 		this.maxAcceleration = maxAcceleration;
-		this.turnPID = turnPID;
 	}
 
 	public Command driveMetersCommand(double meters, RangeOut<Position> left, RangeOut<Position> right,
@@ -41,14 +39,12 @@ public class DriveCommands {
 		rightIn.mapToRange(0, 1).scale(wheelCircumference);
 		TrapezoidalMotionProfile profile = new TrapezoidalMotionProfile(meters, maxAcceleration, maxAcceleration,
 				topSpeed);
-		double initialPosLeft = leftIn.get();
-		double initialPosRight = rightIn.get();
-		return CommandUtil.combineSimultaneous(new FollowProfileCommand(profile, left, initialPosLeft),
-				new FollowProfileCommand(profile, right, initialPosRight));
+		return CommandUtil.combineSimultaneous(new FollowProfileCommand(profile, left, leftIn),
+				new FollowProfileCommand(profile, right, rightIn));
 	}
 
 	public Command turnAngleCommand(double angle, double tolerance, RangeIn<Angle> gyro, RangeOut<Speed> left,
-			RangeOut<Speed> right) {
+			RangeOut<Speed> right,	PIDConfiguration turnPID) {
 		PIDOutput wheels = PIDSystemCreator.combine(new PIDControlledRange<Speed>(left),
 				new PIDControlledRange<Speed>(right.invert()));
 		PIDSource gyroSource = new PIDRangeSource<Angle>(gyro);

@@ -25,6 +25,9 @@ public class RangeOut<T extends Value> {
 	public double max() {
 		return max;
 	}
+	public double range(){
+		return min()-max();
+	}
 
 	public RangeOut<T> mapToRange(double min, double max) {
 		this.output = ScalarOutput.mapToRange(output, min, max, this.min, this.max);
