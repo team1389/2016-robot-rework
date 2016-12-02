@@ -5,9 +5,29 @@ import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.util.RangeUtil;
 
+/**
+ * This interface represents a single double output stream, and stores static operations that can be applied to it
+ * 
+ * @author amind
+ * @param <T> the value type that the double represents
+ */
 public interface ScalarOutput<T extends Value> {
+	/**
+	 * @param val the value to pass down the stream
+	 */
 	public void set(double val);
 
+	/**
+	 * maps the given stream from one range to another <br>
+	 * note that streams are not confined to the range
+	 * 
+	 * @param out the stream to operate on
+	 * @param inMin the original min value
+	 * @param inMax the original max value
+	 * @param outMin the min value of the output stream
+	 * @param outMax the max value of the output stream
+	 * @return the mapped output (does not change the value type)
+	 */
 	public static <T extends Value> ScalarOutput<T> mapToRange(ScalarOutput<T> out, double inMin, double inMax,
 			double outMin, double outMax) {
 		return (double val) -> {
@@ -15,6 +35,14 @@ public interface ScalarOutput<T extends Value> {
 		};
 	}
 
+	/**
+	 * maps the given stream from any range to degrees (0 to 360)
+	 * 
+	 * @param out the stream to operate on
+	 * @param outMin the original min value
+	 * @param outMax the original max value
+	 * @return the mapped output, now an angle stream
+	 */
 	public static ScalarOutput<Angle> mapToAngle(ScalarOutput<?> out, double outMin, double outMax) {
 		return new ScalarOutput<Angle>() {
 			@Override
@@ -25,6 +53,14 @@ public interface ScalarOutput<T extends Value> {
 		};
 	}
 
+	/**
+	 * maps the given stream from any range to percent (-1 to 1)
+	 * 
+	 * @param out the stream to operate on
+	 * @param outMin the original min value
+	 * @param outMax the original max value
+	 * @return the mapped output, now a percent stream
+	 */
 	public static ScalarOutput<Percent> mapToPercent(ScalarOutput<?> out, double outMin, double outMax) {
 		return (double val) -> {
 			out.set(RangeUtil.map(val, -1, 1, outMin, outMax));
@@ -32,6 +68,13 @@ public interface ScalarOutput<T extends Value> {
 
 	}
 
+	/**
+	 * scales the given stream by a constant factor
+	 * 
+	 * @param out the stream to operate on
+	 * @param scale the factor to scale
+	 * @return the scaled stream (does not change the value type)
+	 */
 	public static <T extends Value> ScalarOutput<T> scale(ScalarOutput<T> out, double scale) {
 		return (double val) -> {
 			out.set(val / scale);
@@ -39,25 +82,53 @@ public interface ScalarOutput<T extends Value> {
 
 	}
 
+	/**
+	 * inverts the given stream
+	 * 
+	 * @param out the stream to invert
+	 * @return the inverted stream (does not change the value type)
+	 */
 	public static <T extends Value> ScalarOutput<T> invert(ScalarOutput<T> out) {
 		return (double val) -> {
 			out.set(-val);
 		};
 	}
 
+	/**
+	 * modifies the given stream to truncate values to zero if they are almost zero
+	 * 
+	 * @param out the stream to operate on
+	 * @param deadband how close the values need to be to zero to get truncated
+	 * @return the stream with a deadband (does not change the value type)
+	 */
 	public static ScalarOutput<Percent> applyDeadband(ScalarOutput<Percent> out, double deadband) {
 		return (double val) -> {
 			out.set(RangeUtil.applyDeadband(val, deadband));
 		};
 	}
 
+	/**
+	 * confines the given stream within the given range if the stream's value is outside the range, it will be replaced with the nearest edge of the range
+	 * 
+	 * @param out the stream to operate on
+	 * @param limit the max value of the limit range (min value is -limit)
+	 * @return the limited stream (does not change the value type)
+	 */
 	public static <T extends Value> ScalarOutput<T> limitRange(ScalarOutput<T> out, double limit) {
 		return (double val) -> {
 			out.set(RangeUtil.limit(val, limit));
 		};
 	}
 
-	public static <T extends Value> ScalarOutput<T> getListeningOutput(ScalarOutput<T> output, Runnable onChange) {
+	/**
+	 * converts the stream to a {@link ListeningScalarOutput} which runs the given runnable when the stream's value changes
+	 * 
+	 * @param output the stream to listen to
+	 * @param onChange the runnable to call on value change
+	 * @return the stream with listener attached
+	 */
+	public static <T extends Value> ListeningScalarOutput<T> getListeningOutput(ScalarOutput<T> output,
+			Runnable onChange) {
 		return new ListeningScalarOutput<T>(output, onChange);
 	}
 
