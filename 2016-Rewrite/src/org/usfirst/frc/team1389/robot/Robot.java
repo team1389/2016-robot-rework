@@ -1,7 +1,7 @@
 
-package org.usfirst.frc.team1389.operation;
+package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.robot.RobotHardware;
+import org.usfirst.frc.team1389.operation.TeleopMain;
 import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 

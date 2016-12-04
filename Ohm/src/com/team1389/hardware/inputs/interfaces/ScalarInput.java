@@ -73,15 +73,16 @@ public interface ScalarInput<T extends Value> {
 	}
 
 	/**
-	 * Caps the stream at the limit. If the stream is outside the boundry formed by the limit and its negative, then it gets
-	 * set to the limit on whichever side of 0 it is (so either -limit or +limit).
-	 * @param in The stream to operate on
-	 * @param limit The value of the limit
-	 * @return The stream capped by the limit
+	 * confines the given stream within the given range if the stream's value is outside the range, it will be replaced with the nearest edge of the range
+	 * 
+	 * @param in the stream to operate on
+	 * @param max the max value of the limit range
+	 * @param min the min value of the limit range
+	 * @return the limited stream (does not change the value type)
 	 */
-	static <T extends Value> ScalarInput<T> limitRange(ScalarInput<T> in, double limit) {
+	static <T extends Value> ScalarInput<T> limitRange(ScalarInput<T> in, double min,double max) {
 		return () -> {
-			return (RangeUtil.limit(in.get(), limit));
+			return (RangeUtil.limit(in.get(), min,max));
 		};
 	}
 
@@ -123,7 +124,7 @@ public interface ScalarInput<T extends Value> {
 	}
 
 	/**
-	 * 
+	 * adds together the values of the two input streams to produce a new stream
 	 * @param input Stream 1 to operate on
 	 * @param input2 Stream 2 to operate on
 	 * @return The sum of input streams one and two
@@ -133,5 +134,6 @@ public interface ScalarInput<T extends Value> {
 			return input.get() + input2.get();
 		};
 	}
+
 
 }

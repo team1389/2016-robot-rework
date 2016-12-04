@@ -13,7 +13,7 @@ public class DriveStraight extends AutoModeBase{
 	private final double kDistanceToDrive = 5;
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		runCommand(new RobotCommands().driveMetersCommand(kDistanceToDrive));
+		runCommand(new RobotCommands().driveMetersTalonCommand(kDistanceToDrive));
 	}
 	
 }

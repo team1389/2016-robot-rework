@@ -13,7 +13,9 @@ public class DashboardInput {
 	public static DashboardInput getInstance() {
 		return instance;
 	}
-	
+	public DashboardInput(){
+		init();
+	}
 	private SendableChooser autonSelector;
 	public void init(){
 		autonSelector=new SendableChooser();
@@ -26,7 +28,10 @@ public class DashboardInput {
 
 	private static final String SELECTED_AUTO_MODE = "selected_auto_mode";
 	private static final AutonOption DEFAULT_MODE = AutonOption.DRIVE_STRAIGHT;
-
+	/**
+	 * dashboard must be initialized before this can be called
+	 * @return
+	 */
 	public AutoModeBase getSelectedAutonMode() {
 		String autoModeString = SmartDashboard.getString(SELECTED_AUTO_MODE, DEFAULT_MODE.name);
 		AutonOption selectedOption = DEFAULT_MODE;

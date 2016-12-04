@@ -38,8 +38,8 @@ public class RobotCommands extends DriveCommands {
 	 */
 	public Command driveMetersTalonCommand(double meters) {
 		return driveMetersCommand(meters,
-				robot.leftDrive.getPositionOutput(new PIDConfiguration(new PIDConstants(0.03, 0, 0), true, false)),
-				robot.rightDrive.getPositionOutput(new PIDConfiguration(new PIDConstants(0.03, 0, 0), false, false)),
+				robot.leftDrive.getPositionOutput(new PIDConfiguration(new PIDConstants(0.03, 0, 0), false, false)),
+				robot.rightDrive.getPositionOutput(new PIDConfiguration(new PIDConstants(0.03, 0, 0), true, false)),
 				robot.leftDrive.getLeader().getPositionInput(), robot.rightDrive.getLeader().getPositionInput());
 	}
 
@@ -54,7 +54,7 @@ public class RobotCommands extends DriveCommands {
 				new PIDConfiguration(new PIDConstants(0.03, 0, 0), false, false),
 				robot.leftDrive.getLeader().getPositionInput(), robot.leftDrive.getVoltageOutput());
 		SynchronousPIDController<Percent, Position> right = new SynchronousPIDController<Percent, Position>(
-				new PIDConfiguration(new PIDConstants(0.03, 0, 0), false, false),
+				new PIDConfiguration(new PIDConstants(0.03, 0, 0), true, false),
 				robot.rightDrive.getLeader().getPositionInput(), robot.rightDrive.getVoltageOutput());
 		return driveMetersCommand(meters, left, right);
 	}

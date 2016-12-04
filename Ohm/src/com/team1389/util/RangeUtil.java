@@ -19,8 +19,8 @@ public class RangeUtil {
 	 * @param limit the maximum magnitude of {@code v }; if {@code |v|} is greater, it will be truncated.
 	 * @return the constrained version of {@code v}
 	 */
-	public static double limit(double v,double limit){
-        return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
+	public static double limit(double v,double min,double max){
+        return (Math.abs(v) > max) ? max : v<min?min:v;
 	}
 	/**
 	 * Truncates any val close to zero, creating a "dead zone" around zero.

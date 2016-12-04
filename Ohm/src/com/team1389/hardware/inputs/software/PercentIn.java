@@ -19,9 +19,4 @@ public class PercentIn extends RangeIn<Percent>{
 		input=ScalarInput.applyDeadband(input, deadband);
 		return this;
 	}
-
-	public PercentIn limitRange(double limit) {
-		input=ScalarInput.limitRange(input, limit);
-		return this;
-	}
 }
