@@ -50,9 +50,9 @@ public class DriveCommands {
 	 * @return the drive command
 	 */
 	public Command driveMetersCommand(double meters, SynchronousPIDController<?, Position> left,
-			SynchronousPIDController<?, Position> right) {
+			SynchronousPIDController<?, Position> right,RangeIn<Speed> rightSpd,RangeIn<Speed> leftSpd) {
 		Command followProfile = driveMetersCommand(meters, left.getSetpointSetter(), right.getSetpointSetter(),
-				left.getSource(), right.getSource());
+				left.getSource(), right.getSource(),rightSpd,leftSpd);
 		Command leftPidDoCommand = left.getPIDDoCommand(() -> {
 			return followProfile.isFinished();
 		});
@@ -73,11 +73,39 @@ public class DriveCommands {
 	 * @return the drive command
 	 */
 	public Command driveMetersCommand(double meters, RangeOut<Position> left, RangeOut<Position> right,
-			RangeIn<Position> leftIn, RangeIn<Position> rightIn) {
-		TrapezoidalMotionProfile profile = new TrapezoidalMotionProfile(meters, maxAcceleration, maxAcceleration,
-				maxVelocity);
-		Command leftFollowCommand = new FollowProfileCommand(profile, left, leftIn);
-		Command rightFollowCommand = new FollowProfileCommand(profile, right, rightIn);
+			RangeIn<Position> leftIn, RangeIn<Position> rightIn, RangeIn<Speed> leftSpd, RangeIn<Speed> rightSpd) {
+		Command leftFollowCommand = new Command() {
+			FollowProfileCommand followProfileCommand;
+
+			@Override
+			protected void initialize() {
+				TrapezoidalMotionProfile profileLeft = new TrapezoidalMotionProfile(leftSpd.get(), meters,
+						maxAcceleration, maxAcceleration, maxVelocity);
+				followProfileCommand = new FollowProfileCommand(profileLeft, left, leftIn);
+				followProfileCommand.initialize();
+			}
+
+			@Override
+			protected boolean execute() {
+				return followProfileCommand.execute();
+			}
+		};
+		Command rightFollowCommand = new Command() {
+			FollowProfileCommand followProfileCommand;
+
+			@Override
+			protected void initialize() {
+				TrapezoidalMotionProfile profileRight = new TrapezoidalMotionProfile(rightSpd.get(), meters,
+						maxAcceleration, maxAcceleration, maxVelocity);
+				followProfileCommand = new FollowProfileCommand(profileRight, right, rightIn);
+				followProfileCommand.initialize();
+			}
+
+			@Override
+			protected boolean execute() {
+				return followProfileCommand.execute();
+			}
+		};
 		return CommandUtil.combineSimultaneous(leftFollowCommand, rightFollowCommand);
 	}
 

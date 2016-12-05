@@ -1,17 +1,15 @@
 package org.usfirst.frc.team1389.robot;
 
+import com.team1389.auto.DriveCommands;
+import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.command_framework.CommandUtil;
-import com.team1389.command_framework.command_base.Command;
 import com.team1389.control.SynchronousPIDController;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
-import com.team254.lib.trajectory.Trajectory;
-import com.team254.lib.trajectory.TrajectoryFollower;
-import com.team254.lib.trajectory.TrajectoryGenerator;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
@@ -28,36 +26,25 @@ public class Tester {
 	static RangeOut<Position> voltageSetter;
 
 	public static void init() {
+
 		SynchronousPIDController<Percent, Position> control = new SynchronousPIDController<Percent, Position>(.7, 0, 0,
-				robot.posIn1.scale(Math.PI * 8 * .0254), robot.voltOut1);
+				robot.posIn1, robot.voltOut1);
 		SynchronousPIDController<Percent, Position> control2 = new SynchronousPIDController<Percent, Position>(.7, 0, 0,
-				robot.posIn2.scale(Math.PI * 8 * .0254), robot.voltOut2);
-		// new DriveCommands(8,2,2,5).driveMetersCommand(5, control, control2);
-		// voltageSetter=control.getSetpointSetter();
-		// voltageSetter.set(1);
-		TrajectoryFollower follower;
-		follower = new TrajectoryFollower();
-		TrajectoryGenerator.Config config = new TrajectoryGenerator.Config();
-		config.dt = .01;
-		config.max_acc = 10.0;
-		config.max_jerk = 60.0;
-		config.max_vel = 15.0;
-		Trajectory get=TrajectoryGenerator.generate(config, TrajectoryGenerator.SCurvesStrategy, 0, 0, 100,
-				0, 0);
-		
-		follower.setTrajectory(get);
-		follower.configure(.7, 0, .1, 0, 0);
-		Command followPath = CommandUtil.createCommand(() -> {
-			control.getSetpointSetter().set(follower.calculate(robot.posIn1.scale(Math.PI * 8/12).get()));
-			return follower.isFinishedTrajectory();
-		});
+				robot.posIn2, robot.voltOut2);
 		scheduler.schedule(CommandUtil.combineSimultaneous(
+
+				new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
+						robot.speedIn2),
+				CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
+					scheduler.cancelAll();
+					scheduler.schedule(new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
+						robot.speedIn2));
+					return true;
+				})),
+
 				/*
-				 * new DriveCommands(8, .05, .05, 5).driveMetersCommand(5, control, control2), CommandUtil.combineSequential(new WaitTimeCommand(10),new DriveCommands(8, .05, .05, 5).driveMetersCommand(5, control, control2)),
-				 */
-				followPath, control.getPIDDoCommand(() -> {
-					return false;
-				}), control2.getPIDDoCommand(() -> {
+				 * followPath, control.getPIDDoCommand(() -> { return false; }),
+				 */ control.getPIDDoCommand(() -> {
 					return false;
 				})));
 		dash.watch(robot.posIn1, robot.voltOut1);
