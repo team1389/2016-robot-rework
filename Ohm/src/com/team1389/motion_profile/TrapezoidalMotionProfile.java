@@ -27,10 +27,10 @@ public class TrapezoidalMotionProfile extends MotionProfile {
 			System.out.println("can't hit max vel");
 			double a = (decel * decel / accel) + decel;
 			double b = 2 * v0 * decel / accel;
-			double c = -2 * dx;
+			double c = -2 * dx-2*v0*v0/accel;
 			tDec = (-b + Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
 			tAcc = (decel * tDec + v0) / accel;
-			maxSpeed = 2 * dx / (tAcc + tDec);
+			maxSpeed = v0+accel*tAcc;
 			tCruise = 0;
 			xAcc = tAcc * (maxSpeed + v0) / 2;
 			xDec = tDec * maxSpeed / 2;
@@ -46,7 +46,7 @@ public class TrapezoidalMotionProfile extends MotionProfile {
 
 	@Override
 	public double getDuration() {
-		return tCruise + tDec + tAcc;
+		return Double.MAX_VALUE;// tCruise + tDec + tAcc;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class TrapezoidalMotionProfile extends MotionProfile {
 		} else if (time <= tAcc + tCruise + tDec) {
 			double tDec = time - tAcc - tCruise;
 			double xDec = maxSpeed * tDec - decel * tDec * tDec / 2;
-			xDec=(Math.pow(provideVelocity(time),2)-Math.pow(maxSpeed,2))/(-2*decel);	
+			xDec=(Math.pow(maxSpeed,2)-Math.pow(provideVelocity(time),2))/(-2*decel);	
 			SmartDashboard.putNumber("dec", xDec);
 			return xAcc + xCruise + xDec;
 		} else {

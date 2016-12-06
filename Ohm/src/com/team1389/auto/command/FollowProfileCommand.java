@@ -50,7 +50,6 @@ public class FollowProfileCommand extends Command {
 	@Override
 	public void initialize() {
 		initialPos = feedback.get();
-		filter=new ContinuousAccelFilter(feedback.get(), vel.get(), 0);
 		timer.zero();
 	}
 
@@ -59,12 +58,11 @@ public class FollowProfileCommand extends Command {
 		// TODO use the percent tolerance to determine when the command should exit
 		double profilePosition = profile.getPosition(timer.get());
 		double setpoint = initialPos + profilePosition;
-		//out.set(setpoint);
+		out.set(setpoint);
 		double currentPosition = feedback.get();
 		double error = setpoint - currentPosition-initialPos;
-		filter.calcSystem(error, vel.get(), 0, .06, 1, timer.get());
-		out.set(filter.currPos);
-		timer.zero();
+		//filter.calcSystem(error, vel.get(), 0, .06, 1, timer.get());
+		//out.set(filter.currPos);
 		return false;
 	}
 }

@@ -31,6 +31,7 @@ public class Tester {
 				robot.posIn1, robot.voltOut1);
 		SynchronousPIDController<Percent, Position> control2 = new SynchronousPIDController<Percent, Position>(.7, 0, 0,
 				robot.posIn2, robot.voltOut2);
+		//control.getSetpointSetter().set(20);
 		scheduler.schedule(CommandUtil.combineSimultaneous(
 
 				new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
