@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.auto.DriveCommands;
-import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.control.SynchronousPIDController;
@@ -36,7 +35,7 @@ public class Tester {
 
 				new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
 						robot.speedIn2),
-				CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
+		/*		CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
 					scheduler.cancelAll();
 					scheduler.schedule(new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
 						robot.speedIn2));

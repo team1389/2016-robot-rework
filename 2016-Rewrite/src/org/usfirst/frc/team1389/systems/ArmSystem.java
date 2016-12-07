@@ -1,7 +1,5 @@
 package org.usfirst.frc.team1389.systems;
 
-import com.team1389.auto.command.FollowProfileCommand;
-import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
@@ -11,7 +9,6 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
-import com.team1389.motion_profile.TrapezoidalMotionProfile;
 import com.team1389.system.System;
 import com.team1389.watch.Info;
 import com.team1389.watch.NumberInfo;
@@ -31,18 +28,14 @@ public class ArmSystem extends System {
 		this.armVal = armVal;
 		elevatorPID = new SynchronousPIDController<Percent, Position>(
 				new PIDConfiguration(new PIDConstants(.06, 0, 0), true, false), armVal, elevator);
-		this.elevator = elevatorPID.getSetpointSetter().invert().getProfiledOut(72, 0);
+		this.elevator = elevatorPID.getSetpointSetter().invert().getProfiledOut(30, 0);
 		this.inputAngle = 0;
 	}
 
 	@Override
 	public void init() {
 		elevator.set(inputAngle);
-		buttons.addChangeListener(() -> {
-			profileMover = new FollowProfileCommand(
-					new TrapezoidalMotionProfile(buttons.getCurrentVal().angle - armVal.get(), 10, 10, 50), elevator, armVal);
-			profileMover.init();
-		});
+		buttons.addChangeListener(defaultModeListener);
 	}
 
 	@Override
@@ -58,13 +51,6 @@ public class ArmSystem extends System {
 				profileMover = null;
 			}
 		}
-	}
-
-	public void setArm(double angle) {
-		schedule(CommandUtil.createCommand(() -> {
-			elevator.set(angle);
-			return armVal.get() == angle;
-		}));
 	}
 
 	public enum ArmLocation {

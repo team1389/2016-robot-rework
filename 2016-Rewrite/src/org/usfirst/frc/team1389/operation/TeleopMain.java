@@ -59,11 +59,12 @@ public class TeleopMain {
 	public ArmSystem setupArmSystem() {
 		RangeOut<Percent> elevator = robot.elevation.getVoltageOutput();
 		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
-		map.setMappings(map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
+		map.setMappings(
+				map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
 				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
 				map.new ButtonEnum(controls.getArmPositionC(), ArmLocation.VERTICAL),
 				map.new ButtonEnum(controls.getArmPositionD(), ArmLocation.LOW_GOAL));
-		RangeIn<Position> armVal =robot.armPot.getAnalogInput().mapToRange(120,0).setRange(0, 360);
+		RangeIn<Position> armVal = robot.armPot.getAnalogInput().mapToRange(120,0).setRange(0, 360);
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
 		return armSystem;
 	}
