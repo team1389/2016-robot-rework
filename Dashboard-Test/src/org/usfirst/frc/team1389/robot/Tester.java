@@ -20,16 +20,15 @@ public class Tester {
 
 	public static void init() {
 
-		TrapezoidalController control = new TrapezoidalController(.7, 0, 0, .06, -.06, 2, robot.posIn1, robot.speedIn1,
+		TrapezoidalController control = new TrapezoidalController(.7, 0, 0, .06, .06, 8, robot.posIn1, robot.speedIn1,
 				robot.voltOut1);
-		control.setSetpoint(-10);
+		control.setSetpoint(-20);
 		dash.watch(robot.posIn1, robot.voltOut1);
 		scheduler.schedule(CommandUtil.combineSimultaneous(control.getPIDDoCommand(),
 				CommandUtil.combineSequential(CommandUtil.createCommand(() -> {
-					return robot.posIn1.get() >= 20;
+					return robot.posIn1.get() <= -10;
 				}), CommandUtil.createCommand(() -> {
-					System.out.println("hai");
-					control.setSetpoint(10);
+					control.setSetpoint(-10);
 					return true;
 				}))));
 	}
