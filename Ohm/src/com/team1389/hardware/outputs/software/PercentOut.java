@@ -19,9 +19,4 @@ public class PercentOut extends RangeOut<Percent>{
 		output=ScalarOutput.applyDeadband(output, deadband);
 		return this;
 	}
-
-	public PercentOut limitRange(double limit) {
-		output=ScalarOutput.limitRange(output,limit);
-		return this;
-	}
 }

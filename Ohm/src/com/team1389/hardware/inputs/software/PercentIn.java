@@ -12,16 +12,11 @@ public class PercentIn extends RangeIn<Percent>{
 	public PercentIn(ScalarInput<Percent> val){
 		super(Percent.class,val,-1,1);
 	}
-	protected PercentIn(RangeIn<?> in){
+	public PercentIn(RangeIn<?> in){
 		this(ScalarInput.mapToPercent(in.input, in.min, in.max));
 	}
 	public PercentIn applyDeadband(double deadband) {
 		input=ScalarInput.applyDeadband(input, deadband);
-		return this;
-	}
-
-	public PercentIn limitRange(double limit) {
-		input=ScalarInput.limitRange(input, limit);
 		return this;
 	}
 }

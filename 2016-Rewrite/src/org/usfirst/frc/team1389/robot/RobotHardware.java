@@ -2,6 +2,7 @@ package org.usfirst.frc.team1389.robot;
 
 import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
+import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
@@ -11,8 +12,7 @@ import com.team1389.hardware.registry.Registry;
 import edu.wpi.first.wpilibj.SPI;
 
 /**
- * responsible for initializing and storing hardware objects defined in
- * {@link RobotLayout}
+ * responsible for initializing and storing hardware objects defined in {@link RobotLayout}
  * 
  * @author amind
  * @see RobotLayout
@@ -32,8 +32,7 @@ public class RobotHardware extends RobotLayout {
 
 	/**
 	 * Initializes robot hardware by subsystem. <br>
-	 * note: use this method as an index to show hardware initializations that
-	 * occur, and to find the init code for a particular system's hardware
+	 * note: use this method as an index to show hardware initializations that occur, and to find the init code for a particular system's hardware
 	 */
 	private RobotHardware() {
 		registry = new Registry();
@@ -46,7 +45,7 @@ public class RobotHardware extends RobotLayout {
 
 	private void initTurret() {
 		turretGyro = new GyroHardware(turretGyro_ANALOG);
-		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).getWrapped();
+		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
 		turret = new CANTalonHardware(turretMotor_CAN, registry);
 	}
 
@@ -55,6 +54,7 @@ public class RobotHardware extends RobotLayout {
 		elevationA.getWrappedTalon().setPosition(0);
 		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
 		elevation = new CANTalonGroup(elevationA, elevationB);
+		armPot=new PotentiometerHardware(armPotentiometer_ANALOG);
 	}
 
 	private void initIntake() {
@@ -78,6 +78,7 @@ public class RobotHardware extends RobotLayout {
 
 		rightA = new CANTalonHardware(rightMotorA_CAN, registry);
 		rightA.getWrappedTalon().setPosition(0);
+		rightA.setInverted(true);
 
 		rightB = new CANTalonHardware(rightMotorB_CAN, registry);
 		rightC = new CANTalonHardware(rightMotorC_CAN, registry);

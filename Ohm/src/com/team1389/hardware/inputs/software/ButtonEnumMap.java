@@ -2,23 +2,21 @@ package com.team1389.hardware.inputs.software;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-
-import com.team1389.hardware.inputs.software.DigitalInput;
 
 @SuppressWarnings("rawtypes")
 public class ButtonEnumMap<E extends Enum> {
 	List<ButtonEnum> mappings;
-
+	List<Runnable> changes;
 	public void addChangeListener(Runnable onChange) {
-		for (ButtonEnum mapping : mappings) {
-			mapping.button.addChangeListener(onChange);
-		}
+		changes.add(onChange);
 	}
 
 	public ButtonEnumMap(E defaultValue) {
 		currentVal = defaultValue;
-		this.mappings = new ArrayList<ButtonEnum>();
+		changes=new ArrayList<>();
+		this.mappings = new ArrayList<>();
 	}
 
 	@SafeVarargs
@@ -27,16 +25,26 @@ public class ButtonEnumMap<E extends Enum> {
 	}
 
 	E currentVal;
-
+	E lastVal;
 	public E getVal() {
-		for (ButtonEnum mapping : mappings) {
+		Iterator<ButtonEnum> i = mappings.iterator();
+		while(i.hasNext()){
+			ButtonEnum mapping=i.next();
 			if (mapping.button.get()) {
 				currentVal = mapping.val;
 			}
 		}
+		if(lastVal!=currentVal){
+			for(Runnable r:changes){
+				r.run();
+			}
+		}
+		lastVal=currentVal;
 		return currentVal;
 	}
-
+	public E getCurrentVal(){
+		return currentVal;
+	}
 	public class ButtonEnum {
 		DigitalInput button;
 		E val;

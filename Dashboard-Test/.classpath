@@ -6,5 +6,11 @@
 	<classpathentry kind="lib" path="NetworkTables-3.0.0-20160125.000943-1-desktop.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Ohm"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/2016-Rewrite"/>
+	<classpathentry kind="lib" path="Jinput/jinput.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TankDriveSim/Jinput"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/TrajectoryLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

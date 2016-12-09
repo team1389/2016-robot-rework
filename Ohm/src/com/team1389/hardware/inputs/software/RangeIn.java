@@ -2,13 +2,14 @@ package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
+import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
 
 public class RangeIn<T extends Value> {
 	public Class<T> type;
 	protected ScalarInput<T> input;
 	protected double max, min;
-
+	
 	public RangeIn(Class<T> type, ScalarInput<T> val, double min, double max) {
 		this.input = val;
 		this.min = min;
@@ -32,6 +33,12 @@ public class RangeIn<T extends Value> {
 
 	public double max() {
 		return max;
+	}
+
+	public RangeIn<T> setRange(double min, double max) {
+		this.min = min;
+		this.max = max;
+		return this;
 	}
 
 	public RangeIn<T> mapToRange(double min, double max) {
@@ -76,22 +83,28 @@ public class RangeIn<T extends Value> {
 		return this;
 	}
 
+	public RangeIn<T> limit() {
+		input = ScalarInput.limitRange(input, this.min, this.max);
+		return this;
+	}
+
 	/**
-	 * creates a boolean source that returns true when the value of the RangeIn
-	 * is within the given range
+	 * creates a boolean source that returns true when the value of the RangeIn is within the given range
 	 * 
-	 * @param rangeMin_inclusive
-	 *            the lower limit of the range to compare values to
-	 * @param rangeMax_exclusive
-	 *            the upper limit of the range to compare values to
-	 * @return a boolean source that represents whether the current value of the
-	 *         RangeIn is within the range
+	 * @param rangeMin_inclusive the lower limit of the range to compare values to
+	 * @param rangeMax_exclusive the upper limit of the range to compare values to
+	 * @return a boolean source that represents whether the current value of the RangeIn is within the range
 	 */
 	public BooleanSource getWithinRange(double rangeMin_inclusive, double rangeMax_exclusive) {
 		return () -> {
 			double get = get();
 			return get < rangeMax_exclusive && get >= rangeMin_inclusive;
 		};
+	}
+	//TODO add mapToAngle method in scalar input
+	public RangeIn<Angle> mapToAngle() {
+		input = ScalarInput.mapToRange(input, min, max, 0, 360);
+		return new RangeIn<Angle>(Angle.class,(ScalarInput<Angle>) input,0,360);
 	}
 
 }

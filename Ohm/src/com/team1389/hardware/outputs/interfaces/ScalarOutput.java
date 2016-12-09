@@ -111,12 +111,13 @@ public interface ScalarOutput<T extends Value> {
 	 * confines the given stream within the given range if the stream's value is outside the range, it will be replaced with the nearest edge of the range
 	 * 
 	 * @param out the stream to operate on
-	 * @param limit the max value of the limit range (min value is -limit)
+	 * @param max the max value of the limit range
+	 * @param min the min value of the limit range
 	 * @return the limited stream (does not change the value type)
 	 */
-	public static <T extends Value> ScalarOutput<T> limitRange(ScalarOutput<T> out, double limit) {
+	public static <T extends Value> ScalarOutput<T> limitRange(ScalarOutput<T> out, double min,double max) {
 		return (double val) -> {
-			out.set(RangeUtil.limit(val, limit));
+			out.set(RangeUtil.limit(val, min,max));
 		};
 	}
 

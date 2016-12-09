@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.watchers.DashboardInput;
-
 import com.team1389.command_framework.CommandScheduler;
+import com.team1389.command_framework.CommandUtil;
+import com.team1389.control.TrapezoidalController;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -10,52 +10,59 @@ import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import layout.TesterDefaultHardware;
 
 public class Tester {
+	static TesterDefaultHardware robot;
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
 
 	public static void init() {
-		DashboardInput.getInstance().init();
+
+		TrapezoidalController control = new TrapezoidalController(.7, 0, 0, .06, -.06, 2, robot.posIn1, robot.speedIn1,
+				robot.voltOut1);
+		control.setSetpoint(-10);
+		dash.watch(robot.posIn1, robot.voltOut1);
+		scheduler.schedule(CommandUtil.combineSimultaneous(control.getPIDDoCommand(),
+				CommandUtil.combineSequential(CommandUtil.createCommand(() -> {
+					return robot.posIn1.get() >= 20;
+				}), CommandUtil.createCommand(() -> {
+					System.out.println("hai");
+					control.setSetpoint(10);
+					return true;
+				}))));
 	}
 
 	public static void update() {
-		DashboardInput.getInstance().getSelectedAutonMode();
 	}
 
 	public static void main(String[] args) throws InterruptedException {
 		initNetworkTablesAsRobot();
 		Timer.SetImplementation(new TestTimer());
 		HLUsageReporting.SetImplementation(new Interface() {
-
 			@Override
 			public void reportSmartDashboard() {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void reportScheduler() {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void reportPIDController(int num) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 		dash = new Watcher();
 		manager = new SystemManager();
 		scheduler = new CommandScheduler();
+		robot = new TesterDefaultHardware();
 		init();
 		while (true) {
+			update();
 			scheduler.update();
 			manager.update();
 			dash.publish(Watcher.DASHBOARD);
-			update();
 			Thread.sleep(50);
 		}
 	}

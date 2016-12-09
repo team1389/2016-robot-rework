@@ -8,14 +8,14 @@ import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.systems.TurretSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
-import com.team1389.configuration.PIDConfiguration;
-import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
+import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
@@ -41,13 +41,13 @@ public class TeleopMain {
 
 		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
-		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem, robot.IRsensor1, robot.IRsensor2);
+		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem,turretSystem, robot.navX,robot.turretGyro);
 
 	}
 
 	public void periodic() {
 		manager.update();
-		SmartDashboard.putNumber("pot", robot.armPot.get());
+		SmartDashboard.putNumber("armPot", robot.armPot.getAnalogInput().mapToRange(1, 0).mapToRange(120,0).get());
 	}
 
 	private TurretSystem setupTurretSystem() {
@@ -58,15 +58,16 @@ public class TeleopMain {
 	}
 
 	public ArmSystem setupArmSystem() {
-		RangeOut<Position> elevator = robot.elevation
-				.getPositionOutput(new PIDConfiguration(new PIDConstants(.8, 0, 0), false, false));
+		RangeOut<Percent> elevator = robot.elevation.getVoltageOutput();
 		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
-		map.setMappings(map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
+		map.setMappings(
+				map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
 				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
 				map.new ButtonEnum(controls.getArmPositionC(), ArmLocation.VERTICAL),
 				map.new ButtonEnum(controls.getArmPositionD(), ArmLocation.LOW_GOAL));
-		RangeIn<Position> armVal = robot.elevation.getLeader().getPositionInput();
+		RangeIn<Position> armVal = robot.armPot.getAnalogInput().mapToRange(120,0).setRange(0, 360);
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
+		DebugDash.getInstance().watch(armSystem.elevator.getWatchable("elevator"));
 		return armSystem;
 	}
 
@@ -78,8 +79,8 @@ public class TeleopMain {
 
 	public System setupDriveSystem() {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
-		PercentOut right = robot.rightDrive.getVoltageOutput();
+		PercentOut right = new PercentOut(robot.rightDrive.getVoltageOutput().invert());
 
-		return new CheesyDriveSystem(left, right, controls.getThrottle(), controls.getWheel(), controls.getQuickTurn());
+		return new CheesyDriveSystem(left, right, controls.getThrottle(), new PercentIn(controls.getWheel().invert()), controls.getQuickTurn());
 	}
 }

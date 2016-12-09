@@ -10,7 +10,9 @@ import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.System;
+import com.team1389.watch.BooleanInfo;
 import com.team1389.watch.Info;
+import com.team1389.watch.NumberInfo;
 
 public class TurretSystem extends System {
 	// TODO think about pollable implementation
@@ -34,12 +36,16 @@ public class TurretSystem extends System {
 
 	@Override
 	public String getName() {
-		return null;
+		return "Turret subsystem";
 	}
 
 	@Override
 	public Info[] getInfo() {
-		return null;
+		return new Info[] { new NumberInfo("turret Angle", () -> {
+			return turretAngle.get();
+		}), new BooleanInfo("turret zeroing", () -> {
+			return toZero;
+		}) };
 	}
 
 	@Override

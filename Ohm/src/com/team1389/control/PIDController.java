@@ -7,24 +7,19 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.PIDTunableValue;
 import com.team1389.hardware.value_types.Value;
 
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
-
 public class PIDController<O extends Value, I extends PIDTunableValue> extends edu.wpi.first.wpilibj.PIDController {
 	private RangeOut<O> output;
 	private RangeIn<I> source;
 	private RangeOut<I> setpointSetter;
-
 	public PIDController(double kP, double kI, double kD, RangeIn<I> source, RangeOut<O> output) {
-		super(kP, kI, kD, null, null);
-		m_pidInput = new PIDRangeIn<I>(source);
-		m_pidOutput = new PIDRangeOut<O>(output);
+		super(kP, kI, kD, PIDRangeIn.get(source), PIDRangeOut.get(output));
 		this.source = source;
 		this.output = output;
 		setOutputRange(output.min(), output.max());
 		setInputRange(source.min(), source.max());
 		this.setpointSetter = new RangeOut<I>((double setpoint) -> {
 			setSetpoint(setpoint);
+			enable();
 		}, source.min(), source.max());
 	}
 
@@ -51,49 +46,6 @@ public class PIDController<O extends Value, I extends PIDTunableValue> extends e
 		return output;
 	}
 
-	private class PIDRangeOut<T extends Value> implements edu.wpi.first.wpilibj.PIDOutput {
 
-		RangeOut<T> outputRange;
-
-		public PIDRangeOut(RangeOut<T> voltageOutput) {
-			this.outputRange = voltageOutput;
-		}
-
-		@Override
-		public void pidWrite(double output) {
-			outputRange.set(output);
-		}
-
-	}
-
-	private class PIDRangeIn<T extends PIDTunableValue> implements PIDSource {
-		RangeIn<T> input;
-
-		public PIDRangeIn(RangeIn<T> input) {
-			this.input = input;
-		}
-
-		@Override
-		public void setPIDSourceType(PIDSourceType pidSource) {
-
-		}
-
-		@Override
-		public PIDSourceType getPIDSourceType() {
-			try {
-				return input.type.newInstance().getValueType();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			return PIDSourceType.kDisplacement;
-		}
-
-		@Override
-		public double pidGet() {
-			return input.get();
-		}
-
-	}
+	
 }

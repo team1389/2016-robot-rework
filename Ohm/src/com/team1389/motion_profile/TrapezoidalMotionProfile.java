@@ -1,5 +1,7 @@
 package com.team1389.motion_profile;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TrapezoidalMotionProfile extends MotionProfile {
 	double tAcc;
 	double tCruise;
@@ -7,61 +9,88 @@ public class TrapezoidalMotionProfile extends MotionProfile {
 	double accel;
 	double decel;
 	double maxSpeed;
+	double v0;
+	double xAcc;
+	double xDec;
+	double xCruise;
 
-	public TrapezoidalMotionProfile(double dx, double accel, double decel, double vCruise) {
-		tAcc = vCruise / accel;
-		tDec = vCruise / decel;
-		this.accel=accel;
-		this.decel=decel;
-		double xAcc = tAcc * vCruise/2;
-		double xDec = tDec * vCruise/2;
-		double xCruise;
-		
-		if (xAcc + xDec > Math.abs(dx)) {
-			double t2sq = Math.abs(dx)*2048 / (decel * decel / accel + decel);
-			xDec = decel * t2sq/2048;
-			tDec = Math.sqrt(t2sq)/32;
-			tAcc = tDec * decel / accel;
-			maxSpeed = tAcc * accel;
-			xCruise = 0;
-		} else {
-			xCruise = Math.abs(dx) - xAcc - xDec;
-			maxSpeed = vCruise;
-			tCruise=3*dx/(2*vCruise)-tAcc-tDec;
+	public TrapezoidalMotionProfile(double v0, double dx, double accel, double decel, double vCruise) {
+		setupConstants(v0, dx, accel, decel, vCruise);
+		if(xAcc<0){
+			System.out.println("acc too slow");
+			setupConstants(v0,dx,-accel,-decel,vCruise);
 		}
-		tCruise=xCruise/vCruise;
+
+	}
+
+	private void setupConstants(double v0, double dx, double accel, double decel, double vCruise) {
+		tAcc = (vCruise - v0) / accel; //calculate the time to reach vCruise, assuming there is enough distance in the profile to do so
+		tDec = -(vCruise) / decel; //calculate the time to decelerate from vCruise to 0
+		this.accel = accel;
+		this.v0 = v0;
+		this.decel = decel;
+		xAcc = ((vCruise*vCruise)-(v0*v0))/(2*accel); //calculate distance needed to reach vCruise
+		System.out.println("decel "+decel+" "+v0);
+		xDec = -(vCruise*vCruise)/(2*decel); //calculate distance needed to decelerate from vCruise
+		System.out.println("x's "+xAcc+" "+xDec+" "+dx);
+
+		if (xAcc + xDec >= Math.abs(dx)) {
+			//if this block is entered, the requested distance to travel is not enough for the robot to reach vCruise, so the profile will be triangular
+			System.out.println("can't hit vCruise");
+			xAcc=(-(v0*v0)-2*decel*dx)/(2*accel-2*decel);
+			xDec=dx-xAcc;
+			xCruise=0;
+			maxSpeed=Math.sqrt((v0*v0)+2*accel*xAcc);
+			tAcc=(maxSpeed-v0)/accel;
+			tDec=-maxSpeed/decel;
+			System.out.println(xAcc);
+		} else {
+			System.out.println("can hit vCruise");
+			xCruise = Math.abs(dx) - xAcc - xDec; //calculate distance travelled at vCruise
+			maxSpeed = vCruise; //max speed reached is capped at vCruise
+			tCruise = 3 * dx / (2 * vCruise) - tAcc - tDec; //calculate time spent moving at vCruise
+		}
+		tCruise = xCruise / vCruise;
 	}
 
 	@Override
 	public double getDuration() {
-		return tAcc+tCruise+tDec;
+		return tCruise + tDec + tAcc; //the time spent moving is the sum of time spent in each piece of the trapezoid
 	}
 
 	@Override
 	protected double providePosition(double time) {
+		SmartDashboard.putNumber(this.hashCode() + "", provideVelocity(time));
 		if (time <= tAcc) {
-			return accel*time*time/2;
+			double xSoFar = v0 * time + (accel * time * time / 2);
+			return xSoFar;
 		} else if (time < tCruise + tAcc) {
-			return  accel*tAcc*tAcc/2+ maxSpeed*(time-tAcc);
+			double tCruiseSoFar=time - tAcc; //calculate the time spent in the middle section of the trapezoid
+			double xCruise=maxSpeed *tCruiseSoFar; //calculate distance travelled at vCruise so far
+			return xAcc + xCruise; //total distance travelled
 		} else if (time <= tAcc + tCruise + tDec) {
-			double tDec=time-tAcc-tCruise;
-			return (accel*tAcc*tAcc/2)+(maxSpeed*(tCruise))+maxSpeed*tDec-decel*tDec*tDec/2;
+			double tDec = time - tAcc - tCruise; //calculate time spent in the final section of the trapezoid
+			double xDec = maxSpeed * tDec +( decel * tDec * tDec / 2); //calculate the distance travelled while decelerating so far
+			//xDec=(Math.pow(maxSpeed,2)-Math.pow(provideVelocity(time),2))/(-2*decel);	//alternative eqn for xDec
+			return xAcc + xCruise + xDec; //total distance travelled
 		} else {
-			System.out.println("fuck you");
+			SmartDashboard.putBoolean("test", true);
+			System.out.println("hit the cap motion");
 			return 0;
-		}	}
+		}
+	}
 
 	@Override
 	protected double provideVelocity(double time) {
 
 		if (time <= tAcc) {
-			return accel * time;
+			return v0 + accel * time; 
 		} else if (time < tCruise + tAcc) {
 			return maxSpeed;
 		} else if (time <= tAcc + tCruise + tDec) {
-			return maxSpeed -decel * (time - tAcc - tCruise);
+			return maxSpeed - decel * (time - tAcc - tCruise);
 		} else {
-			System.out.println("fuck you");
+			System.out.println("outside duration of profile");
 			return 0;
 		}
 	}
@@ -75,9 +104,8 @@ public class TrapezoidalMotionProfile extends MotionProfile {
 		} else if (time <= tAcc + tCruise + tDec) {
 			return decel;
 		} else {
-			System.out.println("fuck you");
+			System.out.println("outside duration of profile");
 			return 0;
 		}
 	}
-
 }

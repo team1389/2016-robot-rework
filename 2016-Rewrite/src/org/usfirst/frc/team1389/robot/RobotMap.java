@@ -19,8 +19,11 @@ public class RobotMap {
 	
 	//Arm
 	protected static final int turretMotor_CAN = 10; protected static final boolean turntableMotor_isInverted = false;
+	protected static final int turretGyro_ANALOG=1;
+	
 	protected static final int elevatorMotorA_CAN = 12; protected static final boolean elevatorMotorA_isInverted = true;
 	protected static final int elevatorMotorB_CAN = 8; protected static final boolean elevatorMotorB_isInverted = true;
+	protected static final int armPotentiometer_ANALOG=0;
 	
 	//Ball manipulator
 	protected static final int intakeMotor_PWM = 0; protected static final boolean intakeMotor_isInverted = true;
@@ -30,7 +33,6 @@ public class RobotMap {
 	//Inputs
 	protected static final int ballHolderIR1_DIO = 0; protected static final boolean ballHolderIR1_isInverted = false;
 	protected static final int ballHolderIR2_DIO = 1; protected static final boolean ballHolderIR2_isInverted = false;
-	protected static final int turretGyro_ANALOG=1;
 	
 	
 	protected static final boolean leftEncoderInverted = true;

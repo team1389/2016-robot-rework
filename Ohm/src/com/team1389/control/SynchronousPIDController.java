@@ -11,9 +11,9 @@ import com.team1389.hardware.value_types.PIDTunableValue;
 import com.team1389.hardware.value_types.Value;
 
 public class SynchronousPIDController<O extends Value, I extends PIDTunableValue> extends SynchronousPID {
-	private RangeOut<O> output;
-	private RangeIn<I> source;
-	private RangeOut<I> setpointSetter;
+	protected RangeOut<O> output;
+	protected RangeIn<I> source;
+	protected RangeOut<I> setpointSetter;
 
 	public SynchronousPIDController(double kP, double kI, double kD, RangeIn<I> source, RangeOut<O> output) {
 		super(kP, kI, kD);
@@ -35,7 +35,6 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 		}
 		setContinuous(config.isContinuous);
 	}
-
 	public void update() {
 		output.set(calculate(source.get()));
 	}
