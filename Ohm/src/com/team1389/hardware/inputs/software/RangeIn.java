@@ -9,7 +9,7 @@ public class RangeIn<T extends Value> {
 	public Class<T> type;
 	protected ScalarInput<T> input;
 	protected double max, min;
-
+	
 	public RangeIn(Class<T> type, ScalarInput<T> val, double min, double max) {
 		this.input = val;
 		this.min = min;

@@ -14,7 +14,7 @@ public abstract class System implements Watchable {
 	}
 
 	private CommandScheduler scheduler;
-	protected boolean inDefaultMode;
+	protected boolean inDefaultMode=true;;
 	protected Runnable defaultModeListener;
 
 	public final void update() {
@@ -40,7 +40,7 @@ public abstract class System implements Watchable {
 
 	protected void schedule(Command command) {
 		scheduler.schedule(command);
-		inDefaultMode = false;
+		//inDefaultMode = false;
 	}
 
 }

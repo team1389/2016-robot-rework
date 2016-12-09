@@ -1,12 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
-import com.team1389.auto.DriveCommands;
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.command_framework.CommandUtil;
-import com.team1389.control.SynchronousPIDController;
-import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.value_types.Percent;
-import com.team1389.hardware.value_types.Position;
+import com.team1389.control.TrapezoidalController;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -22,36 +18,23 @@ public class Tester {
 	static Watcher dash;
 	static SystemManager manager;
 
-	static RangeOut<Position> voltageSetter;
-
 	public static void init() {
 
-		SynchronousPIDController<Percent, Position> control = new SynchronousPIDController<Percent, Position>(.7, 0, 0,
-				robot.posIn1, robot.voltOut1);
-		SynchronousPIDController<Percent, Position> control2 = new SynchronousPIDController<Percent, Position>(.7, 0, 0,
-				robot.posIn2, robot.voltOut2);
-		//control.getSetpointSetter().set(20);
-		scheduler.schedule(CommandUtil.combineSimultaneous(
-
-				new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
-						robot.speedIn2),
-		/*		CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
-					scheduler.cancelAll();
-					scheduler.schedule(new DriveCommands(8, .06, .06, 2).driveMetersCommand(20, control, control2, robot.speedIn1,
-						robot.speedIn2));
-					return true;
-				})),
-
-				/*
-				 * followPath, control.getPIDDoCommand(() -> { return false; }),
-				 */ control.getPIDDoCommand(() -> {
-					return false;
-				})));
+		TrapezoidalController control = new TrapezoidalController(.7, 0, 0, .06, -.06, 2, robot.posIn1, robot.speedIn1,
+				robot.voltOut1);
+		control.setSetpoint(-10);
 		dash.watch(robot.posIn1, robot.voltOut1);
+		scheduler.schedule(CommandUtil.combineSimultaneous(control.getPIDDoCommand(),
+				CommandUtil.combineSequential(CommandUtil.createCommand(() -> {
+					return robot.posIn1.get() >= 20;
+				}), CommandUtil.createCommand(() -> {
+					System.out.println("hai");
+					control.setSetpoint(10);
+					return true;
+				}))));
 	}
 
 	public static void update() {
-
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -76,10 +59,10 @@ public class Tester {
 		robot = new TesterDefaultHardware();
 		init();
 		while (true) {
+			update();
 			scheduler.update();
 			manager.update();
 			dash.publish(Watcher.DASHBOARD);
-			update();
 			Thread.sleep(50);
 		}
 	}

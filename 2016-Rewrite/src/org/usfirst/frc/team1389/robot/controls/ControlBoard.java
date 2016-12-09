@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1389.robot.controls;
 
 import com.team1389.hardware.humaninputs.JoystickController;
+import com.team1389.hardware.inputs.software.DigitalInput;
 import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
 import com.team1389.hardware.inputs.software.LatchedDigitalInput;
 import com.team1389.hardware.inputs.software.PercentIn;
@@ -56,8 +57,8 @@ public class ControlBoard extends ControlMap {
 	 * @return a button on the driver controller
 	 * @see com.team1389.system.CheesyDriveSystem
 	 */
-	public RawDigitalInput getQuickTurn() {
-		return (RawDigitalInput) driveController.getButton(btn_QUICK_TURN, InputStyle.RAW);
+	public DigitalInput getQuickTurn() {
+		return driveController.getButton(btn_QUICK_TURN, InputStyle.RAW);
 	}
 
 	// MANIPULATOR CONTROLS

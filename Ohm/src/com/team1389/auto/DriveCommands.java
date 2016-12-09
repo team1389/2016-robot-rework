@@ -80,7 +80,7 @@ public class DriveCommands {
 			@Override
 			protected void initialize() {
 				TrapezoidalMotionProfile profileLeft = new TrapezoidalMotionProfile(leftSpd.get(), meters,
-						maxAcceleration, maxAcceleration, maxVelocity);
+						maxAcceleration, maxDeceleration, maxVelocity);
 				followProfileCommand = new FollowProfileCommand(profileLeft, left, leftIn,leftSpd);
 				followProfileCommand.initialize();
 			}
@@ -96,7 +96,7 @@ public class DriveCommands {
 			@Override
 			protected void initialize() {
 				TrapezoidalMotionProfile profileRight = new TrapezoidalMotionProfile(rightSpd.get(), meters,
-						maxAcceleration, maxAcceleration, maxVelocity);
+						maxAcceleration, maxDeceleration, maxVelocity);
 				followProfileCommand = new FollowProfileCommand(profileRight, right, rightIn,rightSpd);
 				followProfileCommand.initialize();
 			}

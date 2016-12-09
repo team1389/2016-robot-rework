@@ -16,7 +16,7 @@ import com.team1389.watch.StringInfo;
 
 public class ArmSystem extends System {
 
-	RangeOut<Position> elevator;
+	public RangeOut<Position> elevator;
 	SynchronousPIDController<Percent, Position> elevatorPID;
 	ButtonEnumMap<ArmLocation> buttons;
 	RangeIn<Position> armVal;
@@ -28,10 +28,9 @@ public class ArmSystem extends System {
 		this.armVal = armVal;
 		elevatorPID = new SynchronousPIDController<Percent, Position>(
 				new PIDConfiguration(new PIDConstants(.06, 0, 0), true, false), armVal, elevator);
-		this.elevator = elevatorPID.getSetpointSetter().invert().getProfiledOut(30, 0);
+		this.elevator = elevatorPID.getSetpointSetter().invert();
 		this.inputAngle = 0;
 	}
-
 	@Override
 	public void init() {
 		elevator.set(inputAngle);
@@ -45,12 +44,8 @@ public class ArmSystem extends System {
 
 	@Override
 	public void defaultUpdate() {
+		elevator.set(inputAngle);
 		elevatorPID.update();
-		if (profileMover != null) {
-			if (profileMover.exec()) {
-				profileMover = null;
-			}
-		}
 	}
 
 	public enum ArmLocation {
