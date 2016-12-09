@@ -5,6 +5,12 @@ import com.team1389.hardware.inputs.interfaces.BooleanSource;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 public class BooleanInfo extends Info{
+	/**
+	 * Sets BooleanInfo method in variable to class variable
+	 * Calls superclass to handle name in {@link #Info(String name)}
+	 * @param name the name of hardware producing info
+	 * @param in where (method) to get information			
+	 */
 	BooleanSource in;
 	public BooleanInfo(String name,BooleanSource in){
 		super(name);
