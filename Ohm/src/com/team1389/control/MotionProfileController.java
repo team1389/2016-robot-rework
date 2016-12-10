@@ -10,48 +10,46 @@ import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.motion_profile.MotionProfile;
-import com.team1389.motion_profile.TrapezoidalMotionProfile;
 
-public class TrapezoidalController extends SynchronousPID {
+public class MotionProfileController extends SynchronousPID {
 	MotionProfile following;
-	double maxAcc;
-	double maxDec;
-	double maxVel;
+	double startPos;
 	RangeIn<Speed> vel;
 	RangeIn<Position> pos;
 	RangeOut<Percent> out;
 	Timer timer;
-	
-	public TrapezoidalController(double kP, double kI, double kD, double maxAcc, double maxDec, double maxVel,
-			RangeIn<Position> source, RangeIn<Speed> vel, RangeOut<Percent> output) {
+
+	public MotionProfileController(double kP, double kI, double kD, RangeIn<Position> source, RangeIn<Speed> vel,
+			RangeOut<Percent> output) {
 		super(kP, kI, kD);
-		this.maxAcc = maxAcc;
-		this.maxDec = maxDec;
-		this.maxVel = maxVel;
 		this.vel = vel;
-		this.out=output;
-		this.pos=source;
-		timer=new Timer();
+		this.out = output;
+		this.pos = source;
+		startPos = 0;
+		timer = new Timer();
 	}
 
-	@Override
-	public void setSetpoint(double val) {
-			following = new TrapezoidalMotionProfile(vel.get(), val - pos.get(), maxAcc, maxDec, maxVel);
-			timer.zero();
+	public void followProfile(MotionProfile prof) {
+		this.following = prof;
+		startPos = pos.get();
+		timer.zero();
 	}
-	public void update(){
+
+	public void update() {
 		double time = timer.get();
-		if(following!=null&&time<following.getDuration()){
-			super.setSetpoint(following.getPosition(time));
+		if (following != null && !following.isFinished(time)) {
+			super.setSetpoint(following.getPosition(time) + startPos);
 		}
 		double calculate = calculate(pos.get());
 		out.set(calculate);
 	}
+
 	public Command getPIDDoCommand() {
 		return getPIDDoCommand(() -> {
 			return false;
 		});
 	}
+
 	public Command getPIDDoCommand(BooleanSource exitCondition) {
 		return CommandUtil.createCommand(() -> {
 			update();

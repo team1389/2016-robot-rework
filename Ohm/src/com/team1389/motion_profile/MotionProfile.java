@@ -38,28 +38,7 @@ public abstract class MotionProfile {
 		}
 	}
 
-	public MotionProfile invert() {
-		return new MotionProfile() {
-			@Override
-			public double getDuration() {
-				return this.getDuration();
-			}
-
-			@Override
-			public double providePosition(double time) {
-				return -this.providePosition(time);
-			}
-
-			@Override
-			public double provideVelocity(double time) {
-				return -this.provideVelocity(time);
-			}
-
-			@Override
-			public double provideAcceleration(double time) {
-				return -this.provideAcceleration(time);
-			}
-		};
+	public boolean isFinished(double time) {
+		return time > getDuration();
 	}
-
 }
