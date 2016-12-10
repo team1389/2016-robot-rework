@@ -5,39 +5,33 @@ import java.util.Map;
 
 import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
+import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.registry.Registry;
+import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Info;
-import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
-public class CANTalonHardware implements Watchable {
+public class CANTalonHardware extends Hardware<CAN> {
 
 	private final StateTracker stateTracker;
-	private final CANTalon wpiTalon;
-	private String currentMode;
+	private CANTalon wpiTalon;
 
-	public CANTalonHardware(int canPort, Registry registry) {
-		registry.claimCANPort(canPort);
-		registry.registerWatcher(this);
-		wpiTalon = new CANTalon(canPort);
+	public CANTalonHardware() {
 		stateTracker = new StateTracker();
-		currentMode = "None";
 	}
 
 	public PercentOut getVoltageOutput() {
 		State voltageState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.PercentVbus);
-			currentMode = "Voltage Control";
 		});
 
 		return new PercentOut((double voltage) -> {
@@ -53,16 +47,15 @@ public class CANTalonHardware implements Watchable {
 	public RangeOut<Speed> getSpeedOutput(PIDConfiguration config) {
 		State speedState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Speed);
-			setPidConstants(wpiTalon, config.pidConstants);
+			setPidConstants(config.pidConstants);
 			wpiTalon.reverseSensor(config.isSensorReversed);
-			currentMode = "Speed";
 		});
 
 		return new RangeOut<Speed>((double speed) -> {
 			speedState.init();
 			wpiTalon.set(speed);
 		}, // TODO
-				0, 0);
+				0, 8192);
 	}
 
 	public void setInverted(boolean inverted) {
@@ -72,9 +65,8 @@ public class CANTalonHardware implements Watchable {
 	public RangeOut<Position> getPositionOutput(PIDConfiguration config) {
 		State positionState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Position);
-			setPidConstants(wpiTalon, config.pidConstants);
+			setPidConstants(config.pidConstants);
 			wpiTalon.reverseSensor(config.isSensorReversed);
-			currentMode = "Position";
 		});
 		return new RangeOut<Position>((double position) -> {
 			positionState.init();
@@ -100,7 +92,6 @@ public class CANTalonHardware implements Watchable {
 		State followingState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Follower);
 			wpiTalon.set(toFollow.wpiTalon.getDeviceID());
-			currentMode = "Follower";
 		});
 
 		return new CANTalonFollower() {
@@ -111,19 +102,14 @@ public class CANTalonHardware implements Watchable {
 		};
 	}
 
-	private void setPidConstants(CANTalon wpiTalon, PIDConstants pidConstants) {
+	private void setPidConstants(PIDConstants pidConstants) {
 		wpiTalon.setPID(pidConstants.p, pidConstants.i, pidConstants.d);
-	}
-
-	@Override
-	public String getName() {
-		return "CAN Talon " + wpiTalon.getDeviceID();
 	}
 
 	@Override
 	public Info[] getInfo() {
 		Map<String, String> info = new HashMap<>();
-		info.put("mode", currentMode);
+		info.put("mode", wpiTalon.getControlMode().name());
 		switch (wpiTalon.getControlMode()) {
 		case Current:
 			break;
@@ -147,9 +133,16 @@ public class CANTalonHardware implements Watchable {
 			break;
 
 		}
-		// info.put("speed", "" + wpiTalon.getSpeed());
-		// info.put("voltage out", "" + wpiTalon.getOutputVoltage());
-
 		return null;
+	}
+
+	@Override
+	public void initHardware(int port) {
+		wpiTalon = new CANTalon(port);
+	}
+
+	@Override
+	protected String getHardwareIdentifier() {
+		return "Talon";
 	}
 }

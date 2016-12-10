@@ -1,21 +1,15 @@
 package com.team1389.hardware.inputs.hardware;
 
+import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
-import com.team1389.hardware.registry.Registry;
+import com.team1389.hardware.registry.port_types.DIO;
 import com.team1389.watch.BooleanInfo;
 import com.team1389.watch.Info;
-import com.team1389.watch.Watchable;
 
-public class SwitchHardware implements Watchable {
+public class SwitchHardware extends Hardware<DIO> {
 	boolean inverted;
 
 	edu.wpi.first.wpilibj.DigitalInput wpiSwitch;
-
-	public SwitchHardware(int dioPort, Registry registry) {
-		registry.claimDIOPort(dioPort);
-		registry.registerWatcher(this);
-		wpiSwitch = new edu.wpi.first.wpilibj.DigitalInput(dioPort);
-	}
 
 	private boolean get() {
 		return inverted ? !wpiSwitch.get() : wpiSwitch.get();
@@ -27,11 +21,6 @@ public class SwitchHardware implements Watchable {
 		};
 	}
 
-	@Override
-	public String getName() {
-		return wpiSwitch.getSmartDashboardType() + wpiSwitch.getChannel();
-	}
-
 	public void invert(boolean inverted) {
 		this.inverted = inverted;
 	}
@@ -41,6 +30,16 @@ public class SwitchHardware implements Watchable {
 		return new Info[] { new BooleanInfo(getName(), () -> {
 			return wpiSwitch.get();
 		}) };
+	}
+
+	@Override
+	public void initHardware(int port) {
+		wpiSwitch = new edu.wpi.first.wpilibj.DigitalInput(port);
+	}
+
+	@Override
+	protected String getHardwareIdentifier() {
+		return "Switch";
 	}
 
 }

@@ -1,21 +1,36 @@
 package com.team1389.hardware.registry;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
-public class ResourceManager<T>{
-	
-	private Set<T> used;
-	
+import com.team1389.hardware.Hardware;
+import com.team1389.hardware.registry.port_types.PortInstance;
+
+public class ResourceManager<T extends PortInstance> {
+
+	private HashMap<T, Hardware<T>> registered;
+
 	public ResourceManager() {
-		used = new HashSet<T>();
+		registered = new HashMap<T, Hardware<T>>();
 	}
-	
-	public boolean isUsed(T t){
-		return used.contains(t);
+
+	public boolean isUsed(T t) {
+		return registered.containsKey(t);
 	}
-	
-	public void setUsed(T t){
-		used.add(t);
+
+	public Hardware<T> get(T t) {
+		return registered.get(t);
+	}
+
+	private void put(T t, Hardware<T> h) {
+		registered.put(t, h);
+	}
+
+	public Hardware<T> register(T t, Hardware<T> h) {
+		if (isUsed(t)) {
+			return get(t);
+		} else {
+			put(t, h);
+			return h;
+		}
 	}
 }

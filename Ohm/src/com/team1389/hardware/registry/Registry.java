@@ -2,6 +2,14 @@ package com.team1389.hardware.registry;
 
 import java.util.List;
 
+import com.team1389.hardware.Hardware;
+import com.team1389.hardware.registry.port_types.Analog;
+import com.team1389.hardware.registry.port_types.CAN;
+import com.team1389.hardware.registry.port_types.DIO;
+import com.team1389.hardware.registry.port_types.PCM;
+import com.team1389.hardware.registry.port_types.PWM;
+import com.team1389.hardware.registry.port_types.PortInstance;
+import com.team1389.hardware.registry.port_types.USB;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.Watcher;
 
@@ -13,15 +21,20 @@ import com.team1389.watch.Watcher;
  */
 public class Registry {
 	private Watcher watcher;
-	private ResourceManager<Integer> pwmPorts;
-	private ResourceManager<Integer> canPorts;
-	private ResourceManager<Integer> dioPorts;
+	private ResourceManager<Analog> analogPorts;
+	private ResourceManager<PCM> pcmPorts;
+	private ResourceManager<PWM> pwmPorts;
+	private ResourceManager<CAN> canPorts;
+	private ResourceManager<DIO> dioPorts;
+	private ResourceManager<USB> usbPorts;
 
 	/**
 	 * initialize this registry instance
 	 */
 	public Registry() {
 		watcher = new Watcher();
+		pcmPorts = new ResourceManager<>();
+		analogPorts = new ResourceManager<>();
 		pwmPorts = new ResourceManager<>();
 		canPorts = new ResourceManager<>();
 		dioPorts = new ResourceManager<>();
@@ -33,49 +46,41 @@ public class Registry {
 	 * 
 	 * @param watchable the object to watch
 	 */
-	public void registerWatcher(Watchable watchable) {
+	public void registerWatchable(Watchable watchable) {
 		watcher.watch(watchable);
 	}
 
-	/**
-	 * registers the given PWM port as taken.
-	 * 
-	 * @param port the port to claim
-	 * @throws PortTakenException if port is already taken
-	 */
-	public void claimPWMPort(int port) {
-		if (pwmPorts.isUsed(port)) {
-			throw new PortTakenException("PWM port " + port + " is already being used");
-		} else {
-			pwmPorts.setUsed(port);
-		}
+	public <R extends PortInstance> boolean isUsed(R r) {
+		return getRegister(r).isUsed(r);
 	}
 
-	/**
-	 * registers the given CAN port as taken.
-	 * 
-	 * @param port the port to claim
-	 * @throws PortTakenException if port is already taken
-	 */
-	public void claimCANPort(int port) {
-		if (canPorts.isUsed(port)) {
-			throw new PortTakenException("CAN port " + port + " is already being used");
-		} else {
-			canPorts.setUsed(port);
+	@SuppressWarnings("unchecked")
+	public <R extends PortInstance, T extends Hardware<R>> T add(R r, T t) {
+		ResourceManager<R> register = getRegister(r);
+		if (!register.isUsed(r)) {
+			t.initHardware(r.index());
+			registerWatchable(t);
 		}
+		return (T) register.register(r, t);
 	}
 
-	/**
-	 * registers the given DIO port as taken.
-	 * 
-	 * @param port the port to claim
-	 * @throws PortTakenException if port is already taken
-	 */
-	public void claimDIOPort(int port) {
-		if (dioPorts.isUsed(port)) {
-			throw new PortTakenException("DIO port " + port + " is already being used");
-		} else {
-			dioPorts.setUsed(port);
+	@SuppressWarnings("unchecked")
+	public <T extends PortInstance> ResourceManager<T> getRegister(T r) {
+		switch (r.getPortType()) {
+		case PWM:
+			return (ResourceManager<T>) pwmPorts;
+		case ANALOG:
+			return (ResourceManager<T>) analogPorts;
+		case CAN:
+			return (ResourceManager<T>) canPorts;
+		case DIO:
+			return (ResourceManager<T>) dioPorts;
+		case PCM:
+			return (ResourceManager<T>) pcmPorts;
+		case USB:
+			return (ResourceManager<T>) usbPorts;
+		default:
+			return null;
 		}
 	}
 
@@ -85,4 +90,5 @@ public class Registry {
 	public List<Watchable> getHardwareInfo() {
 		return watcher.getWatchables();
 	}
+
 }

@@ -16,5 +16,5 @@ public class Timer implements ScalarInput<Value>{
 	public double get() {
 		return timer.get();
 	}
-	
+
 }
