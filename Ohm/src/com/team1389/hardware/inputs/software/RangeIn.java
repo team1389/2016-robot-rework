@@ -1,6 +1,6 @@
 package com.team1389.hardware.inputs.software;
 
-import com.team1389.hardware.inputs.interfaces.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
@@ -95,7 +95,7 @@ public class RangeIn<T extends Value> {
 	 * @param rangeMax_exclusive the upper limit of the range to compare values to
 	 * @return a boolean source that represents whether the current value of the RangeIn is within the range
 	 */
-	public BooleanSource getWithinRange(double rangeMin_inclusive, double rangeMax_exclusive) {
+	public BinaryInput getWithinRange(double rangeMin_inclusive, double rangeMax_exclusive) {
 		return () -> {
 			double get = get();
 			return get < rangeMax_exclusive && get >= rangeMin_inclusive;

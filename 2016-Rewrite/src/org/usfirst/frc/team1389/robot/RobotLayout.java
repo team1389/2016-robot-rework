@@ -3,7 +3,7 @@ import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
-import com.team1389.hardware.inputs.interfaces.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
@@ -16,7 +16,7 @@ public class RobotLayout extends RobotMap{
 	
 	public SwitchHardware IRsensor1;
 	public SwitchHardware IRsensor2;
-	public BooleanSource IRsensors;
+	public BinaryInput IRsensors;
 	
 	CANTalonHardware leftA;
 	CANTalonHardware leftB;

@@ -1,11 +1,11 @@
 package com.team1389.hardware.inputs.interfaces;
 
-public class ListeningBooleanSource implements BooleanSource {
-	private BooleanSource in;
+public class ListeningBinaryInput implements BinaryInput {
+	private BinaryInput in;
 	private Runnable onChange;
 	private boolean oldVal;
 
-	protected ListeningBooleanSource(BooleanSource in, Runnable onChange) {
+	protected ListeningBinaryInput(BinaryInput in, Runnable onChange) {
 		this.onChange = onChange;
 		this.in = in;
 	}

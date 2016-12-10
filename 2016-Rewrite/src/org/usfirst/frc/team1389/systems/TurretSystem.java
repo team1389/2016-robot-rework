@@ -3,7 +3,7 @@ package org.usfirst.frc.team1389.systems;
 import com.team1389.auto.command.TurnAngleCommand;
 import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
-import com.team1389.hardware.inputs.software.LatchedDigitalInput;
+import com.team1389.hardware.inputs.interfaces.LatchedBinaryInput;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
@@ -23,11 +23,11 @@ public class TurretSystem extends System {
 
 	RangeIn<Angle> turretAngle;
 
-	LatchedDigitalInput zeroButton;
+	LatchedBinaryInput zeroButton;
 	boolean toZero;
 
 	public TurretSystem(PercentOut voltageSystem, RangeIn<Angle> turretAngle, PercentIn joystickIn,
-			LatchedDigitalInput zeroButton) {
+			LatchedBinaryInput zeroButton) {
 		this.voltRange = voltageSystem;
 		this.joystick = joystickIn.scale(.2);
 		this.turretAngle = turretAngle;

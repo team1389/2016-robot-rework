@@ -1,14 +1,16 @@
 package com.team1389.system;
 
-import com.team1389.hardware.inputs.software.DigitalInput;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.BooleanInfo;
 import com.team1389.watch.Info;
 import com.team1389.watch.NumberInfo;
+
 /**
  * hellow
+ * 
  * @author amind
  *
  */
@@ -17,14 +19,14 @@ public class CheesyDriveSystem extends System {
 	private PercentOut rightMotor;
 	private PercentIn throttle;
 	private PercentIn wheel;
-	private DigitalInput quickTurnButton;
+	private BinaryInput quickTurnButton;
 	private boolean isQuickTurn;
 	private double mQuickStopAccumulator;
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
 
 	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
-			DigitalInput quickTurnButton, double turnSensitivity) {
+			BinaryInput quickTurnButton, double turnSensitivity) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.throttle = throttle;
@@ -34,7 +36,7 @@ public class CheesyDriveSystem extends System {
 	}
 
 	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
-			DigitalInput quickTurnButton) {
+			BinaryInput quickTurnButton) {
 		this(leftMotor, rightMotor, throttle, wheel, quickTurnButton, 1.0);
 	}
 

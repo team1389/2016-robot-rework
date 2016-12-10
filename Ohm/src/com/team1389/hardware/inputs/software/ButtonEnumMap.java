@@ -5,17 +5,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
+
 @SuppressWarnings("rawtypes")
 public class ButtonEnumMap<E extends Enum> {
 	List<ButtonEnum> mappings;
 	List<Runnable> changes;
+
 	public void addChangeListener(Runnable onChange) {
 		changes.add(onChange);
 	}
 
 	public ButtonEnumMap(E defaultValue) {
 		currentVal = defaultValue;
-		changes=new ArrayList<>();
+		changes = new ArrayList<>();
 		this.mappings = new ArrayList<>();
 	}
 
@@ -26,30 +29,33 @@ public class ButtonEnumMap<E extends Enum> {
 
 	E currentVal;
 	E lastVal;
+
 	public E getVal() {
 		Iterator<ButtonEnum> i = mappings.iterator();
-		while(i.hasNext()){
-			ButtonEnum mapping=i.next();
+		while (i.hasNext()) {
+			ButtonEnum mapping = i.next();
 			if (mapping.button.get()) {
 				currentVal = mapping.val;
 			}
 		}
-		if(lastVal!=currentVal){
-			for(Runnable r:changes){
+		if (lastVal != currentVal) {
+			for (Runnable r : changes) {
 				r.run();
 			}
 		}
-		lastVal=currentVal;
+		lastVal = currentVal;
 		return currentVal;
 	}
-	public E getCurrentVal(){
+
+	public E getCurrentVal() {
 		return currentVal;
 	}
+
 	public class ButtonEnum {
-		DigitalInput button;
+		BinaryInput button;
 		E val;
 
-		public ButtonEnum(DigitalInput button, E val) {
+		public ButtonEnum(BinaryInput button, E val) {
 			this.button = button;
 			this.val = val;
 		}

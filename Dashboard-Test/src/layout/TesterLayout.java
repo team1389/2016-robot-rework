@@ -1,6 +1,6 @@
 package layout;
 
-import com.team1389.hardware.inputs.software.DigitalInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.WatchableRangeIn;
 import com.team1389.hardware.outputs.software.WatchableRangeOut;
 import com.team1389.hardware.value_types.Percent;
@@ -17,7 +17,7 @@ public class TesterLayout {
 	public WatchableRangeIn<Speed> speedIn1;
 	public WatchableRangeIn<Speed> speedIn2;
 	
-	public DigitalInput digitalIn1;
-	public DigitalInput digitalIn2;
+	public DigitalIn digitalIn1;
+	public DigitalIn digitalIn2;
 	
 }

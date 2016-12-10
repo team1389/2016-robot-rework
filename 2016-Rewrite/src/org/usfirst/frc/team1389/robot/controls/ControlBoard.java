@@ -1,16 +1,12 @@
 package org.usfirst.frc.team1389.robot.controls;
 
 import com.team1389.hardware.humaninputs.JoystickController;
-import com.team1389.hardware.inputs.software.DigitalInput;
-import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
-import com.team1389.hardware.inputs.software.LatchedDigitalInput;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.hardware.inputs.interfaces.LatchedBinaryInput;
 import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.hardware.inputs.software.RawDigitalInput;
 
 /**
- * A basic framework for the robot controls. Like the RobotHardware, one
- * instance of the ControlBoard object is created upon startup, then other
- * methods request the singleton ControlBoard instance.
+ * A basic framework for the robot controls. Like the RobotHardware, one instance of the ControlBoard object is created upon startup, then other methods request the singleton ControlBoard instance.
  * 
  * @author amind
  * @see ControlMap
@@ -31,7 +27,7 @@ public class ControlBoard extends ControlMap {
 	}
 
 	// DRIVER CONTROLS
-	
+
 	/**
 	 * axis used to control the forward speed of the drivetrain
 	 * 
@@ -51,14 +47,13 @@ public class ControlBoard extends ControlMap {
 	}
 
 	/**
-	 * button when <b>held down</b> switches turning from Curvature mode to
-	 * regular Tank turning
+	 * button when <b>held down</b> switches turning from Curvature mode to regular Tank turning
 	 * 
 	 * @return a button on the driver controller
 	 * @see com.team1389.system.CheesyDriveSystem
 	 */
-	public DigitalInput getQuickTurn() {
-		return driveController.getButton(btn_QUICK_TURN, InputStyle.RAW);
+	public BinaryInput getQuickTurn() {
+		return driveController.getButton(btn_QUICK_TURN);
 	}
 
 	// MANIPULATOR CONTROLS
@@ -68,8 +63,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedDigitalInput getArmPositionA() {
-		return (LatchedDigitalInput) manipController.getButton(btn_ARM_POSITION_A, InputStyle.LATCHED);
+	public LatchedBinaryInput getArmPositionA() {
+		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_A));
 	}
 
 	/**
@@ -77,8 +72,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedDigitalInput getArmPositionB() {
-		return (LatchedDigitalInput) manipController.getButton(btn_ARM_POSITION_B, InputStyle.LATCHED);
+	public LatchedBinaryInput getArmPositionB() {
+		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_B));
 	}
 
 	/**
@@ -86,8 +81,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedDigitalInput getArmPositionC() {
-		return (LatchedDigitalInput) manipController.getButton(btn_ARM_POSITION_C, InputStyle.LATCHED);
+	public LatchedBinaryInput getArmPositionC() {
+		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_C));
 	}
 
 	/**
@@ -95,18 +90,17 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedDigitalInput getArmPositionD() {
-		return (LatchedDigitalInput) manipController.getButton(btn_ARM_POSITION_D, InputStyle.LATCHED);
+	public LatchedBinaryInput getArmPositionD() {
+		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_D));
 	}
 
 	/**
-	 * button when <b>pressed</b> overrides the manual turret control and
-	 * returns the turret to zero
+	 * button when <b>pressed</b> overrides the manual turret control and returns the turret to zero
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedDigitalInput getTurretZero() {
-		return (LatchedDigitalInput) manipController.getButton(btn_TURRET_ZERO, InputStyle.LATCHED);
+	public LatchedBinaryInput getTurretZero() {
+		return BinaryInput.getLatched(manipController.getButton(btn_TURRET_ZERO));
 	}
 
 	/**
@@ -128,12 +122,11 @@ public class ControlBoard extends ControlMap {
 	}
 
 	/**
-	 * button when <b>held down</b> overrides the automatic intake control and
-	 * defers to {@link #getIntakeAxis()}
+	 * button when <b>held down</b> overrides the automatic intake control and defers to {@link #getIntakeAxis()}
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public RawDigitalInput getIntakeOverride() {
-		return (RawDigitalInput) manipController.getButton(btn_INTAKE_MANUAL_OVERRIDE, InputStyle.RAW);
+	public BinaryInput getIntakeOverride() {
+		return manipController.getButton(btn_INTAKE_MANUAL_OVERRIDE);
 	}
 }

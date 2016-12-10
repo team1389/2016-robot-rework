@@ -4,7 +4,7 @@ import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
-import com.team1389.hardware.inputs.interfaces.BooleanSource;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.PIDTunableValue;
@@ -59,7 +59,7 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 		});
 	}
 
-	public Command getPIDDoCommand(BooleanSource exitCondition) {
+	public Command getPIDDoCommand(BinaryInput exitCondition) {
 		return CommandUtil.createCommand(() -> {
 			update();
 			return exitCondition.get();

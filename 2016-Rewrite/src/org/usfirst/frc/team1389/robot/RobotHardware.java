@@ -4,6 +4,7 @@ import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
@@ -54,7 +55,7 @@ public class RobotHardware extends RobotLayout {
 		elevationA.getWrappedTalon().setPosition(0);
 		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
 		elevation = new CANTalonGroup(elevationA, elevationB);
-		armPot=new PotentiometerHardware(armPotentiometer_ANALOG);
+		armPot = new PotentiometerHardware(armPotentiometer_ANALOG);
 	}
 
 	private void initIntake() {
@@ -62,7 +63,7 @@ public class RobotHardware extends RobotLayout {
 		IRsensor2 = new SwitchHardware(ballHolderIR2_DIO, registry);
 		IRsensor1.invert(true);
 		IRsensor2.invert(true);
-		IRsensors = SwitchHardware.combineSwitchOR(IRsensor1, IRsensor2);
+		IRsensors = BinaryInput.combineOR(IRsensor1.getRawSwitch(), IRsensor2.getRawSwitch());
 		intake = new VictorHardware(intakeMotor_PWM, registry);
 		intake.invert(true);
 	}

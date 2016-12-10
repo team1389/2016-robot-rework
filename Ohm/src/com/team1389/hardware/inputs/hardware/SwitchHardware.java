@@ -1,8 +1,6 @@
 package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.hardware.inputs.interfaces.BooleanSource;
-import com.team1389.hardware.inputs.software.DigitalInput;
-import com.team1389.hardware.inputs.software.DigitalInput.InputStyle;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.watch.BooleanInfo;
 import com.team1389.watch.Info;
@@ -23,34 +21,10 @@ public class SwitchHardware implements Watchable {
 		return inverted ? !wpiSwitch.get() : wpiSwitch.get();
 	}
 
-	public BooleanSource getRawSwitch() {
+	public BinaryInput getRawSwitch() {
 		return () -> {
 			return get();
 		};
-	}
-
-	public static BooleanSource combineSwitchAND(SwitchHardware... switches) {
-		return () -> {
-			boolean stillTrue = true;
-			for (SwitchHardware switchHardware : switches) {
-				stillTrue = stillTrue && switchHardware.get();
-			}
-			return stillTrue;
-		};
-	}
-
-	public static BooleanSource combineSwitchOR(SwitchHardware... switches) {
-		return () -> {
-			boolean stillTrue = false;
-			for (SwitchHardware switchHardware : switches) {
-				stillTrue = stillTrue || switchHardware.get();
-			}
-			return stillTrue;
-		};
-	}
-
-	public DigitalInput getSwitchAsInput(InputStyle style) {
-		return DigitalInput.createInput(getRawSwitch(), style);
 	}
 
 	@Override
