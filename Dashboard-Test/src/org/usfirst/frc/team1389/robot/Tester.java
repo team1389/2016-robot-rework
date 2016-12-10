@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.command_framework.CommandUtil;
-import com.team1389.control.TrapezoidalController;
+import com.team1389.control.MotionProfileController;
+import com.team1389.motion_profile.ProfileUtil;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -19,18 +19,11 @@ public class Tester {
 	static SystemManager manager;
 
 	public static void init() {
-
-		TrapezoidalController control = new TrapezoidalController(.7, 0, 0, .06, .06, 8, robot.posIn1, robot.speedIn1,
+		MotionProfileController control = new MotionProfileController(.7, 0, 0, robot.posIn1, robot.speedIn1,
 				robot.voltOut1);
-		control.setSetpoint(-20);
+		control.followProfile(ProfileUtil.generate(-20, 0, .06, .06, 8));
 		dash.watch(robot.posIn1, robot.voltOut1);
-		scheduler.schedule(CommandUtil.combineSimultaneous(control.getPIDDoCommand(),
-				CommandUtil.combineSequential(CommandUtil.createCommand(() -> {
-					return robot.posIn1.get() <= -10;
-				}), CommandUtil.createCommand(() -> {
-					control.setSetpoint(-10);
-					return true;
-				}))));
+		scheduler.schedule(control.getPIDDoCommand());
 	}
 
 	public static void update() {
