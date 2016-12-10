@@ -2,6 +2,8 @@ package org.usfirst.frc.team1389.robot;
 
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.control.MotionProfileController;
+import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.motion_profile.ProfileUtil;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
@@ -19,6 +21,10 @@ public class Tester {
 	static SystemManager manager;
 
 	public static void init() {
+		RangeOut<Position> out = new RangeOut<Position>((double val) -> {
+		}, 0, 0);
+		System.out.println(out.mapToRange(0, 1).getClass());
+
 		MotionProfileController control = new MotionProfileController(.7, 0, 0, robot.posIn1, robot.speedIn1,
 				robot.voltOut1);
 		control.followProfile(ProfileUtil.generate(-20, 0, .06, .06, 8));

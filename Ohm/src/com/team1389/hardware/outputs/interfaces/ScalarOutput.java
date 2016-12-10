@@ -97,13 +97,13 @@ public interface ScalarOutput<T extends Value> {
 	/**
 	 * modifies the given stream to truncate values to zero if they are almost zero
 	 * 
-	 * @param out the stream to operate on
+	 * @param output the stream to operate on
 	 * @param deadband how close the values need to be to zero to get truncated
 	 * @return the stream with a deadband (does not change the value type)
 	 */
-	public static ScalarOutput<Percent> applyDeadband(ScalarOutput<Percent> out, double deadband) {
+	public static <T extends Value> ScalarOutput<T> applyDeadband(ScalarOutput<T> output, double deadband) {
 		return (double val) -> {
-			out.set(RangeUtil.applyDeadband(val, deadband));
+			output.set(RangeUtil.applyDeadband(val, deadband));
 		};
 	}
 
@@ -115,9 +115,9 @@ public interface ScalarOutput<T extends Value> {
 	 * @param min the min value of the limit range
 	 * @return the limited stream (does not change the value type)
 	 */
-	public static <T extends Value> ScalarOutput<T> limitRange(ScalarOutput<T> out, double min,double max) {
+	public static <T extends Value> ScalarOutput<T> limit(ScalarOutput<T> out, double min, double max) {
 		return (double val) -> {
-			out.set(RangeUtil.limit(val, min,max));
+			out.set(RangeUtil.limit(val, min, max));
 		};
 	}
 

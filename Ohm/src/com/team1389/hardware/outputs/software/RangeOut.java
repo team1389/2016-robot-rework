@@ -1,7 +1,6 @@
 package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
-import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
 
 public class RangeOut<T extends Value> {
@@ -25,15 +24,14 @@ public class RangeOut<T extends Value> {
 	public double max() {
 		return max;
 	}
-	public double range(){
-		return min()-max();
+
+	public double range() {
+		return min() - max();
 	}
 
-	public RangeOut<T> mapToRange(double min, double max) {
-		this.output = ScalarOutput.mapToRange(output, min, max, this.min, this.max);
-		this.min = min;
-		this.max = max;
-		return this;
+	@SuppressWarnings("unchecked")
+	private <R extends RangeOut<T>> R cast() {
+		return (R) this;
 	}
 
 	public WatchableRangeOut<T> getWatchable(String name) {
@@ -44,30 +42,57 @@ public class RangeOut<T extends Value> {
 		return new PercentOut(this);
 	}
 
-	public RangeOut<Angle> mapToAngle() {
-		return new RangeOut<Angle>(ScalarOutput.mapToAngle(this.output, this.min, this.max), 0, 360);
+	public AngleOut mapToAngle() {
+		return new AngleOut(this);
 	}
 
-	public RangeOut<T> invert() {
+	public <R extends RangeOut<T>> R mapToRange(double min, double max) {
+		this.output = ScalarOutput.mapToRange(output, min, max, this.min, this.max);
+		this.min = min;
+		this.max = max;
+		return cast();
+	}
+
+	public <R extends RangeOut<T>> R invert() {
 		this.output = ScalarOutput.invert(output);
-		return this;
+		return cast();
 	}
 
-	public RangeOut<T> getProfiledOut(double maxChange,double initialPos) {
-		output = new ProfiledRangeOut<T>(output, min, max, maxChange,initialPos);
-		return this;
+	public <R extends RangeOut<T>> R getProfiledOut(double maxChange, double initialPos) {
+		output = new ProfiledRangeOut<T>(output, min, max, maxChange, initialPos);
+		return cast();
 	}
-	public RangeOut<T> addChangeListener(Runnable onChange){
-		output=ScalarOutput.getListeningOutput(output, onChange);
-		return this;
+
+	public <R extends RangeOut<T>> R addChangeListener(Runnable onChange) {
+		output = ScalarOutput.getListeningOutput(output, onChange);
+		return cast();
 	}
-	public RangeOut<T> addFollowers(RangeOut<T> outFollow) {
+
+	public <R extends RangeOut<T>> R addFollowers(RangeOut<T> outFollow) {
 		ScalarOutput<T> out = this.output;
 		output = (double val) -> {
 			out.set(val);
 			outFollow.mapToRange(min, max).set(val);
 		};
-		return this;
+		return cast();
+	}
+
+	public <R extends RangeOut<T>> R applyDeadband(double deadband) {
+		output = ScalarOutput.applyDeadband(output, deadband);
+		return cast();
+	}
+
+	public <R extends RangeOut<T>> R capRange() {
+		return limit(min, max);
+	}
+
+	public <R extends RangeOut<T>> R limit(double abs) {
+		return limit(-abs, abs);
+	}
+
+	public <R extends RangeOut<T>> R limit(double min, double max) {
+		output = ScalarOutput.limit(output, min, max);
+		return cast();
 	}
 
 	public RangeOut<T> scale(double factor) {

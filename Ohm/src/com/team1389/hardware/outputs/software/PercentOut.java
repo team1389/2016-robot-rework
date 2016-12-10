@@ -8,15 +8,12 @@ import com.team1389.hardware.value_types.Percent;
  * 
  * @author Ari Mindell
  */
-public class PercentOut extends RangeOut<Percent>{
-	public PercentOut(ScalarOutput<Percent> out){
-		super(out,-1,1);
+public class PercentOut extends RangeOut<Percent> {
+	public PercentOut(ScalarOutput<Percent> out) {
+		super(out, -1, 1);
 	}
-	public PercentOut(RangeOut<?> out){
+
+	public PercentOut(RangeOut<?> out) {
 		this(ScalarOutput.mapToPercent(out.output, out.min, out.max));
-	}
-	public PercentOut applyDeadband(double deadband) {
-		output=ScalarOutput.applyDeadband(output, deadband);
-		return this;
 	}
 }
