@@ -61,7 +61,7 @@ public class CANTalonHardware implements Watchable {
 		return new RangeOut<Speed>((double speed) -> {
 			speedState.init();
 			wpiTalon.set(speed);
-		} , // TODO
+		}, // TODO
 				0, 0);
 	}
 
@@ -79,21 +79,21 @@ public class CANTalonHardware implements Watchable {
 		return new RangeOut<Position>((double position) -> {
 			positionState.init();
 			wpiTalon.set(position);
-		} , 0, 8192);
+		}, 0, 8192);
 
 	}
 
 	public RangeIn<Speed> getSpeedInput() {
-		return new RangeIn<Speed>(Speed.class,() -> {
+		return new RangeIn<Speed>(Speed.class, () -> {
 			return wpiTalon.getSpeed();
-		} , 0, 1023);
+		}, 0, 1023);
 
 	}
 
 	public RangeIn<Position> getPositionInput() {
-		return new RangeIn<Position>(Position.class,() -> {
+		return new RangeIn<Position>(Position.class, () -> {
 			return wpiTalon.getPosition();
-		} , 0, 8912);
+		}, 0, 8912);
 	}
 
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {

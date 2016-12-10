@@ -9,7 +9,7 @@ public class RangeIn<T extends Value> {
 	public Class<T> type;
 	protected ScalarInput<T> input;
 	protected double max, min;
-	
+
 	public RangeIn(Class<T> type, ScalarInput<T> val, double min, double max) {
 		this.input = val;
 		this.min = min;
@@ -101,10 +101,14 @@ public class RangeIn<T extends Value> {
 			return get < rangeMax_exclusive && get >= rangeMin_inclusive;
 		};
 	}
-	//TODO add mapToAngle method in scalar input
+
+	/**
+	 * maps this range to an angle value
+	 * 
+	 * @return the mapped range
+	 */
 	public RangeIn<Angle> mapToAngle() {
-		input = ScalarInput.mapToRange(input, min, max, 0, 360);
-		return new RangeIn<Angle>(Angle.class,(ScalarInput<Angle>) input,0,360);
+		return new RangeIn<Angle>(Angle.class, ScalarInput.mapToAngle(input, min, max), 0, 360);
 	}
 
 }
