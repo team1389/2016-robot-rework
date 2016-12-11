@@ -3,6 +3,12 @@ package com.team1389.hardware.inputs.interfaces;
 public interface BinaryInput {
 	public boolean get();
 
+	public static BinaryInput invert(BinaryInput in) {
+		return () -> {
+			return !in.get();
+		};
+	}
+
 	public static LatchedBinaryInput getLatched(BinaryInput in) {
 		return new LatchedBinaryInput(in);
 	}
