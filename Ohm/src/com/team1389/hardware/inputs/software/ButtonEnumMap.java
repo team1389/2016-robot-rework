@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.watch.Watchable;
+import com.team1389.watch.info.StringInfo;
 
 @SuppressWarnings("rawtypes")
 public class ButtonEnumMap<E extends Enum> {
@@ -52,12 +53,18 @@ public class ButtonEnumMap<E extends Enum> {
 	}
 
 	public class ButtonEnum {
-		BinaryInput button;
+		DigitalIn button;
 		E val;
 
-		public ButtonEnum(BinaryInput button, E val) {
+		public ButtonEnum(DigitalIn button, E val) {
 			this.button = button;
 			this.val = val;
 		}
+	}
+
+	public Watchable getWatchable(String name) {
+		return new StringInfo(name, () -> {
+			return getCurrentVal().name();
+		});
 	}
 }

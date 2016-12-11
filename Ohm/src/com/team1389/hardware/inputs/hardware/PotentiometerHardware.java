@@ -4,7 +4,7 @@ import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.hardware.value_types.Position;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
@@ -18,8 +18,8 @@ public class PotentiometerHardware extends Hardware<Analog> {
 	}
 
 	@Override
-	public Info[] getInfo() {
-		return null;
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { getAnalogInput().getWatchable("val") };
 	}
 
 	@Override

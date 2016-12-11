@@ -1,22 +1,21 @@
 package org.usfirst.frc.team1389.systems;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.system.System;
-import com.team1389.watch.info.BooleanInfo;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 
 public class IntakeSystem extends System {
 	PercentIn joystick;
 	PercentOut motor;
-	BinaryInput IRSensors;
-	BinaryInput override;
+	DigitalIn IRSensors;
+	DigitalIn override;
 
 	boolean isOverride;
 	double joyVal;
 
-	public IntakeSystem(PercentOut motor, BinaryInput IRSensors, PercentIn joystick, BinaryInput override) {
+	public IntakeSystem(PercentOut motor, DigitalIn IRSensors, PercentIn joystick, DigitalIn override) {
 		this.motor = motor;
 		this.joystick = joystick;
 		this.IRSensors = IRSensors;
@@ -26,13 +25,6 @@ public class IntakeSystem extends System {
 	@Override
 	public String getName() {
 		return "Intake System";
-	}
-
-	@Override
-	public Info[] getInfo() {
-		return new Info[] { new BooleanInfo("Has Ball", () -> {
-			return IRSensors.get();
-		}) };
 	}
 
 	@Override
@@ -53,6 +45,14 @@ public class IntakeSystem extends System {
 	@Override
 	public void init() {
 
+	}
+
+	@Override
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] {
+			motor.getWatchable("intake voltage"),
+			IRSensors.getInfo("has ball"),
+			override.getInfo("manual override") };
 	}
 
 }

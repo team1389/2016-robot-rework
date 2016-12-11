@@ -26,7 +26,7 @@ public class Tester {
 		MotionProfileController control = new MotionProfileController(.7, 0, 0, robot.posIn1, robot.speedIn1,
 				robot.voltOut1);
 		control.followProfile(ProfileUtil.generate(-20, 0, .06, .06, 8));
-		dash.watch(robot.posIn1.getWatchable("hi"), robot.voltOut1.getWatchable("volts"));
+		dash.watch(robot.posIn1.getWatchable("rightWheels"), robot.voltOut1.getWatchable("volts"));
 		scheduler.schedule(control.getPIDDoCommand());
 
 		CheesyDriveSystem system = new CheesyDriveSystem(robot.voltOut1, robot.voltOut2, new PercentIn(() -> {

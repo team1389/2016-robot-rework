@@ -8,8 +8,8 @@ import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.systems.TurretSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Position;
@@ -64,7 +64,7 @@ public class TeleopMain {
 
 	public System setupIntakeSystem() {
 		PercentOut motor = robot.intake.getVoltageOutput();
-		BinaryInput IRsensors = robot.IRsensors;
+		DigitalIn IRsensors = robot.IRsensors;
 		return new IntakeSystem(motor, IRsensors, controls.getIntakeAxis(), controls.getIntakeOverride());
 	}
 

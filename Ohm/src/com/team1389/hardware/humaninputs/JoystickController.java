@@ -2,6 +2,8 @@ package com.team1389.hardware.humaninputs;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.POVInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
+import com.team1389.hardware.inputs.software.DigitalIn.InputType;
 import com.team1389.hardware.inputs.software.PercentIn;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -14,7 +16,15 @@ public class JoystickController {
 		wpiJoystick = new Joystick(port);
 	}
 
-	public BinaryInput getButton(int button) {
+	public DigitalIn getButton(int button) {
+		return new DigitalIn(getRawButton(button));
+	}
+
+	public DigitalIn getButton(int button, InputType type) {
+		return new DigitalIn(getRawButton(button), type);
+	}
+
+	public BinaryInput getRawButton(int button) {
 		return () -> {
 			return wpiJoystick.getRawButton(button);
 		};

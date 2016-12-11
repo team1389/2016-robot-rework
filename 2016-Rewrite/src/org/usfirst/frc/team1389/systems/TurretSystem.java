@@ -2,16 +2,14 @@ package org.usfirst.frc.team1389.systems;
 
 import com.team1389.auto.command.TurnAngleCommand;
 import com.team1389.configuration.PIDConstants;
-import com.team1389.hardware.inputs.interfaces.LatchedBinaryInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.System;
-import com.team1389.watch.info.BooleanInfo;
-import com.team1389.watch.info.Info;
-import com.team1389.watch.info.NumberInfo;
+import com.team1389.watch.Watchable;
 
 public class TurretSystem extends System {
 	// TODO think about pollable implementation
@@ -22,11 +20,11 @@ public class TurretSystem extends System {
 
 	RangeIn<Angle> turretAngle;
 
-	LatchedBinaryInput zeroButton;
+	DigitalIn zeroButton;
 	boolean toZero;
 
 	public TurretSystem(PercentOut voltageSystem, RangeIn<Angle> turretAngle, PercentIn joystickIn,
-			LatchedBinaryInput zeroButton) {
+			DigitalIn zeroButton) {
 		this.voltRange = voltageSystem;
 		this.joystick = joystickIn.scale(.2);
 		this.turretAngle = turretAngle;
@@ -36,15 +34,6 @@ public class TurretSystem extends System {
 	@Override
 	public String getName() {
 		return "Turret subsystem";
-	}
-
-	@Override
-	public Info[] getInfo() {
-		return new Info[] { new NumberInfo("turret Angle", () -> {
-			return turretAngle.get();
-		}), new BooleanInfo("turret zeroing", () -> {
-			return toZero;
-		}) };
 	}
 
 	@Override
@@ -68,6 +57,11 @@ public class TurretSystem extends System {
 	public void getInput() {
 		joyVal = joystick.get();
 		toZero = zeroButton.get();
+	}
+
+	@Override
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { turretAngle.getWatchable("turret Angle") };
 	}
 
 }

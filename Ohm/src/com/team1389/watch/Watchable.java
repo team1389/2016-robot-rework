@@ -9,7 +9,7 @@ public interface Watchable {
 	void publishUnderName(String name, ITable table);
 
 	public default void publish(String parent, ITable table) {
-		publishUnderName(parent + "." + getName(), table);
+		publishUnderName(parent + "/" + getName(), table);
 	}
 
 	public default void publish(ITable table) {

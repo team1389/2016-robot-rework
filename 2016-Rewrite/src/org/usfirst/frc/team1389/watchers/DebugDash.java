@@ -25,7 +25,7 @@ public class DebugDash extends Watcher {
 
 	@Override
 	public void clearWatchers() {
-		Watcher.clearKeys(Watcher.DASHBOARD, getInfoKeys());
+		// TODO doesnt do anything
 		super.clearWatchers();
 	}
 

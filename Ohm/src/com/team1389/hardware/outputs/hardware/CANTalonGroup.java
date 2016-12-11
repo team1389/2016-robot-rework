@@ -1,34 +1,34 @@
 package com.team1389.hardware.outputs.hardware;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.team1389.configuration.PIDConstants;
-import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.Info;
 
-public class CANTalonGroup implements Watchable {
+public class CANTalonGroup implements CompositeWatchable {
 
 	private final CANTalonHardware main;
-	private final List<CANTalonFollower> followers;
+	private final List<CANTalonHardware> followers;
 
 	public CANTalonGroup(CANTalonHardware main, CANTalonHardware... followers) {
 		this.main = main;
 
-		this.followers = new ArrayList<CANTalonFollower>();
-		for (CANTalonHardware talon : followers) {
-			this.followers.add(talon.getFollower(main));
-		}
+		this.followers = Arrays.asList(followers);
+
 	}
 
 	private void setFollowers() {
-		for (CANTalonFollower follower : followers) {
-			follower.follow();
+		for (CANTalonHardware follower : followers) {
+			follower.getFollower(main).follow();
+			;
 		}
 	}
 
@@ -63,13 +63,13 @@ public class CANTalonGroup implements Watchable {
 
 	@Override
 	public String getName() {
-		return "CANTalon Group: " + main.getName() + " ";
-		// TODO add followers
+		return "CANTalon Group: " + main.getName() + " -> "
+				+ followers.stream().map(follower -> new String(follower.getName())).collect(Collectors.joining(", "));
 	}
 
 	@Override
-	public Info[] getInfo() {
-		// TODO Auto-generated method stub0
-		return null;
+	public Watchable[] getSubWatchables() {
+		return Stream.concat(followers.stream().flatMap(follower -> Arrays.stream(follower.getSubWatchables())),
+				Arrays.stream(main.getSubWatchables())).toArray(Watchable[]::new);
 	}
 }

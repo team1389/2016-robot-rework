@@ -10,6 +10,11 @@ public class DigitalIn {
 		this.input = input;
 	}
 
+	public DigitalIn(BinaryInput in, InputType type) {
+		this(in);
+		getSpecial(type);
+	}
+
 	public BooleanInfo getInfo(String name) {
 		return new BooleanInfo(name, this.input);
 	}

@@ -4,7 +4,6 @@ import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
@@ -51,16 +50,17 @@ public class RobotHardware extends RobotLayout {
 	private void initTurret() {
 		turretGyro = registry.add(new Analog(anlg_TURRET_GYRO), new GyroHardware());
 		turret = registry.add(new CAN(can_TURRET_MOTOR), new CANTalonHardware(inv_TURRET_MOTOR));
-		
+
 		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
 
 	}
 
 	private void initArm() {
-		elevationA = registry.add(new CAN(can_ELEVATOR_MOTOR_A),new CANTalonHardware(inv_ELEVATOR_MOTOR_A, sinv_ELEVATOR_ENCODER));
+		elevationA = registry.add(new CAN(can_ELEVATOR_MOTOR_A),
+				new CANTalonHardware(inv_ELEVATOR_MOTOR_A, sinv_ELEVATOR_ENCODER));
 		elevationB = registry.add(new CAN(can_ELEVATOR_MOTOR_B), new CANTalonHardware(inv_ELEVATOR_MOTOR_B));
 		armPot = registry.add(new Analog(anlg_ARM_POTENTIOMETER), new PotentiometerHardware());
-		
+
 		elevation = new CANTalonGroup(elevationA, elevationB);
 	}
 
@@ -69,7 +69,7 @@ public class RobotHardware extends RobotLayout {
 		IRsensor2 = registry.add(new DIO(dio_INTAKE_IR_B), new SwitchHardware(sinv_INTAKE_IR_B));
 		intake = registry.add(new PWM(pwm_INTAKE_MOTOR), new VictorHardware(inv_INTAKE_MOTOR));
 
-		IRsensors = BinaryInput.combineOR(IRsensor1.getRawSwitch(), IRsensor2.getRawSwitch());
+		IRsensors = IRsensor1.getRawSwitch().combineOR(IRsensor2.getRawSwitch());
 	}
 
 	private void initDriveTrain() {

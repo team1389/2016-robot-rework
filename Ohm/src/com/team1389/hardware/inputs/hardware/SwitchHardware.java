@@ -1,10 +1,9 @@
 package com.team1389.hardware.inputs.hardware;
 
 import com.team1389.hardware.Hardware;
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.registry.port_types.DIO;
-import com.team1389.watch.info.BooleanInfo;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 
 public class SwitchHardware extends Hardware<DIO> {
 	boolean inverted;
@@ -23,17 +22,15 @@ public class SwitchHardware extends Hardware<DIO> {
 		return inverted ? !wpiSwitch.get() : wpiSwitch.get();
 	}
 
-	public BinaryInput getRawSwitch() {
-		return () -> {
+	public DigitalIn getRawSwitch() {
+		return new DigitalIn(() -> {
 			return get();
-		};
+		});
 	}
 
 	@Override
-	public Info[] getInfo() {
-		return new Info[] { new BooleanInfo(getName(), () -> {
-			return wpiSwitch.get();
-		}) };
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { getRawSwitch().getInfo("val") };
 	}
 
 	@Override

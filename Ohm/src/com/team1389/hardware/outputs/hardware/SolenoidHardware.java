@@ -1,9 +1,9 @@
 package com.team1389.hardware.outputs.hardware;
 
 import com.team1389.hardware.Hardware;
-import com.team1389.hardware.outputs.interfaces.DigitalOut;
+import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.registry.port_types.PCM;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -11,15 +11,14 @@ public class SolenoidHardware extends Hardware<PCM> {
 	private Solenoid wpiSolenoid;
 
 	public DigitalOut getDigitalOut() {
-		return (boolean val) -> {
+		return new DigitalOut((boolean val) -> {
 			wpiSolenoid.set(val);
-		};
+		});
 	}
 
 	@Override
-	public Info[] getInfo() {
-		// TODO Auto-generated method stub
-		return null;
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { getDigitalOut().getWatchable("output") };
 	}
 
 	@Override

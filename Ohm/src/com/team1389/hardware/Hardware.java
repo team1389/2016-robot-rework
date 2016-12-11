@@ -1,11 +1,15 @@
 package com.team1389.hardware;
 
 import com.team1389.hardware.registry.port_types.PortInstance;
-import com.team1389.watch.Watchable;
+import com.team1389.watch.CompositeWatchable;
 
-public abstract class Hardware<T extends PortInstance> implements Watchable {
+public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	String specificHardwareName;
 	PortInstance currentPort;
+
+	public void setSpecificHardwareName(String specificHardwareName) {
+		this.specificHardwareName = specificHardwareName;
+	}
 
 	public abstract void initHardware(int port);
 

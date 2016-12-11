@@ -9,8 +9,7 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.System;
-import com.team1389.watch.info.Info;
-import com.team1389.watch.info.StringInfo;
+import com.team1389.watch.Watchable;
 
 public class ArmSystem extends System {
 
@@ -76,10 +75,7 @@ public class ArmSystem extends System {
 	}
 
 	@Override
-	public Info[] getInfo() {
-		return new Info[] { 
-				new StringInfo("Target Location", () -> {
-			return buttons.getVal().name();
-		}), armVal.getInfo("Arm Position") };
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { buttons.getWatchable("target location"), armVal.getWatchable("arm position") };
 	}
 }

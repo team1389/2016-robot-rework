@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1389.robot.controls;
 
 import com.team1389.hardware.humaninputs.JoystickController;
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
-import com.team1389.hardware.inputs.interfaces.LatchedBinaryInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
+import com.team1389.hardware.inputs.software.DigitalIn.InputType;
 import com.team1389.hardware.inputs.software.PercentIn;
 
 /**
@@ -52,7 +52,7 @@ public class ControlBoard extends ControlMap {
 	 * @return a button on the driver controller
 	 * @see com.team1389.system.CheesyDriveSystem
 	 */
-	public BinaryInput getQuickTurn() {
+	public DigitalIn getQuickTurn() {
 		return driveController.getButton(btn_QUICK_TURN);
 	}
 
@@ -63,8 +63,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedBinaryInput getArmPositionA() {
-		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_A));
+	public DigitalIn getArmPositionA() {
+		return manipController.getButton(btn_ARM_POSITION_A).getLatched();
 	}
 
 	/**
@@ -72,8 +72,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedBinaryInput getArmPositionB() {
-		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_B));
+	public DigitalIn getArmPositionB() {
+		return manipController.getButton(btn_ARM_POSITION_B).getLatched();
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedBinaryInput getArmPositionC() {
-		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_C));
+	public DigitalIn getArmPositionC() {
+		return manipController.getButton(btn_ARM_POSITION_C).getLatched();
 	}
 
 	/**
@@ -90,8 +90,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedBinaryInput getArmPositionD() {
-		return BinaryInput.getLatched(manipController.getButton(btn_ARM_POSITION_D));
+	public DigitalIn getArmPositionD() {
+		return manipController.getButton(btn_ARM_POSITION_D).getLatched();
 	}
 
 	/**
@@ -99,8 +99,8 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public LatchedBinaryInput getTurretZero() {
-		return BinaryInput.getLatched(manipController.getButton(btn_TURRET_ZERO));
+	public DigitalIn getTurretZero() {
+		return manipController.getButton(btn_TURRET_ZERO, InputType.LATCHED);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class ControlBoard extends ControlMap {
 	 * 
 	 * @return a button on the manipulator joystick
 	 */
-	public BinaryInput getIntakeOverride() {
+	public DigitalIn getIntakeOverride() {
 		return manipController.getButton(btn_INTAKE_MANUAL_OVERRIDE);
 	}
 }
