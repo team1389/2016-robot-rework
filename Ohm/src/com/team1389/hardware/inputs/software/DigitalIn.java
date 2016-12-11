@@ -1,7 +1,7 @@
 package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
-import com.team1389.watch.BooleanInfo;
+import com.team1389.watch.info.BooleanInfo;
 
 public class DigitalIn {
 	private BinaryInput input;

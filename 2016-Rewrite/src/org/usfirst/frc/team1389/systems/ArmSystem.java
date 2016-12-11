@@ -9,8 +9,8 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.System;
-import com.team1389.watch.Info;
-import com.team1389.watch.StringInfo;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.StringInfo;
 
 public class ArmSystem extends System {
 

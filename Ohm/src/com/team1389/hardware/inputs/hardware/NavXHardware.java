@@ -3,9 +3,9 @@ package com.team1389.hardware.inputs.hardware;
 import com.kauailabs.navx.frc.AHRS;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.watch.Info;
-import com.team1389.watch.NumberInfo;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.NumberInfo;
 
 import edu.wpi.first.wpilibj.SPI;
 

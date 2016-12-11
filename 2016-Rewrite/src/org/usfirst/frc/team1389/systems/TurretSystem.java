@@ -9,9 +9,9 @@ import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.System;
-import com.team1389.watch.BooleanInfo;
-import com.team1389.watch.Info;
-import com.team1389.watch.NumberInfo;
+import com.team1389.watch.info.BooleanInfo;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.NumberInfo;
 
 public class TurretSystem extends System {
 	// TODO think about pollable implementation

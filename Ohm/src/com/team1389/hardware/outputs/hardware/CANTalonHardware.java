@@ -14,7 +14,7 @@ import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateTracker;
-import com.team1389.watch.Info;
+import com.team1389.watch.info.Info;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;

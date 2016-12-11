@@ -4,8 +4,8 @@ import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
-import com.team1389.watch.Info;
-import com.team1389.watch.NumberInfo;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.NumberInfo;
 
 public class RangeIn<T extends Value> {
 	public Class<T> type;

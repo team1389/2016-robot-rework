@@ -3,8 +3,8 @@ package com.team1389.hardware.inputs.hardware;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.registry.port_types.DIO;
-import com.team1389.watch.BooleanInfo;
-import com.team1389.watch.Info;
+import com.team1389.watch.info.BooleanInfo;
+import com.team1389.watch.info.Info;
 
 public class SwitchHardware extends Hardware<DIO> {
 	boolean inverted;

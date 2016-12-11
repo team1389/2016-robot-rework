@@ -1,4 +1,4 @@
-package com.team1389.watch;
+package com.team1389.watch.info;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 
@@ -17,7 +17,7 @@ public class NumberInfo extends Info {
 	}
 
 	@Override
-	public void publish(ITable table) {
+	protected void publishWithName(String name, ITable table) {
 		table.putNumber(name, source.get());
 	}
 

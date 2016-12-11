@@ -4,8 +4,8 @@ import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.system.System;
-import com.team1389.watch.BooleanInfo;
-import com.team1389.watch.Info;
+import com.team1389.watch.info.BooleanInfo;
+import com.team1389.watch.info.Info;
 
 public class IntakeSystem extends System {
 	PercentIn joystick;

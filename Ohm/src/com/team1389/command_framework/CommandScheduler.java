@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.team1389.command_framework.command_base.Command;
-import com.team1389.watch.Info;
-import com.team1389.watch.StringInfo;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.StringInfo;
 
 public class CommandScheduler implements Watchable {
 	List<Command> executing;

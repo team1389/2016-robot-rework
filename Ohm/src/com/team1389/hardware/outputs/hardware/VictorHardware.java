@@ -6,7 +6,7 @@ import java.util.Map;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.port_types.PWM;
-import com.team1389.watch.Info;
+import com.team1389.watch.info.Info;
 
 import edu.wpi.first.wpilibj.Victor;
 

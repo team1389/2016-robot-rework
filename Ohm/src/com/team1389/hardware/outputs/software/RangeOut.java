@@ -3,8 +3,8 @@ package com.team1389.hardware.outputs.software;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 import com.team1389.hardware.outputs.interfaces.TrackedScalarOutput;
 import com.team1389.hardware.value_types.Value;
-import com.team1389.watch.Info;
-import com.team1389.watch.NumberInfo;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.NumberInfo;
 
 public class RangeOut<T extends Value> {
 	protected ScalarOutput<T> output;

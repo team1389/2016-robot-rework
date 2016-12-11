@@ -2,9 +2,9 @@ package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Value;
-import com.team1389.watch.Info;
-import com.team1389.watch.NumberInfo;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.Info;
+import com.team1389.watch.info.NumberInfo;
 
 public class WatchableRangeIn<T extends Value> extends RangeIn<T> implements Watchable {
 	private String name;

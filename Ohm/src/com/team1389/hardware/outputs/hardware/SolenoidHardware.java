@@ -3,7 +3,7 @@ package com.team1389.hardware.outputs.hardware;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.interfaces.DigitalOut;
 import com.team1389.hardware.registry.port_types.PCM;
-import com.team1389.watch.Info;
+import com.team1389.watch.info.Info;
 
 import edu.wpi.first.wpilibj.Solenoid;
 

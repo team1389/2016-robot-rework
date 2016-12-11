@@ -1,7 +1,7 @@
 package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.watch.Info;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.Info;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
