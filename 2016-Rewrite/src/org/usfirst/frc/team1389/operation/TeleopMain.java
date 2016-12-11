@@ -10,11 +10,8 @@ import org.usfirst.frc.team1389.watchers.DebugDash;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
-import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
@@ -54,7 +51,7 @@ public class TeleopMain {
 	}
 
 	public ArmSystem setupArmSystem() {
-		RangeOut<Percent> elevator = robot.elevation.getVoltageOutput();
+		PercentOut elevator = robot.elevation.getVoltageOutput();
 		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
 		map.setMappings(map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
 				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
@@ -75,7 +72,7 @@ public class TeleopMain {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
 		PercentOut right = robot.rightDrive.getVoltageOutput().invert();
 
-		return new CheesyDriveSystem(left, right, controls.getThrottle(), new PercentIn(controls.getWheel().invert()),
+		return new CheesyDriveSystem(left, right, controls.getThrottle(), controls.getWheel().invert(),
 				controls.getQuickTurn());
 	}
 }

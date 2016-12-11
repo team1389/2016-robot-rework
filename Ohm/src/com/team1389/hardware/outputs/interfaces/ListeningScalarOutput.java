@@ -11,6 +11,7 @@ public class ListeningScalarOutput<T extends Value> implements ScalarOutput<T> {
 		this.out = out;
 	}
 
+	@Override
 	public void set(double val) {
 		out.set(val);
 		onChange.run();

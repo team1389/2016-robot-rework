@@ -1,7 +1,10 @@
 package com.team1389.hardware.outputs.software;
 
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
+import com.team1389.hardware.outputs.interfaces.TrackedScalarOutput;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.watch.Info;
+import com.team1389.watch.NumberInfo;
 
 public class RangeOut<T extends Value> {
 	protected ScalarOutput<T> output;
@@ -66,6 +69,11 @@ public class RangeOut<T extends Value> {
 	public <R extends RangeOut<T>> R addChangeListener(Runnable onChange) {
 		output = ScalarOutput.getListeningOutput(output, onChange);
 		return cast();
+	}
+
+	public Info getInfo(String name) {
+		this.output = ScalarOutput.getTrackedOutput(output);
+		return new NumberInfo(name, ((TrackedScalarOutput<T>) output).getAsInput());
 	}
 
 	public <R extends RangeOut<T>> R addFollowers(RangeOut<T> outFollow) {

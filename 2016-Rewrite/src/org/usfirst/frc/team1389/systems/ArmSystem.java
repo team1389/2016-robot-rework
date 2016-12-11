@@ -10,7 +10,6 @@ import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.System;
 import com.team1389.watch.Info;
-import com.team1389.watch.NumberInfo;
 import com.team1389.watch.StringInfo;
 
 public class ArmSystem extends System {
@@ -78,10 +77,9 @@ public class ArmSystem extends System {
 
 	@Override
 	public Info[] getInfo() {
-		return new Info[] { new StringInfo("Target Location", () -> {
+		return new Info[] { 
+				new StringInfo("Target Location", () -> {
 			return buttons.getVal().name();
-		}), new NumberInfo("Arm Position", () -> {
-			return armVal.get();
-		}) };
+		}), armVal.getInfo("Arm Position") };
 	}
 }

@@ -4,6 +4,8 @@ import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.watch.Info;
+import com.team1389.watch.NumberInfo;
 
 public class RangeIn<T extends Value> {
 	public Class<T> type;
@@ -35,6 +37,10 @@ public class RangeIn<T extends Value> {
 		return max;
 	}
 
+	public Info getInfo(String name){
+		return new NumberInfo(name,this.input);
+	}
+	
 	/**
 	 * maps this range to an angle value
 	 * 
