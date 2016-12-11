@@ -18,15 +18,14 @@ import edu.wpi.first.wpilibj.Victor;
 public class VictorHardware extends Hardware<PWM> {
 
 	Victor wpiVictor;
-
+	boolean inverted;
+	public VictorHardware(boolean inverted){
+		this.inverted=inverted;
+	}
 	public PercentOut getVoltageOutput() {
 		return new PercentOut((double voltage) -> {
 			wpiVictor.set(voltage);
 		});
-	}
-
-	public void invert(boolean inverted) {
-		wpiVictor.setInverted(inverted);
 	}
 
 	@Override
@@ -40,6 +39,7 @@ public class VictorHardware extends Hardware<PWM> {
 	@Override
 	public void initHardware(int port) {
 		wpiVictor = new Victor(port);
+		wpiVictor.setInverted(inverted);
 	}
 
 	@Override

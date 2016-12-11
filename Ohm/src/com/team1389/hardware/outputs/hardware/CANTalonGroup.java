@@ -3,7 +3,7 @@ package com.team1389.hardware.outputs.hardware;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.team1389.configuration.PIDConfiguration;
+import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
@@ -40,20 +40,20 @@ public class CANTalonGroup implements Watchable {
 		});
 	}
 
-	public RangeOut<Position> getPositionOutput(PIDConfiguration config) {
+	public RangeOut<Position> getPositionOutput(PIDConstants config) {
 		RangeOut<Position> mainOutput = main.getPositionOutput(config);
 		return new RangeOut<Position>((double position) -> {
 			setFollowers();
 			mainOutput.set(position);
-		} , mainOutput.min(), mainOutput.max());
+		}, mainOutput.min(), mainOutput.max());
 	}
 
-	public RangeOut<Speed> getSpeedOutput(PIDConfiguration config) {
+	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
 		RangeOut<Speed> mainOutput = main.getSpeedOutput(config);
 		return new RangeOut<Speed>((double speed) -> {
 			setFollowers();
 			mainOutput.set(speed);
-		} , mainOutput.min(), mainOutput.max());
+		}, mainOutput.min(), mainOutput.max());
 
 	}
 

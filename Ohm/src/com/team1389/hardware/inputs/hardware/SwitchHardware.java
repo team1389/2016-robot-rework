@@ -9,6 +9,14 @@ import com.team1389.watch.Info;
 public class SwitchHardware extends Hardware<DIO> {
 	boolean inverted;
 
+	public SwitchHardware() {
+		this(false);
+	}
+
+	public SwitchHardware(boolean inverted) {
+		this.inverted = inverted;
+	}
+
 	edu.wpi.first.wpilibj.DigitalInput wpiSwitch;
 
 	private boolean get() {
@@ -19,10 +27,6 @@ public class SwitchHardware extends Hardware<DIO> {
 		return () -> {
 			return get();
 		};
-	}
-
-	public void invert(boolean inverted) {
-		this.inverted = inverted;
 	}
 
 	@Override

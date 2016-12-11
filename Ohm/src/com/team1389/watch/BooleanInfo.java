@@ -1,7 +1,6 @@
 package com.team1389.watch;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
