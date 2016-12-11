@@ -20,8 +20,6 @@ import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
 import com.team1389.system.SystemManager;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class TeleopMain {
 	SystemManager manager;
 	ControlBoard controls;
@@ -40,13 +38,12 @@ public class TeleopMain {
 
 		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
-		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem,turretSystem, robot.navX,robot.turretGyro);
+		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem, turretSystem);
 
 	}
 
 	public void periodic() {
 		manager.update();
-		SmartDashboard.putNumber("armPot", robot.armPot.getAnalogInput().mapToRange(1, 0).mapToRange(120,0).get());
 	}
 
 	private TurretSystem setupTurretSystem() {
@@ -59,14 +56,12 @@ public class TeleopMain {
 	public ArmSystem setupArmSystem() {
 		RangeOut<Percent> elevator = robot.elevation.getVoltageOutput();
 		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
-		map.setMappings(
-				map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
+		map.setMappings(map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
 				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
 				map.new ButtonEnum(controls.getArmPositionC(), ArmLocation.VERTICAL),
 				map.new ButtonEnum(controls.getArmPositionD(), ArmLocation.LOW_GOAL));
-		RangeIn<Position> armVal = robot.armPot.getAnalogInput().mapToRange(120,0).setRange(0, 360);
+		RangeIn<Position> armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 360);
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
-		DebugDash.getInstance().watch(armSystem.elevator.getWatchable("elevator"));
 		return armSystem;
 	}
 
@@ -78,8 +73,9 @@ public class TeleopMain {
 
 	public System setupDriveSystem() {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
-		PercentOut right = new PercentOut(robot.rightDrive.getVoltageOutput().invert());
+		PercentOut right = robot.rightDrive.getVoltageOutput().invert();
 
-		return new CheesyDriveSystem(left, right, controls.getThrottle(), new PercentIn(controls.getWheel().invert()), controls.getQuickTurn());
+		return new CheesyDriveSystem(left, right, controls.getThrottle(), new PercentIn(controls.getWheel().invert()),
+				controls.getQuickTurn());
 	}
 }

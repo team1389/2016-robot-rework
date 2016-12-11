@@ -9,6 +9,10 @@ import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
+import com.team1389.hardware.registry.port_types.Analog;
+import com.team1389.hardware.registry.port_types.CAN;
+import com.team1389.hardware.registry.port_types.DIO;
+import com.team1389.hardware.registry.port_types.PWM;
 
 import edu.wpi.first.wpilibj.SPI;
 
@@ -37,7 +41,7 @@ public class RobotHardware extends RobotLayout {
 	 */
 	private RobotHardware() {
 		registry = new Registry();
-		navX = new NavXHardware(SPI.Port.kMXP);
+		navX = new NavXHardware(SPI.Port.kMXP, registry);
 		initDriveTrain();
 		initArm();
 		initTurret();
@@ -45,44 +49,41 @@ public class RobotHardware extends RobotLayout {
 	}
 
 	private void initTurret() {
-		turretGyro = new GyroHardware(turretGyro_ANALOG);
+		turretGyro = registry.add(new Analog(anlg_TURRET_GYRO), new GyroHardware());
 		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
-		turret = new CANTalonHardware(turretMotor_CAN, registry);
+		turret = registry.add(new CAN(can_TURRET_MOTOR), new CANTalonHardware());
 	}
 
 	private void initArm() {
-		elevationA = new CANTalonHardware(elevatorMotorA_CAN, registry);
-		elevationA.getWrappedTalon().setPosition(0);
-		elevationB = new CANTalonHardware(elevatorMotorB_CAN, registry);
+		elevationA = registry.add(new CAN(can_ARM_PITCH_MOTOR_A), new CANTalonHardware());
+		elevationB = registry.add(new CAN(can_ARM_PITCH_MOTOR_B), new CANTalonHardware());
 		elevation = new CANTalonGroup(elevationA, elevationB);
-		armPot = new PotentiometerHardware(armPotentiometer_ANALOG);
+		armPot = registry.add(new Analog(anlg_ARM_POTENTIOMETER), new PotentiometerHardware());
 	}
 
 	private void initIntake() {
-		IRsensor1 = new SwitchHardware(ballHolderIR1_DIO, registry);
-		IRsensor2 = new SwitchHardware(ballHolderIR2_DIO, registry);
+		IRsensor1 = registry.add(new DIO(dio_INTAKE_IR_A), new SwitchHardware());
+		IRsensor2 = registry.add(new DIO(dio_INTAKE_IR_B), new SwitchHardware());
 		IRsensor1.invert(true);
 		IRsensor2.invert(true);
 		IRsensors = BinaryInput.combineOR(IRsensor1.getRawSwitch(), IRsensor2.getRawSwitch());
-		intake = new VictorHardware(intakeMotor_PWM, registry);
+		intake = registry.add(new PWM(pwm_INTAKE_MOTOR), new VictorHardware());
 		intake.invert(true);
 	}
 
 	private void initDriveTrain() {
-		leftA = new CANTalonHardware(leftMotorA_CAN, registry);
+		leftA = registry.add(new CAN(can_LEFT_MOTOR_A), new CANTalonHardware());
 		leftA.setInverted(true);
-		leftA.getWrappedTalon().setPosition(0);
 
-		leftB = new CANTalonHardware(leftMotorB_CAN, registry);
-		leftC = new CANTalonHardware(leftMotorC_CAN, registry);
+		leftB = registry.add(new CAN(can_LEFT_MOTOR_B), new CANTalonHardware());
+		leftC = registry.add(new CAN(can_LEFT_MOTOR_C), new CANTalonHardware());
 		leftDrive = new CANTalonGroup(leftA, leftB, leftC);
 
-		rightA = new CANTalonHardware(rightMotorA_CAN, registry);
-		rightA.getWrappedTalon().setPosition(0);
+		rightA = registry.add(new CAN(can_RIGHT_MOTOR_A), new CANTalonHardware());
 		rightA.setInverted(true);
 
-		rightB = new CANTalonHardware(rightMotorB_CAN, registry);
-		rightC = new CANTalonHardware(rightMotorC_CAN, registry);
-		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
+		rightB = registry.add(new CAN(can_RIGHT_MOTOR_B), new CANTalonHardware());
+		rightC = registry.add(new CAN(can_RIGHT_MOTOR_C), new CANTalonHardware());
+		rightDrive = new CANTalonGroup(leftA, leftB, leftC);
 	}
 }

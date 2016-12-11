@@ -139,6 +139,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 	@Override
 	public void initHardware(int port) {
 		wpiTalon = new CANTalon(port);
+		wpiTalon.setPosition(0);
 	}
 
 	@Override
