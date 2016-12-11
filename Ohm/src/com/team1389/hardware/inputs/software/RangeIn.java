@@ -35,22 +35,13 @@ public class RangeIn<T extends Value> {
 		return max;
 	}
 
-	public RangeIn<T> setRange(double min, double max) {
-		this.min = min;
-		this.max = max;
-		return this;
-	}
-
-	public RangeIn<T> mapToRange(double min, double max) {
-		input = ScalarInput.mapToRange(input, this.min, this.max, min, max);
-		this.min = min;
-		this.max = max;
-		return this;
-	}
-
-	public RangeIn<T> addChangeListener(Runnable onChange) {
-		input = ScalarInput.getListeningInput(input, onChange);
-		return this;
+	/**
+	 * maps this range to an angle value
+	 * 
+	 * @return the mapped range
+	 */
+	public RangeIn<Angle> mapToAngle() {
+		return new AngleIn(this);
 	}
 
 	public PercentIn mapToPercentIn() {
@@ -61,31 +52,59 @@ public class RangeIn<T extends Value> {
 		return new WatchableRangeIn<T>(type, this, name);
 	}
 
-	public RangeIn<T> invert() {
-		input = ScalarInput.invert(input);
-		return this;
+	@SuppressWarnings("unchecked")
+	private <R extends RangeIn<T>> R cast() {
+		return (R) this;
 	}
 
-	public RangeIn<T> scale(double factor) {
+	public <R extends RangeIn<T>> R setRange(double min, double max) {
+		this.min = min;
+		this.max = max;
+		return cast();
+	}
+
+	public <R extends RangeIn<T>> R mapToRange(double min, double max) {
+		input = ScalarInput.mapToRange(input, this.min, this.max, min, max);
+		this.min = min;
+		this.max = max;
+		return cast();
+	}
+
+	public <R extends RangeIn<T>> R addChangeListener(Runnable onChange) {
+		input = ScalarInput.getListeningInput(input, onChange);
+		return cast();
+	}
+
+	public <R extends RangeIn<T>> R applyDeadband(double deadband) {
+		input = ScalarInput.applyDeadband(input, deadband);
+		return cast();
+	}
+
+	public <R extends RangeIn<T>> R invert() {
+		input = ScalarInput.invert(input);
+		return cast();
+	}
+
+	public <R extends RangeIn<T>> R scale(double factor) {
 		input = ScalarInput.scale(input, factor);
 		max *= factor;
 		min *= factor;
-		return this;
+		return cast();
 	}
 
-	public RangeIn<T> getWrapped() {
+	public <R extends RangeIn<T>> R getWrapped() {
 		input = ScalarInput.getWrapped(input, min(), max());
-		return this;
+		return cast();
 	}
 
-	public RangeIn<T> sumInputs(RangeIn<T> rngIn) {
+	public <R extends RangeIn<T>> R sumInputs(RangeIn<T> rngIn) {
 		input = ScalarInput.sum(input, rngIn.input);
-		return this;
+		return cast();
 	}
 
-	public RangeIn<T> limit() {
+	public <R extends RangeIn<T>> R limit() {
 		input = ScalarInput.limitRange(input, this.min, this.max);
-		return this;
+		return cast();
 	}
 
 	/**
@@ -100,15 +119,6 @@ public class RangeIn<T extends Value> {
 			double get = get();
 			return get < rangeMax_exclusive && get >= rangeMin_inclusive;
 		};
-	}
-
-	/**
-	 * maps this range to an angle value
-	 * 
-	 * @return the mapped range
-	 */
-	public RangeIn<Angle> mapToAngle() {
-		return new RangeIn<Angle>(Angle.class, ScalarInput.mapToAngle(input, min, max), 0, 360);
 	}
 
 }

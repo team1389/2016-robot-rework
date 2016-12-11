@@ -87,7 +87,7 @@ public interface ScalarInput<T extends Value> {
 	 * @param deadband If the magnitude of this stream is less than the magnitude of the value of this parameter, the stream returns zero
 	 * @return The stream with the applied deadband
 	 */
-	static ScalarInput<Percent> applyDeadband(ScalarInput<Percent> in, double deadband) {
+	static <T extends Value> ScalarInput<T> applyDeadband(ScalarInput<T> in, double deadband) {
 		return () -> {
 			return RangeUtil.applyDeadband(in.get(), deadband);
 		};

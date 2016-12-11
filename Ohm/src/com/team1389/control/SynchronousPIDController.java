@@ -2,7 +2,6 @@ package com.team1389.control;
 
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
-import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -28,13 +27,6 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 		this(constants.p, constants.i, constants.d, source, output);
 	}
 
-	public SynchronousPIDController(PIDConfiguration config, RangeIn<I> source, RangeOut<O> output) {
-		this(config.pidConstants, source, output);
-		if (config.isSensorReversed) {
-			source.invert();
-		}
-		setContinuous(config.isContinuous);
-	}
 	public void update() {
 		output.set(calculate(source.get()));
 	}

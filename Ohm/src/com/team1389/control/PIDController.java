@@ -1,6 +1,5 @@
 package com.team1389.control;
 
-import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
@@ -25,14 +24,6 @@ public class PIDController<O extends Value, I extends PIDTunableValue> extends e
 
 	public PIDController(PIDConstants constants, RangeIn<I> source, RangeOut<O> output) {
 		this(constants.p, constants.i, constants.d, source, output);
-	}
-
-	public PIDController(PIDConfiguration config, RangeIn<I> source, RangeOut<O> output) {
-		this(config.pidConstants, source, output);
-		if (config.isSensorReversed) {
-			source.invert();
-		}
-		setContinuous(config.isContinuous);
 	}
 
 	public RangeOut<I> getSetpointSetter() {

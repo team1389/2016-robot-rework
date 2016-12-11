@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1389.systems;
 
 import com.team1389.auto.command.TurnAngleCommand;
-import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.inputs.interfaces.LatchedBinaryInput;
 import com.team1389.hardware.inputs.software.PercentIn;
@@ -54,8 +53,7 @@ public class TurretSystem extends System {
 	}
 
 	public void zero() {
-		PIDConfiguration pid = new PIDConfiguration(new PIDConstants(.07, 0, .15), false, false);
-		schedule(new TurnAngleCommand<Percent>(0, true, 2, turretAngle, voltRange, pid));
+		schedule(new TurnAngleCommand<Percent>(0, true, 2, turretAngle, voltRange, new PIDConstants(.07, 0, .15)));
 	}
 
 	@Override

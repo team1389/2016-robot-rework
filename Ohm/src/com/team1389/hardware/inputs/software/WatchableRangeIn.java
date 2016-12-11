@@ -24,54 +24,6 @@ public class WatchableRangeIn<T extends Value> extends RangeIn<T> implements Wat
 	}
 
 	@Override
-	public WatchableRangeIn<T> setRange(double min, double max) {
-		super.setRange(min, max);
-		return this;
-	}
-
-	@Override
-	public WatchableRangeIn<T> mapToRange(double min, double max) {
-		super.mapToRange(min, max);
-		return this;
-	}
-
-	@Override
-	public RangeIn<T> addChangeListener(Runnable onChange) {
-		super.addChangeListener(onChange);
-		return this;
-	}
-
-	@Override
-	public WatchableRangeIn<T> invert() {
-		super.invert();
-		return this;
-	}
-
-	@Override
-	public WatchableRangeIn<T> scale(double factor) {
-		super.scale(factor);
-		return this;
-	}
-
-	@Override
-	public WatchableRangeIn<T> getWrapped() {
-		super.getWrapped();
-		return this;
-	}
-
-	@Override
-	public WatchableRangeIn<T> sumInputs(RangeIn<T> rngIn) {
-		super.sumInputs(rngIn);
-		return this;
-	}
-
-	@Override
-	public WatchableRangeIn<T> limit() {
-		super.limit();
-		return this;
-	}
-
-	@Override
 	public String getName() {
 		return name;
 	}

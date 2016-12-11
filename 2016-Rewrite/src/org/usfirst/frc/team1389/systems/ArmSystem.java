@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1389.systems;
 
 import com.team1389.command_framework.command_base.Command;
-import com.team1389.configuration.PIDConfiguration;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.SynchronousPIDController;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
@@ -26,11 +25,11 @@ public class ArmSystem extends System {
 	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
 		this.buttons = map;
 		this.armVal = armVal;
-		elevatorPID = new SynchronousPIDController<Percent, Position>(
-				new PIDConfiguration(new PIDConstants(.06, 0, 0), true, false), armVal, elevator);
+		elevatorPID = new SynchronousPIDController<Percent, Position>(new PIDConstants(.06, 0, 0), armVal, elevator);
 		this.elevator = elevatorPID.getSetpointSetter().invert();
 		this.inputAngle = 0;
 	}
+
 	@Override
 	public void init() {
 		elevator.set(inputAngle);

@@ -1,6 +1,6 @@
 package com.team1389.hardware.outputs.hardware;
 
-import com.team1389.configuration.PIDConfiguration;
+import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDController;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
@@ -13,16 +13,13 @@ import com.team1389.util.state.StateSetup;
 import com.team1389.util.state.StateTracker;
 
 /**
- * Can PID control a voltage controlled motor given a sensor. Can do either
- * speed control or position control.
+ * Can PID control a voltage controlled motor given a sensor. Can do either speed control or position control.
  * 
- * Most importantly, this class will ensure that a given motor is only being
- * used by one controller at once, and that it has been given all required
- * configuration before it runs.
+ * Most importantly, this class will ensure that a given motor is only being used by one controller at once, and that it has been given all required configuration before it runs.
  * 
  * @author Jacob Prinz
  */
-public class PIDVoltageHardware{
+public class PIDVoltageHardware {
 	final StateTracker stateTracker;
 	final PercentOut voltageOutput;
 
@@ -31,8 +28,9 @@ public class PIDVoltageHardware{
 		stateTracker = new StateTracker();
 	}
 
-	public RangeOut<Speed> getSpeedOutput(RangeIn<Speed> speedSensor, PIDConfiguration config) {
-		PIDController<Percent,Speed> controller = new PIDController<Percent,Speed>(config,speedSensor,voltageOutput);
+	public RangeOut<Speed> getSpeedOutput(RangeIn<Speed> speedSensor, PIDConstants config) {
+		PIDController<Percent, Speed> controller = new PIDController<Percent, Speed>(config, speedSensor,
+				voltageOutput);
 
 		State speedControlState = stateTracker.newState(new StateSetup() {
 			@Override
@@ -46,11 +44,14 @@ public class PIDVoltageHardware{
 			}
 		});
 
-		return controller.getSetpointSetter().addChangeListener(()->{speedControlState.init();});
+		return controller.getSetpointSetter().addChangeListener(() -> {
+			speedControlState.init();
+		});
 	}
 
-	public RangeOut<Position> getPositionOutput(RangeIn<Position> positionSensor, PIDConfiguration config) {
-		PIDController<Percent,Position> controller = new PIDController<Percent,Position>(config,positionSensor,voltageOutput);
+	public RangeOut<Position> getPositionOutput(RangeIn<Position> positionSensor, PIDConstants config) {
+		PIDController<Percent, Position> controller = new PIDController<Percent, Position>(config, positionSensor,
+				voltageOutput);
 
 		State positionControlState = stateTracker.newState(new StateSetup() {
 			@Override
@@ -64,7 +65,9 @@ public class PIDVoltageHardware{
 			}
 		});
 
-		return controller.getSetpointSetter().addChangeListener(()->{positionControlState.init();});
+		return controller.getSetpointSetter().addChangeListener(() -> {
+			positionControlState.init();
+		});
 
 	}
 }

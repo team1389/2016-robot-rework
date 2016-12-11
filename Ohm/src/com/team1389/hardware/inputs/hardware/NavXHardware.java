@@ -1,9 +1,8 @@
 package com.team1389.hardware.inputs.hardware;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.value_types.Angle;
 import com.team1389.watch.Info;
 import com.team1389.watch.NumberInfo;
 import com.team1389.watch.Watchable;
@@ -19,10 +18,10 @@ public class NavXHardware implements Watchable {
 		registry.registerWatchable(this);
 	}
 
-	public RangeIn<Angle> getAngleInput() {
-		return new RangeIn<Angle>(Angle.class, () -> {
+	public AngleIn getAngleInput() {
+		return new AngleIn(() -> {
 			return navX.getYaw();
-		}, 0d, 360d);
+		});
 	}
 
 	@Override

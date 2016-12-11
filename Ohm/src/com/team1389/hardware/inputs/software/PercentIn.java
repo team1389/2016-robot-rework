@@ -15,8 +15,5 @@ public class PercentIn extends RangeIn<Percent>{
 	public PercentIn(RangeIn<?> in){
 		this(ScalarInput.mapToPercent(in.input, in.min, in.max));
 	}
-	public PercentIn applyDeadband(double deadband) {
-		input=ScalarInput.applyDeadband(input, deadband);
-		return this;
-	}
+
 }
