@@ -4,7 +4,7 @@ import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 
 public class RangeIn<T extends Value> {
@@ -37,10 +37,10 @@ public class RangeIn<T extends Value> {
 		return max;
 	}
 
-	public Info getInfo(String name){
-		return new NumberInfo(name,this.input);
+	public Watchable getWatchable(String name) {
+		return new NumberInfo(name, this.input);
 	}
-	
+
 	/**
 	 * maps this range to an angle value
 	 * 
@@ -52,10 +52,6 @@ public class RangeIn<T extends Value> {
 
 	public PercentIn mapToPercentIn() {
 		return new PercentIn(this);
-	}
-
-	public WatchableRangeIn<T> getWatchable(String name) {
-		return new WatchableRangeIn<T>(type, this, name);
 	}
 
 	@SuppressWarnings("unchecked")

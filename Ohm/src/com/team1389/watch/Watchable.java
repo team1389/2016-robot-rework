@@ -1,38 +1,22 @@
 package com.team1389.watch;
 
-import com.team1389.watch.info.Info;
-
 import edu.wpi.first.wpilibj.tables.ITable;
 
 public interface Watchable {
 
 	public String getName();
 
-	public Info[] getInfo();
+	void publishUnderName(String name, ITable table);
 
-	public default Watchable[] getSubWatchables() {
-		return new Watchable[0];
+	public default void publish(String parent, ITable table) {
+		publishUnderName(parent + "." + getName(), table);
 	}
 
 	public default void publish(ITable table) {
-		for (Info e : getInfo()) {
-			e.publish(getName(), table);
-		}
+		publishUnderName(getName(), table);
 	}
 
-	public default String getPrintString() {
-		String s = "";
-		for (Info e : getInfo()) {
-			s = String.join(s, e.toString() + " ");
-		}
-		return s;
-	}
+	public String getPrintString();
 
-	public default String loggable() {
-		String s = "";
-		for (Info e : getInfo()) {
-			s = String.join(s, e.loggable() + "\t");
-		}
-		return s;
-	}
+	public double getLoggable();
 }

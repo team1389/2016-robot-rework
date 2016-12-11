@@ -63,4 +63,8 @@ public class DigitalIn {
 		this.input = BinaryInput.invert(input);
 		return this;
 	}
+
+	public boolean get() {
+		return input.get();
+	}
 }

@@ -1,11 +1,10 @@
 package com.team1389.system;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.util.DriveSignal;
-import com.team1389.watch.info.BooleanInfo;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 
 /**
@@ -19,14 +18,14 @@ public class CheesyDriveSystem extends System {
 	private PercentOut rightMotor;
 	private PercentIn throttle;
 	private PercentIn wheel;
-	private BinaryInput quickTurnButton;
+	private DigitalIn quickTurnButton;
 	private boolean isQuickTurn;
 	private double mQuickStopAccumulator;
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
 
 	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
-			BinaryInput quickTurnButton, double turnSensitivity) {
+			DigitalIn quickTurnButton, double turnSensitivity) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.throttle = throttle;
@@ -36,7 +35,7 @@ public class CheesyDriveSystem extends System {
 	}
 
 	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
-			BinaryInput quickTurnButton) {
+			DigitalIn quickTurnButton) {
 		this(leftMotor, rightMotor, throttle, wheel, quickTurnButton, 1.0);
 	}
 
@@ -113,15 +112,12 @@ public class CheesyDriveSystem extends System {
 	}
 
 	@Override
-	public Info[] getInfo() {
-		// TODO info is useless when not in default mode;
-		return new Info[] { new NumberInfo("leftWheels", () -> {
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { new NumberInfo("leftWheels", () -> {
 			return mSignal.leftMotor;
 		}), new NumberInfo("rightWheels", () -> {
 			return mSignal.rightMotor;
-		}), new BooleanInfo("isQuickTurn", () -> {
-			return isQuickTurn;
-		}) };
+		}), quickTurnButton.getInfo("quickTurnButton") };
 	}
 
 }

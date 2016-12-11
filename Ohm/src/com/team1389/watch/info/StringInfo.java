@@ -2,7 +2,7 @@ package com.team1389.watch.info;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
-public class StringInfo extends Info {
+public class StringInfo extends SimpleWatchable {
 	/**
 	 * Sets information (StringSource, Name) to class variables or super class
 	 * 
@@ -21,17 +21,17 @@ public class StringInfo extends Info {
 	}
 
 	@Override
-	public void publishWithName(String name, ITable table) {
+	public void publishUnderName(String name, ITable table) {
 		table.putString(name, source.get());
 	}
 
 	@Override
-	public String toString() {
+	public String getPrintString() {
 		return name + ": " + source.get();
 	}
 
 	@Override
-	public double loggable() {
+	public double getLoggable() {
 		return -1;
 	}
 }

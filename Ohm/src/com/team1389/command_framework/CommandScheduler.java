@@ -5,14 +5,20 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.team1389.command_framework.command_base.Command;
+import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.Info;
 import com.team1389.watch.info.StringInfo;
 
-public class CommandScheduler implements Watchable {
+public class CommandScheduler implements CompositeWatchable {
 	List<Command> executing;
+	String name;
 
 	public CommandScheduler() {
+		this("Scheduler");
+	}
+
+	public CommandScheduler(String name) {
+		this.name = name;
 		executing = new ArrayList<Command>();
 	}
 
@@ -39,14 +45,14 @@ public class CommandScheduler implements Watchable {
 	}
 
 	@Override
-	public String getName() {
-		return null;
+	public Watchable[] getSubWatchables() {
+		return new Watchable[] { new StringInfo("Current Command list", () -> {
+			return executing.toString();
+		}) };
 	}
 
 	@Override
-	public Info[] getInfo() {
-		return new Info[] { new StringInfo("Current Command list", () -> {
-			return executing.toString();
-		}) };
+	public String getName() {
+		return name;
 	}
 }

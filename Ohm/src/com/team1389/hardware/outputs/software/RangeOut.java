@@ -3,7 +3,7 @@ package com.team1389.hardware.outputs.software;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 import com.team1389.hardware.outputs.interfaces.TrackedScalarOutput;
 import com.team1389.hardware.value_types.Value;
-import com.team1389.watch.info.Info;
+import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 
 public class RangeOut<T extends Value> {
@@ -37,10 +37,6 @@ public class RangeOut<T extends Value> {
 		return (R) this;
 	}
 
-	public WatchableRangeOut<T> getWatchable(String name) {
-		return new WatchableRangeOut<T>(this, name);
-	}
-
 	public PercentOut mapToPercentOut() {
 		return new PercentOut(this);
 	}
@@ -71,7 +67,7 @@ public class RangeOut<T extends Value> {
 		return cast();
 	}
 
-	public Info getInfo(String name) {
+	public Watchable getWatchable(String name) {
 		this.output = ScalarOutput.getTrackedOutput(output);
 		return new NumberInfo(name, ((TrackedScalarOutput<T>) output).getAsInput());
 	}

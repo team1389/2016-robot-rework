@@ -4,7 +4,7 @@ import com.team1389.hardware.inputs.interfaces.BinaryInput;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
-public class BooleanInfo extends Info {
+public class BooleanInfo extends SimpleWatchable {
 	/**
 	 * Sets BooleanInfo method in variable to class variable Calls superclass to handle name in {@link #Info(String name)}
 	 * 
@@ -19,17 +19,18 @@ public class BooleanInfo extends Info {
 	}
 
 	@Override
-	public void publishWithName(String name, ITable subtable) {
+	public void publishUnderName(String name, ITable subtable) {
 		subtable.putBoolean(name, in.get());
 	}
 
 	@Override
-	public String toString() {
-		return name + ": " + in.get();
+	public String getPrintString() {
+		return getName() + ": " + in.get();
 	}
 
 	@Override
-	public double loggable() {
+	public double getLoggable() {
 		return in.get() ? 1d : 0d;
 	}
+
 }

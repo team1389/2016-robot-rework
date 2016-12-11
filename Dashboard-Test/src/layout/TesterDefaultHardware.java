@@ -17,36 +17,36 @@ public class TesterDefaultHardware extends TesterLayout {
 	public TesterDefaultHardware() {
 		voltOut1 = new PercentOut((double val) -> {
 			val1 = val;
-		}).getWatchable("speedOut1");
+		});
 		voltOut2 = new PercentOut((double val) -> {
 			val2 = val;
-		}).getWatchable("speedOut2");
+		});
 
 		speedIn1 = new RangeIn<Speed>(Speed.class, () -> {
 			return speed1;
-		}, 0, 1).getWatchable("speedOut1");
+		}, 0, 1);
 		speedIn2 = new RangeIn<Speed>(Speed.class, () -> {
 			return speed2;
-		}, 0, 8192).getWatchable("speedOut2");
+		}, 0, 8192);
 
 		posIn1 = new RangeIn<Position>(Position.class, () -> {
 			return pos1;
-		}, 0, 1).getWatchable("posOut1");
+		}, 0, 1);
 		posIn2 = new RangeIn<Position>(Position.class, () -> {
 			return pos2;
-		}, 0, 8192).getWatchable("posOut2");
+		}, 0, 8192);
 		new Thread(() -> {
 			double lastLoop = System.currentTimeMillis();
 			while (true) {
 				double dt = System.currentTimeMillis() - lastLoop;
-				lastLoop=System.currentTimeMillis();
-				dt/=1000;
-				speed1 =V_TO_RPM_CONSTANT*val1;
-				speed2 =V_TO_RPM_CONSTANT*val2;
+				lastLoop = System.currentTimeMillis();
+				dt /= 1000;
+				speed1 = V_TO_RPM_CONSTANT * val1;
+				speed2 = V_TO_RPM_CONSTANT * val2;
 				pos1 += speed1 * dt;
 				pos2 += speed2 * dt;
 				try {
-					Thread.sleep(1/50);
+					Thread.sleep(1 / 50);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

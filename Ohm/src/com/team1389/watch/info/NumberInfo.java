@@ -4,7 +4,7 @@ import com.team1389.hardware.inputs.interfaces.ScalarInput;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
-public class NumberInfo extends Info {
+public class NumberInfo extends SimpleWatchable {
 	ScalarInput<?> source;
 
 	public NumberInfo(String name, ScalarInput<?> source) {
@@ -17,17 +17,17 @@ public class NumberInfo extends Info {
 	}
 
 	@Override
-	protected void publishWithName(String name, ITable table) {
+	public void publishUnderName(String name, ITable table) {
 		table.putNumber(name, source.get());
 	}
 
 	@Override
-	public String toString() {
+	public String getPrintString() {
 		return name + ": " + source.get();
 	}
 
 	@Override
-	public double loggable() {
+	public double getLoggable() {
 		return source.get();
 	}
 }

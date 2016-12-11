@@ -2,9 +2,9 @@ package com.team1389.system;
 
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.command_framework.command_base.Command;
-import com.team1389.watch.Watchable;
+import com.team1389.watch.CompositeWatchable;
 
-public abstract class System implements Watchable {
+public abstract class System implements CompositeWatchable {
 	public System() {
 		scheduler = new CommandScheduler();
 		enterDefaultMode();
@@ -14,7 +14,7 @@ public abstract class System implements Watchable {
 	}
 
 	private CommandScheduler scheduler;
-	protected boolean inDefaultMode=true;;
+	protected boolean inDefaultMode = true;;
 	protected Runnable defaultModeListener;
 
 	public final void update() {
@@ -40,7 +40,7 @@ public abstract class System implements Watchable {
 
 	protected void schedule(Command command) {
 		scheduler.schedule(command);
-		//inDefaultMode = false;
+		// inDefaultMode = false;
 	}
 
 }
