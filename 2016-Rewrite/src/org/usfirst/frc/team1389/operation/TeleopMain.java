@@ -8,11 +8,10 @@ import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.systems.TurretSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
+import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.hardware.value_types.Position;
 import com.team1389.system.CheesyDriveSystem;
 import com.team1389.system.System;
 import com.team1389.system.SystemManager;
@@ -57,7 +56,7 @@ public class TeleopMain {
 				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
 				map.new ButtonEnum(controls.getArmPositionC(), ArmLocation.VERTICAL),
 				map.new ButtonEnum(controls.getArmPositionD(), ArmLocation.LOW_GOAL));
-		RangeIn<Position> armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 360);
+		AngleIn armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 360).mapToAngle();
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
 		return armSystem;
 	}
