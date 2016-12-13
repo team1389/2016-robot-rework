@@ -6,7 +6,6 @@ import java.util.Map;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.outputs.interfaces.CANTalonFollower;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.port_types.CAN;
@@ -148,4 +147,9 @@ public class CANTalonHardware extends Hardware<CAN> {
 	protected String getHardwareIdentifier() {
 		return "Talon";
 	}
+
+	public interface CANTalonFollower {
+		public void follow();
+	}
+
 }
