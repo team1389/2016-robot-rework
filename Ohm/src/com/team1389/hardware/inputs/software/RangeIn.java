@@ -2,7 +2,6 @@ package com.team1389.hardware.inputs.software;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
-import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
@@ -46,7 +45,7 @@ public class RangeIn<T extends Value> {
 	 * 
 	 * @return the mapped range
 	 */
-	public RangeIn<Angle> mapToAngle() {
+	public AngleIn mapToAngle() {
 		return new AngleIn(this);
 	}
 

@@ -3,28 +3,28 @@ package org.usfirst.frc.team1389.systems;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.SynchronousPIDController;
+import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
-import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
-import com.team1389.hardware.value_types.Position;
 import com.team1389.system.System;
 import com.team1389.watch.Watchable;
 
 public class ArmSystem extends System {
 
-	public RangeOut<Position> elevator;
-	SynchronousPIDController<Percent, Position> elevatorPID;
+	public RangeOut<Angle> elevator;
+	SynchronousPIDController<Percent, Angle> elevatorPID;
 	ButtonEnumMap<ArmLocation> buttons;
-	RangeIn<Position> armVal;
+	AngleIn armVal;
 	Command profileMover;
 	double inputAngle;
 
-	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, RangeIn<Position> armVal) {
+	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, AngleIn armVal) {
 		this.buttons = map;
 		this.armVal = armVal;
-		elevatorPID = new SynchronousPIDController<Percent, Position>(new PIDConstants(.06, 0, 0), armVal, elevator);
-		this.elevator = elevatorPID.getSetpointSetter().invert();
+		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.003, 0, 0), armVal, elevator);
+		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(20, 0);
 		this.inputAngle = 0;
 	}
 
@@ -76,6 +76,8 @@ public class ArmSystem extends System {
 
 	@Override
 	public Watchable[] getSubWatchables() {
-		return new Watchable[] { buttons.getWatchable("target location"), armVal.getWatchable("arm position") };
+		return new Watchable[] { buttons.getWatchable("target location"), armVal.getWatchable("arm position"),
+				elevatorPID.getSetpointSetter().getWatchable("arm setpoint"),
+				elevatorPID.getOutput().getWatchable("arm vOut") };
 	}
 }

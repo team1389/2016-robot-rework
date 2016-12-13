@@ -18,6 +18,8 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 		super(kP, kI, kD);
 		this.source = source;
 		this.output = output;
+		setInputRange(source.min(), source.max());
+		setOutputRange(output.min(),output.max());
 		this.setpointSetter = new RangeOut<I>((double setpoint) -> {
 			setSetpoint(setpoint);
 		}, source.min(), source.max());
@@ -37,6 +39,10 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 
 	public RangeIn<I> getSource() {
 		return source;
+	}
+
+	public RangeOut<O> getOutput() {
+		return output;
 	}
 
 	public Command getPIDDoCommand() {

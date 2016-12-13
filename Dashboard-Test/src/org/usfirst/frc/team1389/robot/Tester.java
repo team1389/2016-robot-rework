@@ -1,11 +1,10 @@
 package org.usfirst.frc.team1389.robot;
 
+import org.usfirst.frc.team1389.systems.ArmSystem;
+import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
+
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.control.MotionProfileController;
-import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.motion_profile.ProfileUtil;
-import com.team1389.system.CheesyDriveSystem;
+import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -22,21 +21,10 @@ public class Tester {
 	static SystemManager manager;
 
 	public static void init() {
-
-		MotionProfileController control = new MotionProfileController(.7, 0, 0, robot.posIn1, robot.speedIn1,
-				robot.voltOut1);
-		control.followProfile(ProfileUtil.generate(-20, 0, .06, .06, 8));
-		dash.watch(robot.posIn1.getWatchable("rightWheels"), robot.voltOut1.getWatchable("volts"));
-		scheduler.schedule(control.getPIDDoCommand());
-
-		CheesyDriveSystem system = new CheesyDriveSystem(robot.voltOut1, robot.voltOut2, new PercentIn(() -> {
-			return -.05;
-		}), new PercentIn(() -> {
-			return -.05;
-		}), new DigitalIn(() -> {
-			return false;
-		}));
+		ButtonEnumMap<ArmLocation> testButtons = new ButtonEnumMap<>(ArmLocation.DEFENSE);
+		ArmSystem system = new ArmSystem(robot.voltOut1, testButtons, robot.posIn1.mapToAngle());
 		dash.watch(system);
+		manager.register(system);
 	}
 
 	public static void update() {

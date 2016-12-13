@@ -14,7 +14,4 @@ public interface BinaryOutput {
 		};
 	}
 
-	public static TrackedBinaryOutput getTracked(BinaryOutput out) {
-		return new TrackedBinaryOutput(out);
-	}
 }

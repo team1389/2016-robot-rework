@@ -7,6 +7,7 @@ import com.team1389.watch.Watchable;
 
 public class SwitchHardware extends Hardware<DIO> {
 	boolean inverted;
+	edu.wpi.first.wpilibj.DigitalInput wpiSwitch;
 
 	public SwitchHardware() {
 		this(false);
@@ -16,7 +17,6 @@ public class SwitchHardware extends Hardware<DIO> {
 		this.inverted = inverted;
 	}
 
-	edu.wpi.first.wpilibj.DigitalInput wpiSwitch;
 
 	private boolean get() {
 		return inverted ? !wpiSwitch.get() : wpiSwitch.get();

@@ -38,6 +38,7 @@ public class Registry {
 		pwmPorts = new ResourceManager<>();
 		canPorts = new ResourceManager<>();
 		dioPorts = new ResourceManager<>();
+		usbPorts = new ResourceManager<>();
 	}
 
 	/**
@@ -57,6 +58,7 @@ public class Registry {
 	@SuppressWarnings("unchecked")
 	public <R extends PortInstance, T extends Hardware<R>> T add(R r, T t) {
 		ResourceManager<R> register = getRegister(r);
+		System.out.println(register);
 		if (!register.isUsed(r)) {
 			t.initHardware(r.index());
 			registerWatchable(t);

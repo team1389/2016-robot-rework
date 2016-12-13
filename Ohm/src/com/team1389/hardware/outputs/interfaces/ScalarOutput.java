@@ -133,14 +133,4 @@ public interface ScalarOutput<T extends Value> {
 		return new ListeningScalarOutput<T>(output, onChange);
 	}
 
-	/**
-	 * converts the stream to a {@link TrackedScalarOutput} which can be accessed to see the last value sent to downstream
-	 * 
-	 * @param output the stream to listen to
-	 * @return the tracked stream
-	 */
-	public static <T extends Value> TrackedScalarOutput<T> getTrackedOutput(ScalarOutput<T> output) {
-		return new TrackedScalarOutput<T>(output);
-	}
-
 }

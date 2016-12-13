@@ -1,5 +1,8 @@
 package com.team1389.hardware.inputs.software;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.watch.info.BooleanInfo;
 
@@ -55,12 +58,8 @@ public class DigitalIn {
 	}
 
 	public DigitalIn combineOR(DigitalIn... toCombine) {
-		BinaryInput[] inps = new BinaryInput[toCombine.length + 1];
-		for (int i = 0; i < inps.length; i++) {
-			inps[i] = toCombine[i].input;
-		}
-		inps[inps.length - 1] = this.input;
-		this.input = BinaryInput.combineOR(inps);
+		Stream<BinaryInput> inps=Arrays.stream(toCombine).map(it->it.input);
+		this.input = BinaryInput.combineOR(Stream.concat(inps, Stream.of(input)).toArray(BinaryInput[]::new));
 		return this;
 	}
 

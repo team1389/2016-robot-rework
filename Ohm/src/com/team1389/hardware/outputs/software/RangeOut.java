@@ -1,12 +1,14 @@
 package com.team1389.hardware.outputs.software;
 
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
-import com.team1389.hardware.outputs.interfaces.TrackedScalarOutput;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 
-public class RangeOut<T extends Value> {
+public class RangeOut<T extends Value> implements ScalarInput<T> {
+	private double lastVal;
+
 	protected ScalarOutput<T> output;
 	protected double min, max;
 
@@ -16,7 +18,13 @@ public class RangeOut<T extends Value> {
 		this.max = max;
 	}
 
+	@Override
+	public double get() {
+		return lastVal;
+	}
+
 	public void set(double val) {
+		lastVal = val;
 		output.set(val);
 	}
 
@@ -68,8 +76,7 @@ public class RangeOut<T extends Value> {
 	}
 
 	public Watchable getWatchable(String name) {
-		this.output = ScalarOutput.getTrackedOutput(output);
-		return new NumberInfo(name, ((TrackedScalarOutput<T>) output).getAsInput());
+		return new NumberInfo(name, this);
 	}
 
 	public <R extends RangeOut<T>> R addFollowers(RangeOut<T> outFollow) {

@@ -50,9 +50,7 @@ public class RobotHardware extends RobotLayout {
 	private void initTurret() {
 		turretGyro = registry.add(new Analog(anlg_TURRET_GYRO), new GyroHardware());
 		turret = registry.add(new CAN(can_TURRET_MOTOR), new CANTalonHardware(inv_TURRET_MOTOR));
-
 		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
-
 	}
 
 	private void initArm() {
