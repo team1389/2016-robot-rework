@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1389.robot.controls;
 
-import com.team1389.hardware.humaninputs.JoystickController;
+import com.team1389.hardware.inputs.hardware.JoystickHardware;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.DigitalIn.InputType;
 import com.team1389.hardware.inputs.software.PercentIn;
@@ -21,8 +21,8 @@ public class ControlBoard extends ControlMap {
 	private ControlBoard() {
 	}
 
-	private final JoystickController driveController = new JoystickController(DRIVE_CONTROLLER);
-	private final JoystickController manipController = new JoystickController(MANIP_CONTROLLER);
+	private final JoystickHardware driveController = new JoystickHardware(DRIVE_CONTROLLER);
+	private final JoystickHardware manipController = new JoystickHardware(MANIP_CONTROLLER);
 
 	// DRIVER CONTROLS
 	public PercentIn throttle = driveController.getAxis(ax_THROTTLE_AXIS).applyDeadband(.02);

@@ -1,4 +1,4 @@
-package com.team1389.hardware.humaninputs;
+package com.team1389.hardware.inputs.hardware;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.POVInput;
@@ -9,10 +9,10 @@ import com.team1389.hardware.inputs.software.PercentIn;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;
 
-public class JoystickController {
+public class JoystickHardware {
 	final Joystick wpiJoystick;
 
-	public JoystickController(int port) {
+	public JoystickHardware(int port) {
 		wpiJoystick = new Joystick(port);
 	}
 
