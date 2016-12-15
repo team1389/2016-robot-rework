@@ -32,7 +32,7 @@ public class TeleopMain {
 		System intakeSystem = setupIntakeSystem();
 		System turretSystem = setupTurretSystem();
 
-		manager = new SystemManager(driveSystem, intakeSystem, /* armSystem, */ turretSystem);
+		manager = new SystemManager(driveSystem, intakeSystem,  armSystem,  turretSystem);
 		manager.init();
 		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem, turretSystem);
 

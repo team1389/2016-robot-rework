@@ -30,7 +30,6 @@ public class ServoHardware extends Hardware<PWM> {
 		return new Watchable[] { getAngleInput().getWatchable("angle") };
 	}
 
-	// TODO check if this max val should be 180?
 	public RangeIn<Position> getPositionInput() {
 		return new RangeIn<Position>(Position.class, () -> {
 			return wpiServo.getPosition();

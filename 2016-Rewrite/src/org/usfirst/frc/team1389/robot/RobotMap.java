@@ -22,7 +22,7 @@ public class RobotMap {
 	protected static final int anlg_TURRET_GYRO=1;
 	
 	protected static final int can_ELEVATOR_MOTOR_A = 12; protected static final boolean inv_ELEVATOR_MOTOR_A = true;
-	protected static final int can_ELEVATOR_MOTOR_B = 8; protected static final boolean inv_ELEVATOR_MOTOR_B = true;
+	protected static final int can_ELEVATOR_MOTOR_B = 8; protected static final boolean inv_ELEVATOR_MOTOR_B = false;
 	protected static final int anlg_ARM_POTENTIOMETER=0;
 	
 	//Ball manipulator
@@ -33,7 +33,6 @@ public class RobotMap {
 	//Inputs
 	protected static final int dio_INTAKE_IR_A = 0; protected static final boolean sinv_INTAKE_IR_B = true;
 	protected static final int dio_INTAKE_IR_B = 1; protected static final boolean sinv_INTAKE_IR_A = true;
-	
 	
 	protected static final boolean sinv_LEFT_ENCODER = true;
 	protected static final boolean sinv_RIGHT_ENCODER = false;

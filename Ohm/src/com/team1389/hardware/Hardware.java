@@ -7,7 +7,7 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 	String specificHardwareName;
 	int port;
 
-	public void setSpecificHardwareName(String specificHardwareName) {
+	public void setName(String specificHardwareName) {
 		this.specificHardwareName = specificHardwareName;
 	}
 
