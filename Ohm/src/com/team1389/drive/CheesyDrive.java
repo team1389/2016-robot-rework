@@ -7,7 +7,12 @@ import com.team1389.util.DriveSignal;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
-
+/**
+ * Provides a drive algorithm for voltage controlled drivetrains.
+ * combines the traditional tank drive algorithm with a special curvature drive which is easier to control, but makes turning more difficult
+ * @author amind
+ *
+ */
 public class CheesyDrive implements CompositeWatchable {
 	DriveOut<Percent> drive;
 	private PercentIn throttle;
@@ -16,7 +21,14 @@ public class CheesyDrive implements CompositeWatchable {
 	private double mQuickStopAccumulator;
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
-
+	/**
+	 * 
+	 * @param drive the driveTrain stream to control
+	 * @param throttle an input stream controlling the forward speed of the drivetrain
+	 * @param wheel an input stream controlling the turning of the drivetrain
+	 * @param quickTurnButton a digital stream used to switch between tank drive and curvature drive
+	 * @param turnSensitivity how tightly to turn during curvature drive mode
+	 */
 	public CheesyDrive(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton,
 			double turnSensitivity) {
 		this.drive = drive;
@@ -29,16 +41,29 @@ public class CheesyDrive implements CompositeWatchable {
 	public CheesyDrive(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton) {
 		this(drive, throttle, wheel, quickTurnButton, 1.0);
 	}
-
+	/**
+	 * ticks this drive algorithm
+	 * this method expects to be called every tick of a control loop
+	 * 
+	 */
 	public void update() {
 		mSignal = cheesyDrive(throttle.get(), wheel.get(), quickTurnButton.get());
 		drive.set(mSignal);
 	}
-
+	/**
+	 * 
+	 * @param val the turn sensitivity
+	 */
 	public void setTurnSensitivity(double val) {
 		this.kTurnSensitivity = val;
 	}
-
+/**
+ * generates a voltage drive signal based on the given input
+ * @param throttle
+ * @param wheel
+ * @param isQuickTurn
+ * @return
+ */
 	public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
 
 		double overPower;
@@ -83,7 +108,9 @@ public class CheesyDrive implements CompositeWatchable {
 		mSignal.leftMotor = leftPwm;
 		return mSignal;
 	}
-
+	/**
+	 * the watchable identifier for this algorithm
+	 */
 	@Override
 	public String getName() {
 		return "Cheesy Drive";
