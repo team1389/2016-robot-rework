@@ -1,7 +1,9 @@
 package com.team1389.hardware.outputs.hardware;
 
 import com.team1389.hardware.Hardware;
+import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.AngleOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.value_types.Position;
@@ -25,7 +27,7 @@ public class ServoHardware extends Hardware<PWM> {
 
 	@Override
 	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getPositionInput().getWatchable("pos") };
+		return new Watchable[] { getAngleInput().getWatchable("angle") };
 	}
 
 	// TODO check if this max val should be 180?
@@ -33,6 +35,18 @@ public class ServoHardware extends Hardware<PWM> {
 		return new RangeIn<Position>(Position.class, () -> {
 			return wpiServo.getPosition();
 		}, 0, 1);
+	}
+
+	public AngleIn getAngleInput() {
+		return new AngleIn(() -> {
+			return wpiServo.getAngle();
+		});
+	}
+
+	public AngleOut getAngleOutput() {
+		return new AngleOut((double val) -> {
+			wpiServo.setAngle(val);
+		});
 	}
 
 	@Override
