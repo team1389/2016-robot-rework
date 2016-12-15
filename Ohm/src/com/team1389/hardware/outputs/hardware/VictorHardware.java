@@ -33,7 +33,7 @@ public class VictorHardware extends Hardware<PWM> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		wpiVictor = new Victor(port);
 		wpiVictor.setInverted(inverted);
 	}

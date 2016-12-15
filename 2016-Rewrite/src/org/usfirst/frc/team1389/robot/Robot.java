@@ -83,7 +83,7 @@ public class Robot extends IterativeRobot {
 	public void testInit() {
 		testRunner = new SystemManager();
 		MotorVoltageTester motorVoltageTester = new MotorVoltageTester(robot.elevation.getVoltageOutput(),
-				ControlBoard.getInstance().getIntakeAxis(), false);
+				ControlBoard.getInstance().intakeAxis, false);
 		testRunner.register(motorVoltageTester);
 		DebugDash.getInstance().watch(motorVoltageTester);
 	}

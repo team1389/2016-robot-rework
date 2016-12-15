@@ -28,13 +28,9 @@ public class IntakeSystem extends System {
 	}
 
 	@Override
-	public void getInput() {
+	public void update() {
 		isOverride = override.get();
 		joyVal = joystick.get();
-	}
-
-	@Override
-	public void defaultUpdate() {
 		if (IRSensors.get() && !isOverride && joyVal >= 0) {
 			motor.set(-.15);
 		} else {
@@ -49,10 +45,8 @@ public class IntakeSystem extends System {
 
 	@Override
 	public Watchable[] getSubWatchables() {
-		return new Watchable[] {
-			motor.getWatchable("intake voltage"),
-			IRSensors.getInfo("has ball"),
-			override.getInfo("manual override") };
+		return new Watchable[] { motor.getWatchable("intake voltage"), IRSensors.getInfo("has ball"),
+				override.getInfo("manual override") };
 	}
 
 }

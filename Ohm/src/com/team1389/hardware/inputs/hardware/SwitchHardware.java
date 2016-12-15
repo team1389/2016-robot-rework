@@ -34,7 +34,7 @@ public class SwitchHardware extends Hardware<DIO> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		wpiSwitch = new edu.wpi.first.wpilibj.DigitalInput(port);
 	}
 

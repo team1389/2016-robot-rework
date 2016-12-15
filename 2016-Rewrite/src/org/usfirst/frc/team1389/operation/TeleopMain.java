@@ -32,7 +32,7 @@ public class TeleopMain {
 		System intakeSystem = setupIntakeSystem();
 		System turretSystem = setupTurretSystem();
 
-		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
+		manager = new SystemManager(driveSystem, intakeSystem, /* armSystem, */ turretSystem);
 		manager.init();
 		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem, turretSystem);
 
@@ -44,18 +44,18 @@ public class TeleopMain {
 
 	private TurretSystem setupTurretSystem() {
 		PercentOut turretVoltage = robot.turret.getVoltageOutput();
-		TurretSystem turret = new TurretSystem(turretVoltage, robot.turretAngle, controls.getTurretManual(),
-				controls.getTurretZero());
+		TurretSystem turret = new TurretSystem(turretVoltage, robot.turretAngle, controls.turretAxis,
+				controls.turretZero);
 		return turret;
 	}
 
 	public ArmSystem setupArmSystem() {
 		PercentOut elevator = robot.elevation.getVoltageOutput();
 		ButtonEnumMap<ArmLocation> map = new ButtonEnumMap<>(ArmLocation.DOWN);
-		map.setMappings(map.new ButtonEnum(controls.getArmPositionA(), ArmLocation.DOWN),
-				map.new ButtonEnum(controls.getArmPositionB(), ArmLocation.DEFENSE),
-				map.new ButtonEnum(controls.getArmPositionC(), ArmLocation.VERTICAL),
-				map.new ButtonEnum(controls.getArmPositionD(), ArmLocation.LOW_GOAL));
+		map.setMappings(map.new ButtonEnum(controls.armButtonA, ArmLocation.DOWN),
+				map.new ButtonEnum(controls.armButtonB, ArmLocation.DEFENSE),
+				map.new ButtonEnum(controls.armButtonC, ArmLocation.VERTICAL),
+				map.new ButtonEnum(controls.armButtonD, ArmLocation.LOW_GOAL));
 		AngleIn armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 360).mapToAngle();
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
 		return armSystem;
@@ -64,14 +64,13 @@ public class TeleopMain {
 	public System setupIntakeSystem() {
 		PercentOut motor = robot.intake.getVoltageOutput();
 		DigitalIn IRsensors = robot.IRsensors;
-		return new IntakeSystem(motor, IRsensors, controls.getIntakeAxis(), controls.getIntakeOverride());
+		return new IntakeSystem(motor, IRsensors, controls.intakeAxis, controls.intakeOverride);
 	}
 
 	public System setupDriveSystem() {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
 		PercentOut right = robot.rightDrive.getVoltageOutput().invert();
 
-		return new CheesyDriveSystem(left, right, controls.getThrottle(), controls.getWheel().invert(),
-				controls.getQuickTurn());
+		return new CheesyDriveSystem(left, right, controls.throttle, controls.wheel.invert(), controls.quickTurn);
 	}
 }

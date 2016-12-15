@@ -28,7 +28,6 @@ public class CANTalonGroup implements CompositeWatchable {
 	private void setFollowers() {
 		for (CANTalonHardware follower : followers) {
 			follower.getFollower(main).follow();
-			;
 		}
 	}
 

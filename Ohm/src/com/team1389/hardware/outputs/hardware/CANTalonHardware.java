@@ -90,6 +90,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {
 		State followingState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Follower);
+			wpiTalon.getOutputVoltage();
 			wpiTalon.set(toFollow.wpiTalon.getDeviceID());
 		});
 
@@ -136,10 +137,11 @@ public class CANTalonHardware extends Hardware<CAN> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		wpiTalon = new CANTalon(port);
 		wpiTalon.setPosition(0);
 		wpiTalon.reverseOutput(outputInverted);
+		wpiTalon.setInverted(outputInverted);
 		wpiTalon.reverseSensor(inputInverted);
 	}
 

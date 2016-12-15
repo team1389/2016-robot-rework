@@ -12,7 +12,6 @@ import com.team1389.system.System;
 import com.team1389.watch.Watchable;
 
 public class TurretSystem extends System {
-	// TODO think about pollable implementation
 	PercentOut voltRange;
 
 	RangeIn<Percent> joystick;
@@ -38,7 +37,7 @@ public class TurretSystem extends System {
 
 	@Override
 	public void init() {
-
+		voltRange.addChangeListener(COMMAND_CANCEL);
 	}
 
 	public void zero() {
@@ -46,17 +45,13 @@ public class TurretSystem extends System {
 	}
 
 	@Override
-	public void defaultUpdate() {
+	public void update() {
+		joyVal = joystick.get();
+		toZero = zeroButton.get();
 		voltRange.set(joyVal);
 		if (toZero) {
 			zero();
 		}
-	}
-
-	@Override
-	public void getInput() {
-		joyVal = joystick.get();
-		toZero = zeroButton.get();
 	}
 
 	@Override

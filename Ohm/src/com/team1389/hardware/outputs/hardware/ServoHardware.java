@@ -36,7 +36,7 @@ public class ServoHardware extends Hardware<PWM> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		wpiServo = new Servo(port);
 	}
 

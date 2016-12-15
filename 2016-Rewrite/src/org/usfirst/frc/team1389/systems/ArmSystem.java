@@ -31,16 +31,12 @@ public class ArmSystem extends System {
 	@Override
 	public void init() {
 		elevator.set(inputAngle);
-		buttons.addChangeListener(defaultModeListener);
+		buttons.addChangeListener(COMMAND_CANCEL);
 	}
 
 	@Override
-	public void getInput() {
+	public void update() {
 		inputAngle = buttons.getVal().angle;
-	}
-
-	@Override
-	public void defaultUpdate() {
 		elevator.set(inputAngle);
 		elevatorPID.update();
 	}

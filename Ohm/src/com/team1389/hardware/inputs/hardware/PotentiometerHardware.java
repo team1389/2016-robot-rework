@@ -23,7 +23,7 @@ public class PotentiometerHardware extends Hardware<Analog> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		this.wpiPot = new AnalogPotentiometer(port);
 	}
 
