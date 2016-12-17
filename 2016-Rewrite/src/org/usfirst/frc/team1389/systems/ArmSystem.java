@@ -23,8 +23,8 @@ public class ArmSystem extends System {
 	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, AngleIn armVal) {
 		this.buttons = map;
 		this.armVal = armVal;
-		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, .0005, 0), armVal, elevator);
-		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(50, 0);
+		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, .0005, .0001), armVal, elevator.limit(.7));
+		this.elevator = elevatorPID.getSetpointSetter();
 		this.inputAngle = 0;
 	}
 

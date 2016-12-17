@@ -7,9 +7,9 @@ public class ProfileUtil {
 		maxVel *= Math.signum(dx);
 		Kinematics accelSegment = new Kinematics(Vo, maxVel, Double.NaN, maxAccel, Double.NaN);
 		Kinematics decelSegment = new Kinematics(maxVel, 0, Double.NaN, maxDecel, Double.NaN);
-		double diff = dx - (accelSegment.S + decelSegment.S);
-		System.out.println(decelSegment);
-		if (diff*Math.signum(dx) > 0) {
+		double diff = dx - (accelSegment.X + decelSegment.X);
+		System.out.println("\naccel: " + accelSegment + "\ndecel: " + decelSegment + "\ndx: " + dx);
+		if (diff * Math.signum(dx) > 0) {
 			return combine(new ConstantAccelProfile(accelSegment), new ConstantAccelProfile(0, diff, maxVel),
 					new ConstantAccelProfile(decelSegment));
 		} else {
@@ -18,6 +18,7 @@ public class ProfileUtil {
 			double xDec = dx - xAcc;
 			accelSegment = new Kinematics(Vo, Double.NaN, Double.NaN, maxAccel, xAcc);
 			decelSegment = new Kinematics(Double.NaN, 0, Double.NaN, maxDecel, xDec);
+			System.out.println(decelSegment.t);
 			return combine(new ConstantAccelProfile(accelSegment), new ConstantAccelProfile(decelSegment));
 		}
 	}

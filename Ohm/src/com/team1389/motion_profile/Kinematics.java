@@ -1,7 +1,7 @@
 package com.team1389.motion_profile;
 
 public class Kinematics {
-	public double Vo, V, t, a, S;
+	public double Vo, V, t, a, X;
 
 	public static void main(String[] args) {
 		System.out.println(new Kinematics(0, 10, Double.NaN, Double.NaN, 5).solveSystem());
@@ -12,18 +12,18 @@ public class Kinematics {
 		this.Vo = v0;
 		this.t = t;
 		this.V = vf;
-		this.S = S;
+		this.X = S;
 		solveSystem();
 	}
 
 	@Override
 	public String toString() {
-		return "Vo: " + Vo + " V: " + V + " a: " + a + " t: " + t + " S: " + S;
+		return "Vo: " + Vo + " V: " + V + " a: " + a + " t: " + t + " S: " + X;
 	}
 
 	public Kinematics solveSystem() {
 		int code = 0;
-		code = Double.isNaN(S) ? code : code | 1;
+		code = Double.isNaN(X) ? code : code | 1;
 		code = code << 1;
 		code = Double.isNaN(t) ? code : code | 1;
 		code = code << 1;
@@ -36,7 +36,7 @@ public class Kinematics {
 	}
 
 	private Kinematics solveSystem(int code) {
-		double tS = S;
+		double tS = X;
 		double tVo = Vo;
 		double tV = V;
 		double ta = a;
@@ -55,27 +55,27 @@ public class Kinematics {
 		if ((code & 7) == 7) {
 			if (ta == 0) {
 				t = 0;
-				S = 0;
+				X = 0;
 			} else {
 				tt = (tV - tVo) / ta;
 				t = tt;
-				S = tVo * tt + ta * tt * tt / 2;
+				X = tVo * tt + ta * tt * tt / 2;
 			}
 		}
 		if ((code & 11) == 11) {
 			if (tt == 0) {
 				a = 0;
-				S = 0;
+				X = 0;
 			} else {
 				ta = (tV - tVo) / tt;
 				a = ta;
-				S = tVo * tt + ta * tt * tt / 2;
+				X = tVo * tt + ta * tt * tt / 2;
 			}
 		}
 		if ((code & 14) == 14) {
 			tVo = tV - ta * tt;
 			Vo = tVo;
-			S = tVo * tt + ta * tt * tt / 2;
+			X = tVo * tt + ta * tt * tt / 2;
 		}
 		if ((code & 26) == 26) {
 			if (tt == 0) {
@@ -87,15 +87,14 @@ public class Kinematics {
 				a = (tV - tVo) / tt;
 			}
 		}
-		// TODO this handles signs badly
 		if ((code & 22) == 22) {
 			if (ta == 0) {
 				Vo = tV;
-				t = S / Vo;
+				t = X / Vo;
 			} else {
-				tVo = Math.sqrt(tV * tV - 2 * ta * tS);
-				Vo = tVo;
-				t = (tV - tVo) / ta;
+				tt = -tV + Math.signum(tS)*Math.sqrt(tV * tV - 2 * ta * tS) / -a;
+				Vo = tV - ta * tt;
+				t = tt;
 			}
 		}
 		if ((code & 28) == 28) {
@@ -111,7 +110,7 @@ public class Kinematics {
 		if ((code & 13) == 13) {
 			tV = tVo + ta * tt;
 			V = tV;
-			S = tVo * tt + ta * tt * tt / 2;
+			X = tVo * tt + ta * tt * tt / 2;
 		}
 		if ((code & 25) == 25) {
 			if (tt == 0) {
@@ -126,7 +125,7 @@ public class Kinematics {
 		if ((code & 21) == 21) {
 			if (ta == 0) {
 				V = tVo;
-				t = S / V;
+				t = X / V;
 			} else {
 				tV = Math.signum(a) * Math.sqrt(tVo * tVo + 2 * ta * tS);
 				V = tV;

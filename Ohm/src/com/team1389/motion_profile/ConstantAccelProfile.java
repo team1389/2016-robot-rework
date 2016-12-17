@@ -13,7 +13,7 @@ public class ConstantAccelProfile extends MotionProfile {
 
 	@Override
 	public double providePosition(double time) {
-		return getCurrentKinematics(time).S;
+		return getCurrentKinematics(time).X;
 	}
 
 	@Override

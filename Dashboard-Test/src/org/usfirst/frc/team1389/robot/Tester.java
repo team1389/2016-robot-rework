@@ -1,10 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.systems.ArmSystem;
-import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
-
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.hardware.inputs.software.ButtonEnumMap;
+import com.team1389.control.MotionProfileController;
+import com.team1389.motion_profile.ProfileUtil;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -19,15 +17,16 @@ public class Tester {
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
+	static MotionProfileController cont;
 
 	public static void init() {
-		ButtonEnumMap<ArmLocation> testButtons = new ButtonEnumMap<>(ArmLocation.DEFENSE);
-		ArmSystem system = new ArmSystem(robot.voltOut1, testButtons, robot.posIn1.mapToAngle());
-		dash.watch(system);
-		manager.register(system);
+		cont = new MotionProfileController(.07, 0, 0, robot.posIn1, robot.speedIn1, robot.voltOut1);
+		dash.watch(robot.posIn1.getWatchable("pos"), robot.speedIn1.getWatchable("speed"));
+		cont.followProfile(ProfileUtil.generate(-20, 0, .06, .06, 2));
 	}
 
 	public static void update() {
+		cont.update();
 	}
 
 	public static void main(String[] args) throws InterruptedException {
