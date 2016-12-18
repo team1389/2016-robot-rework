@@ -31,15 +31,11 @@ public class FieldOriented implements CompositeWatchable
 
 	public void update()
 	{
-		speedCommand.FieldOriented(throtleX.get(), throtleY.get());
+		commandSpeed.FieldOriented(throtleX.get(), throtleY.get());
 	}
 
 	public DriveSignal fieldOriented(double XThrottle, double YThrottle, double gyro, boolean overide, boolean nonGyro, boolean reZero)
 	{
-		double forward = 0;
-		double right = 90;
-		double backward = 180;
-		double left = 270;
 		double speedCommand = Math.max(Math.abs(XThrottle), Math.abs(YThrottle));
 		double directionCommand = Math.atan2(XThrottle, YThrottle) * (180 / Math.PI);
 		double angleError = directionCommand - gyro;
@@ -68,32 +64,31 @@ public class FieldOriented implements CompositeWatchable
 
 		if (Math.abs(speedCommand) < .1)
 			clockwiseCommand = 0;
-		
-		if(nonGyro)
+
+		if (nonGyro)
 		{
 			speedCommand = -XThrottle;
-			clockwiseCommand = -YThrottle; //may have to reverse x and y
+			clockwiseCommand = -YThrottle; // may have to reverse x and y
 		}
-		
-		if(reZero)
+
+		if (reZero)
 		{
 			gyro = 0;
 		}
-		
+
 		double leftSpeed = speedCommand + clockwiseCommand;
 		double rightSpeed = speedCommand - clockwiseCommand;
-		
-		if(leftSpeed > 1)
+
+		if (leftSpeed > 1)
 			leftSpeed = 1;
-		if(leftSpeed < -1)
+		if (leftSpeed < -1)
 			leftSpeed = -1;
-		
-		if(rightSpeed > 1)
+
+		if (rightSpeed > 1)
 			rightSpeed = 1;
-		if(rightSpeed < -1)
+		if (rightSpeed < -1)
 			rightSpeed = -1;
-		
-		
+
 		return commandSpeed;
 
 	}
@@ -107,6 +102,7 @@ public class FieldOriented implements CompositeWatchable
 	@Override
 	public Watchable[] getSubWatchables()
 	{
-		// return gyroValue, throle value, and output
+		return new Watchable[] {new  
+			
 	}
 }
