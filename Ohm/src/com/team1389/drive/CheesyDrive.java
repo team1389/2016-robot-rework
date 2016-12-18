@@ -8,7 +8,9 @@ import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 
-public class CheesyDrive implements CompositeWatchable {
+
+public class CheesyDrive implements CompositeWatchable
+{
 	DriveOut<Percent> drive;
 	private PercentIn throttle;
 	private PercentIn wheel;
@@ -17,8 +19,8 @@ public class CheesyDrive implements CompositeWatchable {
 	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
 
-	public CheesyDrive(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton,
-			double turnSensitivity) {
+	public CheesyDrive(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton, double turnSensitivity)
+	{
 		this.drive = drive;
 		this.throttle = throttle;
 		this.wheel = wheel;
@@ -26,56 +28,76 @@ public class CheesyDrive implements CompositeWatchable {
 		this.kTurnSensitivity = turnSensitivity;
 	}
 
-	public CheesyDrive(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton) {
+	public CheesyDrive(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton)
+	{
 		this(drive, throttle, wheel, quickTurnButton, 1.0);
 	}
 
-	public void update() {
+	public void update()
+	{
 		mSignal = cheesyDrive(throttle.get(), wheel.get(), quickTurnButton.get());
 		drive.set(mSignal);
 	}
 
-	public void setTurnSensitivity(double val) {
+	public void setTurnSensitivity(double val)
+	{
 		this.kTurnSensitivity = val;
 	}
 
-	public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
+	public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn)
+	{
 
 		double overPower;
 
 		double angularPower;
 
-		if (isQuickTurn) {
-			if (Math.abs(throttle) < 0.2) {
+		if (isQuickTurn)
+		{
+			if (Math.abs(throttle) < 0.2)
+			{
 				double alpha = 0.1;
 				mQuickStopAccumulator = (1 - alpha) * mQuickStopAccumulator + alpha * wheel * 2;
 			}
 			overPower = 1.0;
 			angularPower = wheel;
-		} else {
+		}
+		else
+		{
 			overPower = 0.0;
 			angularPower = Math.abs(throttle) * wheel * kTurnSensitivity - mQuickStopAccumulator;
-			if (mQuickStopAccumulator > 1) {
+			if (mQuickStopAccumulator > 1)
+			{
 				mQuickStopAccumulator -= 1;
-			} else if (mQuickStopAccumulator < -1) {
+			}
+			else if (mQuickStopAccumulator < -1)
+			{
 				mQuickStopAccumulator += 1;
-			} else {
+			}
+			else
+			{
 				mQuickStopAccumulator = 0.0;
 			}
 		}
 
 		double rightPwm = throttle - angularPower;
 		double leftPwm = throttle + angularPower;
-		if (leftPwm > 1.0) {
+		if (leftPwm > 1.0)
+		{
 			rightPwm -= overPower * (leftPwm - 1.0);
 			leftPwm = 1.0;
-		} else if (rightPwm > 1.0) {
+		}
+		else if (rightPwm > 1.0)
+		{
 			leftPwm -= overPower * (rightPwm - 1.0);
 			rightPwm = 1.0;
-		} else if (leftPwm < -1.0) {
+		}
+		else if (leftPwm < -1.0)
+		{
 			rightPwm += overPower * (-1.0 - leftPwm);
 			leftPwm = -1.0;
-		} else if (rightPwm < -1.0) {
+		}
+		else if (rightPwm < -1.0)
+		{
 			leftPwm += overPower * (-1.0 - rightPwm);
 			rightPwm = -1.0;
 		}
@@ -85,13 +107,15 @@ public class CheesyDrive implements CompositeWatchable {
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "Cheesy Drive";
 	}
 
 	// TODO think about watchable implementation for drive classes
 	@Override
-	public Watchable[] getSubWatchables() {
+	public Watchable[] getSubWatchables()
+	{
 		return new Watchable[] { new NumberInfo("leftWheels", () -> {
 			return mSignal.leftMotor;
 		}), new NumberInfo("rightWheels", () -> {

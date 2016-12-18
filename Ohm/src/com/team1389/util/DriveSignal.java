@@ -25,4 +25,10 @@ public class DriveSignal {
     public String toString() {
         return "L: " + leftMotor + ", R: " + rightMotor;
     }
+
+	public void FieldOriented(double throtleX, double throtleY)
+	{
+	this.throtleX = throtleX;
+		
+	}
 }
