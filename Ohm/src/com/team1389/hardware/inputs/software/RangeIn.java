@@ -44,6 +44,7 @@ public class RangeIn<T extends Value> {
 	 * maps this range to an angle value
 	 * 
 	 * @return the mapped range
+	 *  
 	 */
 	public AngleIn mapToAngle() {
 		return new AngleIn(this);
