@@ -2,23 +2,31 @@ package com.team1389.motion_profile;
 
 public class ProfileUtil {
 	public static MotionProfile generate(double dx, double Vo, double maxAccel, double maxDecel, double maxVel) {
-		maxAccel *= Math.signum(dx);
-		maxDecel *= -Math.signum(dx);
-		maxVel *= Math.signum(dx);
+		if (dx == 0) {
+			maxAccel *= Math.signum(Vo);
+			maxDecel *= -Math.signum(Vo);
+			maxVel *= Math.signum(Vo);
+		} else {
+			maxAccel *= Math.signum(dx);
+			maxDecel *= -Math.signum(dx);
+			maxVel *= Math.signum(dx);
+		}
 		Kinematics accelSegment = new Kinematics(Vo, maxVel, Double.NaN, maxAccel, Double.NaN);
 		Kinematics decelSegment = new Kinematics(maxVel, 0, Double.NaN, maxDecel, Double.NaN);
 		double diff = dx - (accelSegment.X + decelSegment.X);
-		System.out.println("\naccel: " + accelSegment + "\ndecel: " + decelSegment + "\ndx: " + dx);
 		if (diff * Math.signum(dx) > 0) {
 			return combine(new ConstantAccelProfile(accelSegment), new ConstantAccelProfile(0, diff, maxVel),
 					new ConstantAccelProfile(decelSegment));
 		} else {
-			System.out.println("can't hit vMax");
+			accelSegment = new Kinematics(Vo, 0, Double.NaN, maxDecel, Double.NaN);
+			if (dx - accelSegment.X < 0) {
+				return combine(new ConstantAccelProfile(accelSegment),
+						generate(-accelSegment.X, 0, Math.abs(maxAccel), Math.abs(maxDecel), maxVel));
+			}
 			double xAcc = (-(Vo * Vo) - 2 * maxDecel * dx) / (2 * maxAccel - 2 * maxDecel);
 			double xDec = dx - xAcc;
 			accelSegment = new Kinematics(Vo, Double.NaN, Double.NaN, maxAccel, xAcc);
 			decelSegment = new Kinematics(Double.NaN, 0, Double.NaN, maxDecel, xDec);
-			System.out.println(decelSegment.t);
 			return combine(new ConstantAccelProfile(accelSegment), new ConstantAccelProfile(decelSegment));
 		}
 	}

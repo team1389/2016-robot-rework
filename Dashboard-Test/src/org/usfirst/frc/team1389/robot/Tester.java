@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
+import com.team1389.auto.command.WaitForBooleanCommand;
 import com.team1389.command_framework.CommandScheduler;
+import com.team1389.command_framework.CommandUtil;
 import com.team1389.control.MotionProfileController;
 import com.team1389.motion_profile.ProfileUtil;
 import com.team1389.system.SystemManager;
@@ -22,7 +24,12 @@ public class Tester {
 	public static void init() {
 		cont = new MotionProfileController(.07, 0, 0, robot.posIn1, robot.speedIn1, robot.voltOut1);
 		dash.watch(robot.posIn1.getWatchable("pos"), robot.speedIn1.getWatchable("speed"));
-		cont.followProfile(ProfileUtil.generate(-20, 0, .06, .06, 2));
+		cont.followProfile(ProfileUtil.generate(20, 0, .06, .06, 2));
+		scheduler.schedule(CommandUtil.combineSequential(new WaitForBooleanCommand(robot.posIn1.getWithinRange(19, 20)),
+				CommandUtil.createCommand(() -> {
+					cont.followProfile(ProfileUtil.generate(0, robot.speedIn1.get(), .06, .06, 2));
+					return true;
+				})));
 	}
 
 	public static void update() {
