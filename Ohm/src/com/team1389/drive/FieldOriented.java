@@ -72,9 +72,7 @@ public class FieldOriented implements CompositeWatchable
 		}
 
 		if (reZero)
-		{
 			gyro = 0;
-		}
 
 		double leftSpeed = speedCommand + clockwiseCommand;
 		double rightSpeed = speedCommand - clockwiseCommand;
@@ -102,7 +100,9 @@ public class FieldOriented implements CompositeWatchable
 	@Override
 	public Watchable[] getSubWatchables()
 	{
-		return new Watchable[] {new  
+		return new Watchable[] {new NumberInfo("left wheels", () -> {
+			return commandSpeed.leftMotor;}),new NumberInfo("right wheels", () -> {return commandSpeed.rightMotor;});
+	}
 			
 	}
 }
