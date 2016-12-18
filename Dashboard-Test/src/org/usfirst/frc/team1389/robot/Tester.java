@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import layout.TesterDefaultHardware;
 
 public class Tester {
@@ -23,6 +24,7 @@ public class Tester {
 	public static void init() {
 		ButtonEnumMap<ArmLocation> testButtons = new ButtonEnumMap<>(ArmLocation.DEFENSE);
 		ArmSystem system = new ArmSystem(robot.voltOut1, testButtons, robot.posIn1.mapToAngle());
+		SmartDashboard.putNumber("test", 0.0);
 		dash.watch(system);
 		manager.register(system);
 	}
