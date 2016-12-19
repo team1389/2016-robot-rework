@@ -28,7 +28,7 @@ public class DigitalOut implements BinaryInput {
 	}
 
 	@Override
-	public boolean get() {
+	public Boolean get() {
 		return last;
 	}
 }

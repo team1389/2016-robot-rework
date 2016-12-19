@@ -19,7 +19,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	@Override
-	public double get() {
+	public Double get() {
 		return lastVal;
 	}
 

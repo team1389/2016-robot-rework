@@ -13,7 +13,7 @@ public class TimedBoolean implements BinaryInput{
 		timer.zero();
 	}
 	@Override
-	public boolean get() {
+	public Boolean get() {
 		return timer.get()>time;
 	}
 }

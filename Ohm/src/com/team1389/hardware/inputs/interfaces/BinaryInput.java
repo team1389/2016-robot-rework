@@ -1,7 +1,8 @@
 package com.team1389.hardware.inputs.interfaces;
 
-public interface BinaryInput {
-	public boolean get();
+public interface BinaryInput extends Input<Boolean> {
+	@Override
+	public Boolean get();
 
 	public static BinaryInput invert(BinaryInput in) {
 		return () -> {

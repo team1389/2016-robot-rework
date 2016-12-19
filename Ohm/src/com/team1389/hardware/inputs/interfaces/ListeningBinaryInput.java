@@ -10,7 +10,8 @@ public class ListeningBinaryInput implements BinaryInput {
 		this.in = in;
 	}
 
-	public boolean get() {
+	@Override
+	public Boolean get() {
 		boolean newVal = in.get();
 		if (oldVal != newVal) {
 			onChange.run();

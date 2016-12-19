@@ -12,7 +12,7 @@ public class LatchedBinaryInput implements BinaryInput {
 	}
 
 	@Override
-	public boolean get() {
+	public Boolean get() {
 		return latchedIn.get(input.get());
 	}
 

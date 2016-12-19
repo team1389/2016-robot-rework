@@ -12,11 +12,12 @@ import com.team1389.util.RangeUtil;
  *
  * @param <T> Used to make sure of the type of a stream in certain spots in the code
  */
-public interface ScalarInput<T extends Value> {
+public interface ScalarInput<T extends Value> extends Input<Double> {
 	/**
 	 * @return The current value of this stream.
 	 */
-	public double get();
+	@Override
+	public Double get();
 
 	/**
 	 * Maps a stream proportionally to a new range from a given range. Note that if initially a number is outside of the given range, it will be outside the new range of the resultant stream too.
@@ -44,12 +45,8 @@ public interface ScalarInput<T extends Value> {
 	 * @return the mapped output, now an angle stream
 	 */
 	static <T extends Value> ScalarInput<Angle> mapToAngle(ScalarInput<T> in, double inMin, double inMax) {
-		return new ScalarInput<Angle>() {
-			@Override
-			public double get() {
-				return RangeUtil.map(in.get(), inMin, inMax, 0, 360);
-			}
-
+		return () -> {
+			return RangeUtil.map(in.get(), inMin, inMax, 0, 360);
 		};
 
 	}
