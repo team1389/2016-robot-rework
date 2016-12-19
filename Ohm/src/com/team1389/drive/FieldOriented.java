@@ -37,7 +37,7 @@ public class FieldOriented implements CompositeWatchable
 	public DriveSignal fieldOriented(double XThrottle, double YThrottle, double gyro, boolean overide, boolean nonGyro, boolean reZero)
 	{
 		double speedCommand = Math.max(Math.abs(XThrottle), Math.abs(YThrottle));
-		double directionCommand = Math.atan2(XThrottle, YThrottle) * (180 / Math.PI);
+		double directionCommand = Math.toDegrees(Math.atan2(XThrottle, YThrottle));
 		double angleError = directionCommand - gyro;
 
 		while (angleError > 180)

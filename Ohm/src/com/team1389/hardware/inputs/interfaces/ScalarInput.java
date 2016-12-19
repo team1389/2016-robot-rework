@@ -140,9 +140,7 @@ public interface ScalarInput<T extends Value> {
 	 */
 	static <T extends Value> ScalarInput<T> getWrapped(ScalarInput<T> input, double min, double max) {
 		return () -> {
-			double val = input.get();
-			double divider = (max - min);
-			return min + ((val - min) % (divider) + divider) % divider;
+			return RangeUtil.wrapValue(input.get(), min, max);
 		};
 	}
 
