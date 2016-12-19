@@ -5,7 +5,7 @@ import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.watch.Watchable;
 
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.VictorSP;
 
 /**
  * A victor motor controller
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Victor;
  */
 public class VictorHardware extends Hardware<PWM> {
 
-	Victor wpiVictor;
+	VictorSP wpiVictor;
 	boolean inverted;
 
 	public VictorHardware(boolean inverted) {
@@ -33,8 +33,8 @@ public class VictorHardware extends Hardware<PWM> {
 	}
 
 	@Override
-	public void initHardware(int port) {
-		wpiVictor = new Victor(port);
+	public void init(int port) {
+		wpiVictor = new VictorSP(port);
 		wpiVictor.setInverted(inverted);
 	}
 

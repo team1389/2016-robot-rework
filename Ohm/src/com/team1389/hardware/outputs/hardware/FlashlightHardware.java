@@ -22,7 +22,7 @@ public class FlashlightHardware extends Hardware<PCM> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		this.wpiSolenoid = new Solenoid(port);
 	}
 

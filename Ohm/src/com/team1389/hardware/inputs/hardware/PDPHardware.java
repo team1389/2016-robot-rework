@@ -42,7 +42,7 @@ public class PDPHardware extends Hardware<CAN> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 	}
 
 	@Override

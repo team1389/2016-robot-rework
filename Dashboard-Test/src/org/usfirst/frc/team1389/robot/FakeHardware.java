@@ -12,7 +12,7 @@ public class FakeHardware extends Hardware<PWM>{
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		System.out.println(port);
 	}
 

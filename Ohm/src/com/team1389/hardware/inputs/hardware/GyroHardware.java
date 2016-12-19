@@ -23,7 +23,7 @@ public class GyroHardware extends Hardware<Analog> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		wpiGyro = new AnalogGyro(port);
 		wpiGyro.calibrate();
 	}

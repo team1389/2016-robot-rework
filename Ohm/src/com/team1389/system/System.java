@@ -7,40 +7,25 @@ import com.team1389.watch.CompositeWatchable;
 public abstract class System implements CompositeWatchable {
 	public System() {
 		scheduler = new CommandScheduler();
-		enterDefaultMode();
-		defaultModeListener = () -> {
-			enterDefaultMode();
+		COMMAND_CANCEL = () -> {
+			scheduler.cancelAll();
 		};
 	}
 
 	private CommandScheduler scheduler;
-	protected boolean inDefaultMode = true;;
-	protected Runnable defaultModeListener;
+	protected Runnable COMMAND_CANCEL;
 
-	public final void update() {
-		getInput();
-		if (inDefaultMode) {
-			defaultUpdate();
-		} else {
-			scheduler.update();
-			inDefaultMode = scheduler.isFinished();
-		}
-	}
-
-	public final void enterDefaultMode() {
-		scheduler.cancelAll();
-		inDefaultMode = true;
+	public final void thisUpdate() {
+		update();
+		scheduler.update();
 	}
 
 	public abstract void init();
 
-	public abstract void defaultUpdate();
-
-	public abstract void getInput();
+	public abstract void update();
 
 	protected void schedule(Command command) {
 		scheduler.schedule(command);
-		// inDefaultMode = false;
 	}
 
 }

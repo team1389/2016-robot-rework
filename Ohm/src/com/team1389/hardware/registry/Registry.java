@@ -60,7 +60,7 @@ public class Registry {
 		ResourceManager<R> register = getRegister(r);
 		System.out.println(register);
 		if (!register.isUsed(r)) {
-			t.initHardware(r.index());
+			t.init(r.index());
 			registerWatchable(t);
 		}
 		return (T) register.register(r, t);

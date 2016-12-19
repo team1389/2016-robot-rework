@@ -4,6 +4,7 @@ import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
 
 import com.team1389.command_framework.CommandScheduler;
+import com.team1389.control.MotionProfileController;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
@@ -20,7 +21,8 @@ public class Tester {
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
-
+	static MotionProfileController cont;
+	double value;
 	public static void init() {
 		ButtonEnumMap<ArmLocation> testButtons = new ButtonEnumMap<>(ArmLocation.DEFENSE);
 		ArmSystem system = new ArmSystem(robot.voltOut1, testButtons, robot.posIn1.mapToAngle());

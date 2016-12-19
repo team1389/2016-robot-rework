@@ -30,14 +30,8 @@ public class MotorVoltageTester extends System {
 	}
 
 	@Override
-	public void defaultUpdate() {
+	public void update() {
 		out.set(in.get());
-	}
-
-	@Override
-	public void getInput() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

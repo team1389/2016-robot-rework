@@ -40,19 +40,15 @@ public class CheesyDriveSystem extends System {
 	}
 
 	@Override
-	public void getInput() {
+	public void init() {
+		throttle.addChangeListener(COMMAND_CANCEL);
+		wheel.addChangeListener(COMMAND_CANCEL);
+	}
+
+	@Override
+	public void update() {
 		isQuickTurn = quickTurnButton.get();
 		mSignal = cheesyDrive(throttle.get(), wheel.get(), isQuickTurn);
-	}
-
-	@Override
-	public void init() {
-		throttle.addChangeListener(defaultModeListener);
-		wheel.addChangeListener(defaultModeListener);
-	}
-
-	@Override
-	public void defaultUpdate() {
 		leftMotor.set(mSignal.leftMotor);
 		rightMotor.set(mSignal.rightMotor);
 	}

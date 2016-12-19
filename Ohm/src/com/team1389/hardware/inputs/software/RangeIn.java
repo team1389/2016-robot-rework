@@ -8,7 +8,7 @@ import com.team1389.watch.info.NumberInfo;
 
 public class RangeIn<T extends Value> {
 	public Class<T> type;
-	protected ScalarInput<T> input;
+	protected ScalarInput<T> input;//interface that represents a single method that returns a double
 	protected double max, min;
 
 	public RangeIn(Class<T> type, ScalarInput<T> val, double min, double max) {

@@ -22,7 +22,7 @@ public class SolenoidHardware extends Hardware<PCM> {
 	}
 
 	@Override
-	public void initHardware(int port) {
+	public void init(int port) {
 		wpiSolenoid = new Solenoid(port);
 	}
 

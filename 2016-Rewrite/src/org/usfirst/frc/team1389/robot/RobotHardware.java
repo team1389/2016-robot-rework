@@ -54,8 +54,7 @@ public class RobotHardware extends RobotLayout {
 	}
 
 	private void initArm() {
-		elevationA = registry.add(new CAN(can_ELEVATOR_MOTOR_A),
-				new CANTalonHardware(inv_ELEVATOR_MOTOR_A, sinv_ELEVATOR_ENCODER));
+		elevationA = registry.add(new CAN(can_ELEVATOR_MOTOR_A),new CANTalonHardware(inv_ELEVATOR_MOTOR_A));
 		elevationB = registry.add(new CAN(can_ELEVATOR_MOTOR_B), new CANTalonHardware(inv_ELEVATOR_MOTOR_B));
 		armPot = registry.add(new Analog(anlg_ARM_POTENTIOMETER), new PotentiometerHardware());
 
@@ -79,6 +78,6 @@ public class RobotHardware extends RobotLayout {
 		rightC = registry.add(new CAN(can_RIGHT_MOTOR_C), new CANTalonHardware(inv_RIGHT_MOTOR_C));
 
 		leftDrive = new CANTalonGroup(leftA, leftB, leftC);
-		rightDrive = new CANTalonGroup(leftA, leftB, leftC);
+		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
 	}
 }

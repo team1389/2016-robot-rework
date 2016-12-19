@@ -34,16 +34,12 @@ public class ArmSystem extends System {
 	@Override
 	public void init() {
 		elevator.set(inputAngle);
-		buttons.addChangeListener(defaultModeListener);
+		buttons.addChangeListener(elevatorPID::resetIntegrator);
 	}
 
 	@Override
-	public void getInput() {
+	public void update() {
 		inputAngle = buttons.getVal().angle;
-	}
-
-	@Override
-	public void defaultUpdate() {
 		elevator.set(inputAngle);
 		elevatorPID.update();
 	}
@@ -81,6 +77,6 @@ public class ArmSystem extends System {
 	public Watchable[] getSubWatchables() {
 		return new Watchable[] { buttons.getWatchable("target location"), armVal.getWatchable("arm position"),
 				elevatorPID.getSetpointSetter().getWatchable("arm setpoint"),
-				elevatorPID.getOutput().getWatchable("arm vOut") };
+				elevatorPID.getOutput().getWatchable("arm vOut"), elevatorPID.getPIDTuner("arm controller") };
 	}
 }

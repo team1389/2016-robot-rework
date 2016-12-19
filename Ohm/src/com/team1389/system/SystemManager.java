@@ -31,7 +31,7 @@ public class SystemManager {
 
 	public void update() {
 		for (System system : systems) {
-			system.update();
+			system.thisUpdate();
 		}
 	}
 }

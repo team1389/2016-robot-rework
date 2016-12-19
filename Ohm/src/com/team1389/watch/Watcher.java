@@ -58,4 +58,7 @@ public class Watcher {
 			table.delete(key);
 		}
 	}
+	public static void clear(){
+		NetworkTable.globalDeleteAll();
+	}
 }
