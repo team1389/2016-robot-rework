@@ -12,10 +12,6 @@ public class NumberInfo extends SimpleWatchable {
 		this.source = source;
 	}
 
-	public interface NumberSource {
-		public double get();
-	}
-
 	@Override
 	public void publishUnderName(String name, ITable table) {
 		table.putNumber(name, source.get());

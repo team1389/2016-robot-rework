@@ -23,8 +23,8 @@ public class ArmSystem extends System {
 	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, AngleIn armVal) {
 		this.buttons = map;
 		this.armVal = armVal;
-		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, .0005, .0001), armVal, elevator.limit(.7));
-		this.elevator = elevatorPID.getSetpointSetter();
+		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.003, 0, 0), armVal, elevator);
+		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(50, 0);
 		this.inputAngle = 0;
 	}
 
@@ -74,6 +74,6 @@ public class ArmSystem extends System {
 	public Watchable[] getSubWatchables() {
 		return new Watchable[] { buttons.getWatchable("target location"), armVal.getWatchable("arm position"),
 				elevatorPID.getSetpointSetter().getWatchable("arm setpoint"),
-				elevatorPID.getOutput().getWatchable("arm vOut") };
+				elevatorPID.getOutput().getWatchable("arm vOut"),elevatorPID.getPIDTuner("arm controller") };
 	}
 }
