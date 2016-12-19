@@ -20,7 +20,7 @@ public class Tester {
 	static Watcher dash;
 	static SystemManager manager;
 	static MotionProfileController cont;
-
+	double value;
 	public static void init() {
 		cont = new MotionProfileController(.07, 0, 0, robot.posIn1, robot.speedIn1, robot.voltOut1);
 		dash.watch(robot.posIn1.getWatchable("pos"), robot.speedIn1.getWatchable("speed"));
