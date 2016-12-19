@@ -19,7 +19,7 @@ public class NavXHardware implements CompositeWatchable {
 
 	public AngleIn getAngleInput() {
 		return new AngleIn(() -> {
-			return navX.getYaw();
+			return (double) navX.getYaw();
 		});
 	}
 

@@ -1,5 +1,6 @@
 package com.team1389.hardware.outputs.interfaces;
 
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Value;
@@ -16,6 +17,12 @@ public interface ScalarOutput<T extends Value> {
 	 * @param val the value to pass down the stream
 	 */
 	public void set(double val);
+
+	public static <T extends Value> ScalarOutput<T> offset(ScalarOutput<T> out, ScalarInput<?> in) {
+		return (double val) -> {
+			out.set(val + in.get());
+		};
+	}
 
 	/**
 	 * maps the given stream from one range to another <br>

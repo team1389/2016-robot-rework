@@ -6,7 +6,6 @@ import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.MotorVoltageTester;
 import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
-import org.usfirst.frc.team1389.watchers.RobotNetworkTable;
 
 import com.team1389.auto.AutoModeExecuter;
 import com.team1389.system.SystemManager;
@@ -21,7 +20,6 @@ public class Robot extends IterativeRobot {
 	RobotHardware robot;
 	TeleopMain teleOperator;
 	AutoModeExecuter autoModeExecuter;
-	RobotNetworkTable table;
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any initialization code.
@@ -29,7 +27,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		try {
-			RobotNetworkTable.getInstance();
 			DebugDash.getInstance().clearWatchers();
 			robot = RobotHardware.getInstance();
 			teleOperator = new TeleopMain(robot);

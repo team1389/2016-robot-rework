@@ -106,6 +106,17 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		return cast();
 	}
 
+	public <R extends RangeOut<T>> R offset(ScalarInput<?> offsetAmt) {
+		output = ScalarOutput.offset(output, offsetAmt);
+		return cast();
+	}
+
+	public <R extends RangeOut<T>> R offset(double amt) {
+		return offset(() -> {
+			return amt;
+		});
+	}
+
 	public RangeOut<T> scale(double factor) {
 		output = ScalarOutput.scale(output, factor);
 		max *= factor;
