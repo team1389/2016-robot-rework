@@ -18,8 +18,10 @@ NetworkTable netTable = NetworkTable.getTable("SmartDashboard");
 //get something to listen for changes in smartdashboard, and then change the value based on that
 	@Override
 	public double get() {
-		netTable.addTableListener((ITable source,String key, Object value, boolean isNew)->{ valueChanged(source,  key, value, isNew);}, changed);
-		if
+		//make a class in here that impliments , changed);
+		NetworkTable networkTable = new NetworkTable(){
+			
+		}
 		return 0.0;
 	}
  
