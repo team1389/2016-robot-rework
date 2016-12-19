@@ -5,6 +5,7 @@ import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.util.DriveSignal;
+import com.team1389.util.RangeUtil;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
@@ -21,32 +22,34 @@ public class FieldOriented implements CompositeWatchable
 	private DriveSignal commandSpeed = new DriveSignal(0, 0);
 	private PercentIn throttleX;
 	private PercentIn throttleY;
+	private DigitalIn override;
+	private DigitalIn nonGyro;
 
-	public FieldOriented(PercentIn throtleX, PercentIn throtleY, AngleIn gyro)
+	public FieldOriented(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn gyro, DigitalIn override, DigitalIn nonGyro)
 	{
 		this.throttleX = throttleX;
 		this.throttleY = throttleY;
 		this.gyro = gyro;
+		this.override = override;
+		this.nonGyro = nonGyro;
+		this.drive = drive;
 	}
 
 	public void update()
 	{
-		commandSpeed.FieldOriented(throtleX.get(), throtleY.get());
+		DriveSignal signal = fieldOriented(throttleX.get(), throttleY.get(), gyro.get(), override.get(), nonGyro.get());
+		drive.set(signal);
 	}
 
-	public DriveSignal fieldOriented(double XThrottle, double YThrottle, double gyro, boolean overide, boolean nonGyro, boolean reZero)
+	public DriveSignal fieldOriented(double XThrottle, double YThrottle, double gyro, boolean override, boolean nonGyro)
 	{
 		double speedCommand = Math.max(Math.abs(XThrottle), Math.abs(YThrottle));
 		double directionCommand = Math.toDegrees(Math.atan2(XThrottle, YThrottle));
 		double angleError = directionCommand - gyro;
 
-		while (angleError > 180)
-			angleError -= 360;
+		angleError = RangeUtil.wrapValue(angleError, -180, 180);
 
-		while (angleError < -180)
-			angleError += 360;
-
-		if (!overide)
+		if (!override)
 		{
 			if (angleError > 100)
 			{
@@ -71,23 +74,13 @@ public class FieldOriented implements CompositeWatchable
 			clockwiseCommand = -YThrottle; // may have to reverse x and y
 		}
 
-		if (reZero)
-			gyro = 0;
-
 		double leftSpeed = speedCommand + clockwiseCommand;
 		double rightSpeed = speedCommand - clockwiseCommand;
 
-		if (leftSpeed > 1)
-			leftSpeed = 1;
-		if (leftSpeed < -1)
-			leftSpeed = -1;
+		RangeUtil.limit(leftSpeed, -1, 1);
+		RangeUtil.limit(rightSpeed, -1, 1);
 
-		if (rightSpeed > 1)
-			rightSpeed = 1;
-		if (rightSpeed < -1)
-			rightSpeed = -1;
-
-		return commandSpeed;
+		return new DriveSignal(leftSpeed, rightSpeed);
 
 	}
 
@@ -100,9 +93,11 @@ public class FieldOriented implements CompositeWatchable
 	@Override
 	public Watchable[] getSubWatchables()
 	{
-		return new Watchable[] {new NumberInfo("left wheels", () -> {
-			return commandSpeed.leftMotor;}),new NumberInfo("right wheels", () -> {return commandSpeed.rightMotor;});
+		return new Watchable[] { new NumberInfo("Left wheels", () -> {
+			return commandSpeed.leftMotor;
+		}), new NumberInfo("Right wheels", () -> {
+			return commandSpeed.rightMotor;
+		}), gyro.getWatchable("Gyro") };
 	}
-			
-	}
+
 }
