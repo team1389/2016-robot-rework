@@ -16,7 +16,7 @@ public class Watcher {
 	public Watcher() {
 		watchables = new ArrayList<>();
 	}
-
+	
 	public Watcher watch(Watchable... watchables) {
 		this.watchables.addAll(Arrays.asList(watchables));
 		return this;

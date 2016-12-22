@@ -8,7 +8,11 @@ import com.team1389.command_framework.command_base.Command;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.StringInfo;
-
+/**
+ * creates queue of commands to execute, and executes them in the order they were added
+ * @author Kenneth
+ *
+ */
 public class CommandScheduler implements CompositeWatchable {
 	List<Command> executing;
 	String name;
@@ -16,16 +20,24 @@ public class CommandScheduler implements CompositeWatchable {
 	public CommandScheduler() {
 		this("Scheduler");
 	}
-
+	/**
+	 * 
+	 * @param used for key in ITable related activities
+	 */
 	public CommandScheduler(String name) {
 		this.name = name;
 		executing = new ArrayList<Command>();
 	}
-
+	/**
+	 * 
+	 * @param command added to List 
+	 */
 	public void schedule(Command command) {
 		executing.add(command);
 	}
-
+	/**
+	 * executes commands in List until none remain
+	 */
 	public void update() {
 		ListIterator<Command> iter = executing.listIterator();
 		while (iter.hasNext()) {
@@ -35,22 +47,29 @@ public class CommandScheduler implements CompositeWatchable {
 		}
 
 	}
-
+	/**
+	 * 
+	 * @return if no more commands in list
+	 */
 	public boolean isFinished() {
 		return executing.isEmpty();
 	}
-
+	/**
+	 * reset list of commands
+	 */
 	public void cancelAll() {
 		executing = new ArrayList<Command>();
 	}
-
+	/**
+	 * create <Watchable> with values of list under key 
+	 */
 	@Override
 	public Watchable[] getSubWatchables() {
 		return new Watchable[] { new StringInfo("Current Command list", () -> {
 			return executing.toString();
 		}) };
 	}
-
+	
 	@Override
 	public String getName() {
 		return name;
