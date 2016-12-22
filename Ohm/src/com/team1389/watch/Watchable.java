@@ -2,7 +2,7 @@ package com.team1389.watch;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 /**
- * represents a stream of values that can be added to ITable
+ * represents a stream of values that can be added to ITable 
  * @author Kenneth
  *
  */
