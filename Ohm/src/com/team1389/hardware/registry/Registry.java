@@ -2,7 +2,6 @@ package com.team1389.hardware.registry;
 
 import java.util.List;
 
-import com.team1389.hardware.Hardware;
 import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.registry.port_types.DIO;
@@ -55,15 +54,8 @@ public class Registry {
 		return getRegister(r).isUsed(r);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <R extends PortInstance, T extends Hardware<R>> T add(R r, T t) {
-		ResourceManager<R> register = getRegister(r);
-		System.out.println(register);
-		if (!register.isUsed(r)) {
-			t.init(r.index());
-			registerWatchable(t);
-		}
-		return (T) register.register(r, t);
+	public <R extends PortInstance> boolean claim(R r) {
+		return getRegister(r).claim(r);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -92,5 +84,10 @@ public class Registry {
 	public List<Watchable> getHardwareInfo() {
 		return watcher.getWatchables();
 	}
+
+	public static Registry getInstance() {
+		return instance;
+	}
+	static Registry instance=new Registry();
 
 }

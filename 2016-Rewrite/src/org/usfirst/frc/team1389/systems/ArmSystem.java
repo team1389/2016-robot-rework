@@ -3,7 +3,6 @@ package org.usfirst.frc.team1389.systems;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.SynchronousPIDController;
-import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.outputs.software.RangeOut;
@@ -11,7 +10,6 @@ import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.System;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.Watcher;
 
 public class ArmSystem extends System {
 
@@ -25,9 +23,8 @@ public class ArmSystem extends System {
 	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, AngleIn armVal) {
 		this.buttons = map;
 		this.armVal = armVal;
-		RangeOut<Percent> elev = elevator.offset(new DashboardScalarInput("grav constant", Watcher.DASHBOARD, 0.0));
-		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.003, 0, 0), armVal, elev);
-		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(20, 0);
+		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, 0, 0), armVal, elevator.offset(.147));
+		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(30, 0);
 		this.inputAngle = 0;
 	}
 

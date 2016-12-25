@@ -37,6 +37,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	public PercentOut getVoltageOutput() {
 		State voltageState = stateTracker.newState(() -> {
+			wpiTalon.setInverted(outputInverted);
 			wpiTalon.changeControlMode(TalonControlMode.PercentVbus);
 		});
 
@@ -52,6 +53,8 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
 		State speedState = stateTracker.newState(() -> {
+			wpiTalon.reverseOutput(outputInverted);
+			wpiTalon.reverseSensor(inputInverted);
 			wpiTalon.changeControlMode(TalonControlMode.Speed);
 			setPidConstants(config);
 		});
@@ -64,6 +67,8 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	public RangeOut<Position> getPositionOutput(PIDConstants config) {
 		State positionState = stateTracker.newState(() -> {
+			wpiTalon.reverseOutput(outputInverted);
+			wpiTalon.reverseSensor(inputInverted);
 			wpiTalon.changeControlMode(TalonControlMode.Position);
 			setPidConstants(config);
 		});
@@ -76,6 +81,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	public RangeIn<Speed> getSpeedInput() {
 		return new RangeIn<Speed>(Speed.class, () -> {
+			wpiTalon.reverseSensor(inputInverted);
 			return wpiTalon.getSpeed();
 		}, 0, 1023);
 
@@ -83,6 +89,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	public RangeIn<Position> getPositionInput() {
 		return new RangeIn<Position>(Position.class, () -> {
+			wpiTalon.reverseSensor(inputInverted);
 			return wpiTalon.getPosition();
 		}, 0, 8912);
 	}
@@ -90,8 +97,8 @@ public class CANTalonHardware extends Hardware<CAN> {
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {
 		State followingState = stateTracker.newState(() -> {
 			wpiTalon.changeControlMode(TalonControlMode.Follower);
-			wpiTalon.getOutputVoltage();
 			wpiTalon.set(toFollow.wpiTalon.getDeviceID());
+			wpiTalon.reverseOutput(toFollow.outputInverted ^ outputInverted);
 		});
 
 		return new CANTalonFollower() {
@@ -140,9 +147,6 @@ public class CANTalonHardware extends Hardware<CAN> {
 	public void init(int port) {
 		wpiTalon = new CANTalon(port);
 		wpiTalon.setPosition(0);
-		wpiTalon.reverseOutput(outputInverted);
-		wpiTalon.setInverted(outputInverted);
-		wpiTalon.reverseSensor(inputInverted);
 	}
 
 	@Override

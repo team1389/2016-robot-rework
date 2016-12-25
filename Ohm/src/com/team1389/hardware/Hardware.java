@@ -5,7 +5,7 @@ import com.team1389.watch.CompositeWatchable;
 
 public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	String specificHardwareName;
-	int port;
+	T port;
 
 	public void setName(String specificHardwareName) {
 		this.specificHardwareName = specificHardwareName;
@@ -13,13 +13,14 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 
 	public abstract void init(int port);
 
-	public void initHardware(int port) {
+	public void initHardware(T port) {
 		this.port = port;
+		this.init(port.index());
 	}
 
 	public int getPort() {
 		try {
-			return port;
+			return port.index();
 		} catch (NullPointerException e) {
 			System.err.println("Hardware Object " + getHardwareIdentifier() + " not attached to a port yet");
 			return -1;

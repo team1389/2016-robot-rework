@@ -26,15 +26,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		try {
-			DebugDash.getInstance().clearWatchers();
-			robot = RobotHardware.getInstance();
-			teleOperator = new TeleopMain(robot);
-			autoModeExecuter = new AutoModeExecuter();
-		} catch (Exception e) {
-			System.out.println("hi");
-		}
-		;
+		DebugDash.getInstance().clearWatchers();
+		robot = RobotHardware.getInstance();
+		teleOperator = new TeleopMain(robot);
+		autoModeExecuter = new AutoModeExecuter();
 	}
 
 	@Override

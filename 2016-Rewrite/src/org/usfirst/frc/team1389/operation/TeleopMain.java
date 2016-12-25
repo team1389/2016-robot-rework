@@ -32,7 +32,7 @@ public class TeleopMain {
 		System intakeSystem = setupIntakeSystem();
 		System turretSystem = setupTurretSystem();
 
-		manager = new SystemManager(driveSystem, intakeSystem,  armSystem,  turretSystem);
+		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
 		DebugDash.getInstance().watch(driveSystem, armSystem, intakeSystem, turretSystem);
 
@@ -56,7 +56,8 @@ public class TeleopMain {
 				map.new ButtonEnum(controls.armButtonB, ArmLocation.DEFENSE),
 				map.new ButtonEnum(controls.armButtonC, ArmLocation.VERTICAL),
 				map.new ButtonEnum(controls.armButtonD, ArmLocation.LOW_GOAL));
-		AngleIn armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 360).mapToAngle();
+		AngleIn armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 76).mapToRange(0, 90)
+				.setRange(0, 360).mapToAngle();
 		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
 		return armSystem;
 	}

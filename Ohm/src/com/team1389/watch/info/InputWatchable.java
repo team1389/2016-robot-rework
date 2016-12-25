@@ -24,8 +24,11 @@ public class InputWatchable<T> extends SimpleWatchable {
 		if (!table.containsKey(name)) {
 			table.putNumber(name, val);
 			table.addTableListener(name, (ITable t, String s, Object val, boolean changed) -> {
+				System.out.println(name + " changed " + val);
 				onChange.changed((T) val);
 			}, true);
+		} else {
+			val = table.getNumber(name, val);
 		}
 	}
 

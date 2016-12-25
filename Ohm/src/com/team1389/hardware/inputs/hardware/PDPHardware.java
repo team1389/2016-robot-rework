@@ -19,12 +19,12 @@ public class PDPHardware extends Hardware<CAN> {
 	PowerDistributionPanel wpiPDP;
 
 	public static PDPHardware getInstance(Registry registry) {
-		return registry.add(new CAN(0), new PDPHardware());
+		return registry.claim(new CAN(0));
 	}
 
 	public PDPHardware() {
+		Registry.getInstance().claim(new CAN(0));
 	}
-
 	public RangeIn<Value> getCurrentIn(int port) {
 		return new RangeIn<Value>(Value.class, () -> {
 			return wpiPDP.getCurrent(port);

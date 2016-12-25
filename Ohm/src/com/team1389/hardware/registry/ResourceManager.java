@@ -1,36 +1,24 @@
 package com.team1389.hardware.registry;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.team1389.hardware.Hardware;
 import com.team1389.hardware.registry.port_types.PortInstance;
 
 public class ResourceManager<T extends PortInstance> {
 
-	private HashMap<T, Hardware<T>> registered;
+	private List<T> usedPorts;
 
 	public ResourceManager() {
-		registered = new HashMap<T, Hardware<T>>();
+		usedPorts = new ArrayList<>();
 	}
 
 	public boolean isUsed(T t) {
-		return registered.containsKey(t);
+		return usedPorts.contains(t);
 	}
 
-	public Hardware<T> get(T t) {
-		return registered.get(t);
+	public boolean claim(T t) {
+		return usedPorts.add(t);
 	}
 
-	private void put(T t, Hardware<T> h) {
-		registered.put(t, h);
-	}
-
-	public Hardware<T> register(T t, Hardware<T> h) {
-		if (isUsed(t)) {
-			return get(t);
-		} else {
-			put(t, h);
-			return h;
-		}
-	}
 }
