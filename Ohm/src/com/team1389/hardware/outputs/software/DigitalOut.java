@@ -1,11 +1,11 @@
 package com.team1389.hardware.outputs.software;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
 import com.team1389.hardware.outputs.interfaces.BinaryOutput;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.BooleanInfo;
 
-public class DigitalOut implements BinaryInput {
+public class DigitalOut implements BooleanSupplier {
 	BinaryOutput out;
 	private boolean last;
 

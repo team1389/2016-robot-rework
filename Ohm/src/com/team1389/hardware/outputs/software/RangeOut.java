@@ -1,5 +1,7 @@
 package com.team1389.hardware.outputs.software;
 
+import java.util.function.Consumer;
+
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 import com.team1389.hardware.value_types.Value;
@@ -16,6 +18,11 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		this.output = out;
 		this.min = min;
 		this.max = max;
+	}
+	public RangeOut(Consumer<Double> out,double min,double max){
+		this.min = min;
+		this.max = max;
+		output=out::accept;
 	}
 
 	@Override
@@ -121,6 +128,11 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		output = ScalarOutput.scale(output, factor);
 		max *= factor;
 		min *= factor;
+		return this;
+	}
+	public RangeOut<T> setRange(int min, int max) {
+		this.min=min;
+		this.max=max;
 		return this;
 	}
 }

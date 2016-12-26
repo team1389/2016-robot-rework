@@ -1,8 +1,8 @@
 package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
+import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
 
-public class TimedBoolean implements BinaryInput{
+public class TimedBoolean implements BooleanSupplier{
 	Timer timer;
 	double time;
 	public TimedBoolean(double time){
