@@ -4,36 +4,30 @@ import java.util.Optional;
 
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PortInstance;
+import com.team1389.util.OptionalUtil;
 import com.team1389.watch.CompositeWatchable;
 
 public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	Optional<String> specificHardwareName;
-	Optional<T> port;
+	protected Optional<T> port;
 
 	public Hardware(T requestedPort, Registry registry) {
 		this.port = registry.getPort(requestedPort);
-		if (port.isPresent()) {
-			init(getPort());
-		} else {
+		if (!port.isPresent()) {
 			System.out.println("hardware failed to initialize on " + requestedPort);
-			// hardware not inited
 		}
+		port.ifPresent(this::init);
 	}
 
 	public void setName(String specificHardwareName) {
 		this.specificHardwareName = Optional.of(specificHardwareName);
 	}
 
-	public abstract void init(int port);
+	public abstract void init(T port);
 
 	public int getPort() {
-		if (port.isPresent()) {
-			return port.get().index();
-		} else {
-			return -1;
-		}
+		return OptionalUtil.<T, Integer>ifPresent(-1, PortInstance::index).apply(port);
 	}
-
 	protected abstract String getHardwareIdentifier();
 
 	@Override

@@ -7,6 +7,7 @@ import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.FlagInfo;
 
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -35,12 +36,13 @@ public class VictorHardware extends Hardware<PWM> {
 
 	@Override
 	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getVoltageOutput().getWatchable("voltage") };
+		return new Watchable[] { getVoltageOutput().getWatchable("voltage"),
+				new FlagInfo("port fault", port::isPresent) };
 	}
 
 	@Override
-	public void init(int port) {
-		VictorSP myVictor = new VictorSP(port);
+	public void init(PWM port) {
+		VictorSP myVictor = new VictorSP(port.index());
 		myVictor.setInverted(inverted);
 		wpiVictor = Optional.of(myVictor);
 	}

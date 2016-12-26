@@ -21,4 +21,8 @@ public abstract class PortInstance {
 	public String toString() {
 		return getPortType().name() + " port " + index;
 	}
+
+	public static <T extends PortInstance> int checkIndex(T port) {
+		return port.index();
+	}
 }
