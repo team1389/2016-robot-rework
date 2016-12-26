@@ -1,6 +1,7 @@
 package com.team1389.hardware.registry;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.hardware.registry.port_types.CAN;
@@ -58,6 +59,17 @@ public class Registry {
 		return getRegister(r).claim(r);
 	}
 
+	public <R extends PortInstance> Optional<R> getPort(R r) {
+		Optional<R> port;
+		if (isUsed(r)) {
+			port = Optional.empty();
+		} else {
+			port = Optional.of(r);
+			claim(r);
+		}
+		return port;
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T extends PortInstance> ResourceManager<T> getRegister(T r) {
 		switch (r.getPortType()) {
@@ -88,6 +100,7 @@ public class Registry {
 	public static Registry getInstance() {
 		return instance;
 	}
-	static Registry instance=new Registry();
+
+	static Registry instance = new Registry();
 
 }

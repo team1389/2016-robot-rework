@@ -16,4 +16,9 @@ public abstract class PortInstance {
 	}
 
 	public abstract PortType getPortType();
+
+	@Override
+	public String toString() {
+		return getPortType().name() + " port " + index;
+	}
 }

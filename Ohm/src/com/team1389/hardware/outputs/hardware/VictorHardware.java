@@ -1,7 +1,10 @@
 package com.team1389.hardware.outputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.watch.Watchable;
 
@@ -14,16 +17,19 @@ import edu.wpi.first.wpilibj.VictorSP;
  */
 public class VictorHardware extends Hardware<PWM> {
 
-	VictorSP wpiVictor;
+	Optional<VictorSP> wpiVictor;
 	boolean inverted;
 
-	public VictorHardware(boolean inverted) {
+	public VictorHardware(boolean inverted, PWM port, Registry registry) {
+		super(port, registry);
 		this.inverted = inverted;
 	}
 
 	public PercentOut getVoltageOutput() {
-		return new PercentOut((double voltage) -> {
-			wpiVictor.set(voltage);
+		return new PercentOut((double val) -> {
+			wpiVictor.ifPresent((VictorSP vic) -> {
+				vic.set(val);
+			});
 		});
 	}
 
@@ -34,8 +40,9 @@ public class VictorHardware extends Hardware<PWM> {
 
 	@Override
 	public void init(int port) {
-		wpiVictor = new VictorSP(port);
-		wpiVictor.setInverted(inverted);
+		VictorSP myVictor = new VictorSP(port);
+		myVictor.setInverted(inverted);
+		wpiVictor = Optional.of(myVictor);
 	}
 
 	@Override

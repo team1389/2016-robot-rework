@@ -1,12 +1,14 @@
 package com.team1389.watch.info;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj.tables.ITable;
 
 public class InputWatchable<T> extends SimpleWatchable {
 	boolean init;
-	ChangeHandler<T> onChange;
+	Consumer<T> onChange;
 
-	public InputWatchable(String name, double defaultVal, ChangeHandler<T> onChange) {
+	public InputWatchable(String name, double defaultVal, Consumer<T> onChange) {
 		super(name);
 		this.onChange = onChange;
 		this.val = defaultVal;
@@ -24,8 +26,7 @@ public class InputWatchable<T> extends SimpleWatchable {
 		if (!table.containsKey(name)) {
 			table.putNumber(name, val);
 			table.addTableListener(name, (ITable t, String s, Object val, boolean changed) -> {
-				System.out.println(name + " changed " + val);
-				onChange.changed((T) val);
+				onChange.accept((T) val);
 			}, true);
 		} else {
 			val = table.getNumber(name, val);
@@ -40,9 +41,5 @@ public class InputWatchable<T> extends SimpleWatchable {
 	@Override
 	public double getLoggable() {
 		return val;
-	}
-
-	public interface ChangeHandler<T> {
-		public void changed(T val);
 	}
 }
