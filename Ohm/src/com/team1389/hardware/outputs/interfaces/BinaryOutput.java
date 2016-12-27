@@ -7,13 +7,22 @@ import java.util.function.Consumer;
  * 
  * @author Prinz
  */
-public interface BinaryOutput extends Consumer<Boolean>{
-	public void set(boolean onOrOff);
+public interface BinaryOutput extends Consumer<Boolean> {
+	public void set(Boolean onOrOff);
+
+	@Override
+	public default void accept(Boolean val) {
+		set(val);
+	}
 
 	public static BinaryOutput invert(BinaryOutput out) {
-		return (boolean val) -> {
+		return (Boolean val) -> {
 			out.set(!val);
 		};
+	}
+
+	public static BinaryOutput convert(Consumer<Boolean> consumer) {
+		return consumer::accept;
 	}
 
 }

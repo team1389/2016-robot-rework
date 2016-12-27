@@ -1,22 +1,22 @@
 package com.team1389.auto.command;
 
 import com.team1389.command_framework.command_base.Command;
-import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 
 /**
- * This command waits until the given {@link BooleanSupplier} returns true
+ * This command waits until the given {@link BinaryInput} returns true
  * 
  * @author amind
  *
  */
 public class WaitForBooleanCommand extends Command {
-	BooleanSupplier untilTrue;
+	BinaryInput untilTrue;
 
 	/**
 	 * 
-	 * @param untilTrue the {@link BooleanSupplier} to wait for
+	 * @param untilTrue the {@link BinaryInput} to wait for
 	 */
-	public WaitForBooleanCommand(BooleanSupplier untilTrue) {
+	public WaitForBooleanCommand(BinaryInput untilTrue) {
 		this.untilTrue = untilTrue;
 	}
 

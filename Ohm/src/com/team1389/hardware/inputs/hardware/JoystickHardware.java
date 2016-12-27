@@ -1,6 +1,6 @@
 package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.POVInput;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.DigitalIn.InputType;
@@ -24,7 +24,7 @@ public class JoystickHardware {
 		return new DigitalIn(getRawButton(button), type);
 	}
 
-	public BooleanSupplier getRawButton(int button) {
+	public BinaryInput getRawButton(int button) {
 		return () -> {
 			return wpiJoystick.getRawButton(button);
 		};

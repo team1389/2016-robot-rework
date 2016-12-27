@@ -1,6 +1,8 @@
 package com.team1389.hardware.outputs.software;
 
-import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+
 import com.team1389.hardware.outputs.interfaces.BinaryOutput;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.BooleanInfo;
@@ -12,7 +14,9 @@ public class DigitalOut implements BooleanSupplier {
 	public DigitalOut(BinaryOutput out) {
 		this.out = out;
 	}
-
+	public DigitalOut(Consumer<Boolean> out){
+		this(BinaryOutput.convert(out));
+	}
 	public void set(boolean onOrOff) {
 		this.last = onOrOff;
 		out.set(onOrOff);
@@ -28,7 +32,7 @@ public class DigitalOut implements BooleanSupplier {
 	}
 
 	@Override
-	public Boolean get() {
+	public boolean getAsBoolean() {
 		return last;
 	}
 }

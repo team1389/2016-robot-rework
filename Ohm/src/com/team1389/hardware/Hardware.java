@@ -26,8 +26,9 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 	public abstract void init(T port);
 
 	public int getPort() {
-		return OptionalUtil.<T, Integer>ifPresent(-1, PortInstance::index).apply(port);
+		return OptionalUtil.ifPresent(-1, port, PortInstance::index).get();
 	}
+
 	protected abstract String getHardwareIdentifier();
 
 	@Override
@@ -35,5 +36,5 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 		String defaultName = getHardwareIdentifier() + " " + getPort();
 		return specificHardwareName.orElse(defaultName);
 	}
-
+	//TODO subwatchables use streams, make port fault a watchable of all hardware
 }

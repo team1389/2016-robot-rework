@@ -35,7 +35,7 @@ public class ServoHardware extends Hardware<PWM> {
 
 	@Override
 	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getAngleInput().getWatchable("angle") };
+		return new Watchable[] { getAngleInput().getWatchable("angle")};
 	}
 
 	public RangeIn<Position> getPositionInput() {

@@ -1,5 +1,7 @@
 package com.team1389.hardware.outputs.interfaces;
 
+import java.util.function.Consumer;
+
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
@@ -12,11 +14,21 @@ import com.team1389.util.RangeUtil;
  * @author amind
  * @param <T> the value type that the double represents
  */
-public interface ScalarOutput<T extends Value> {
+public interface ScalarOutput<T extends Value> extends Consumer<Double> {
+	@Override
+	public default void accept(Double val) {
+		this.set(val);
+	}
+
 	/**
 	 * @param val the value to pass down the stream
 	 */
 	public void set(double val);
+
+	public static <T extends Value> ScalarOutput<T> convert(Consumer<Double> consumer) {
+		return consumer::accept;
+	}
+
 	public static <T extends Value> ScalarOutput<T> offset(ScalarOutput<T> out, ScalarInput<?> in) {
 		return (double val) -> {
 			out.set(val + in.get());

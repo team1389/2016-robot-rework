@@ -3,7 +3,7 @@ package com.team1389.control;
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.hardware.inputs.hardware.Timer;
-import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
@@ -50,7 +50,7 @@ public class MotionProfileController extends SynchronousPID {
 		});
 	}
 
-	public Command getPIDDoCommand(BooleanSupplier exitCondition) {
+	public Command getPIDDoCommand(BinaryInput exitCondition) {
 		return CommandUtil.createCommand(() -> {
 			update();
 			return exitCondition.get();

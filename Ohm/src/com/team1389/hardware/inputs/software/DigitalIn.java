@@ -3,17 +3,17 @@ package com.team1389.hardware.inputs.software;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import com.team1389.hardware.inputs.interfaces.BooleanSupplier;
+import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.watch.info.BooleanInfo;
 
 public class DigitalIn {
-	private BooleanSupplier input;
+	private BinaryInput input;
 
-	public DigitalIn(BooleanSupplier input) {
+	public DigitalIn(BinaryInput input) {
 		this.input = input;
 	}
 
-	public DigitalIn(BooleanSupplier in, InputType type) {
+	public DigitalIn(BinaryInput in, InputType type) {
 		this(in);
 		getSpecial(type);
 	}
@@ -38,33 +38,33 @@ public class DigitalIn {
 	}
 
 	public DigitalIn getLatched() {
-		this.input = BooleanSupplier.getLatched(input);
+		this.input = BinaryInput.getLatched(input);
 		return this;
 	}
 
 	public DigitalIn getToggled() {
-		this.input = BooleanSupplier.getToggled(input);
+		this.input = BinaryInput.getToggled(input);
 		return this;
 	}
 
 	public DigitalIn combineAND(DigitalIn... toCombine) {
-		BooleanSupplier[] inps = new BooleanSupplier[toCombine.length + 1];
+		BinaryInput[] inps = new BinaryInput[toCombine.length + 1];
 		for (int i = 0; i < inps.length; i++) {
 			inps[i] = toCombine[i].input;
 		}
 		inps[inps.length - 1] = this.input;
-		this.input = BooleanSupplier.combineAND(inps);
+		this.input = BinaryInput.combineAND(inps);
 		return this;
 	}
 
 	public DigitalIn combineOR(DigitalIn... toCombine) {
-		Stream<BooleanSupplier> inps=Arrays.stream(toCombine).map(it->it.input);
-		this.input = BooleanSupplier.combineOR(Stream.concat(inps, Stream.of(input)).toArray(BooleanSupplier[]::new));
+		Stream<BinaryInput> inps=Arrays.stream(toCombine).map(it->it.input);
+		this.input = BinaryInput.combineOR(Stream.concat(inps, Stream.of(input)).toArray(BinaryInput[]::new));
 		return this;
 	}
 
 	public DigitalIn invert() {
-		this.input = BooleanSupplier.invert(input);
+		this.input = BinaryInput.invert(input);
 		return this;
 	}
 

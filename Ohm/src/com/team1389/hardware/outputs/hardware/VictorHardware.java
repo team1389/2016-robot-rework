@@ -6,6 +6,7 @@ import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
+import com.team1389.util.OptionalUtil;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.FlagInfo;
 
@@ -27,13 +28,11 @@ public class VictorHardware extends Hardware<PWM> {
 	}
 
 	public PercentOut getVoltageOutput() {
-		return new PercentOut((double val) -> {
-			wpiVictor.ifPresent((VictorSP vic) -> {
-				vic.set(val);
-			});
-		});
+		return new PercentOut(OptionalUtil.ifPresent(wpiVictor, (VictorSP s, Double pos) -> {
+			s.set(pos);
+		}));
 	}
-
+	//TODO remove the port fault flag from here once its implemented in hardware
 	@Override
 	public Watchable[] getSubWatchables() {
 		return new Watchable[] { getVoltageOutput().getWatchable("voltage"),
