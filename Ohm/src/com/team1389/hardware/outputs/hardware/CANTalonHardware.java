@@ -13,10 +13,12 @@ import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.util.OptionalUtil;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Watchable;
 
+import edu.wpi.first.wpilibj.CANSpeedController.ControlMode;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
@@ -39,15 +41,15 @@ public class CANTalonHardware extends Hardware<CAN> {
 		this(outInverted, false, requestedPort, registry);
 	}
 
+	public CANTalon getWrappedTalon() {
+		return wpiTalon.get();
+	}
+
 	public PercentOut getVoltageOutput() {
 		return new PercentOut((double voltage) -> {
 			voltageState.init();
 			wpiTalon.set(voltage);
 		});
-	}
-
-	public CANTalon getWrappedTalon() {
-		return wpiTalon;
 	}
 
 	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
@@ -85,7 +87,9 @@ public class CANTalonHardware extends Hardware<CAN> {
 		State followStuff = followingState;
 		followingState = () -> {
 			followStuff.init();
-			if(toFollow.wpiTalon.get().set(toFollow.getPort());
+			if (toFollow.wpiTalon.isPresent()) {
+				wpiTalon.get().set(toFollow.getPort());
+			}
 			wpiTalon.get().reverseOutput(toFollow.outputInverted ^ outputInverted);
 		};
 		return new CANTalonFollower() {
@@ -96,15 +100,11 @@ public class CANTalonHardware extends Hardware<CAN> {
 		};
 	}
 
-	private void setPidConstants(PIDConstants pidConstants) {
-		wpiTalon.setPID(pidConstants.p, pidConstants.i, pidConstants.d);
-	}
-
 	@Override
 	public Watchable[] getSubWatchables() {
 		Map<String, String> info = new HashMap<>();
-		info.put("mode", wpiTalon.getControlMode().name());
-		switch (wpiTalon.getControlMode()) {
+		info.put("mode", getControlMode().name());
+		switch (getControlMode()) {
 		case Current:
 			break;
 		case Disabled:
@@ -116,8 +116,8 @@ public class CANTalonHardware extends Hardware<CAN> {
 		case PercentVbus:
 			break;
 		case Position:
-			info.put("position", "" + wpiTalon.getPosition());
-			info.put("setPoint", "" + wpiTalon.getSetpoint());
+			info.put("position", "" + getPositionInput());
+			info.put("setPoint", "" + );
 			break;
 		case Speed:
 			break;
@@ -163,6 +163,24 @@ public class CANTalonHardware extends Hardware<CAN> {
 		});
 		talon.setPosition(0);
 		wpiTalon = Optional.of(talon);
+	}
+
+	private void setPidConstants(PIDConstants pidConstants) {
+		wpiTalon.ifPresent((CANTalon talon) -> {
+			talon.setPID(pidConstants.p, pidConstants.i, pidConstants.d);
+		});
+	}
+
+	private Double getSetpoint() {
+		return OptionalUtil.ifPresent(0.0, wpiTalon, (CANTalon talon) -> {
+			return talon.getSetpoint();
+		}).get();
+	}
+
+	private TalonControlMode getControlMode() {
+		return OptionalUtil.ifPresent(TalonControlMode.Disabled, wpiTalon, (CANTalon talon) -> {
+			return talon.getControlMode();
+		}).get();
 	}
 
 }
