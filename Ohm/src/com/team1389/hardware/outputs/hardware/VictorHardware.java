@@ -1,12 +1,11 @@
 package com.team1389.hardware.outputs.hardware;
 
-import java.util.Optional;
 
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
-import com.team1389.util.OptionalUtil;
+import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.FlagInfo;
 
@@ -28,7 +27,7 @@ public class VictorHardware extends Hardware<PWM> {
 	}
 
 	public PercentOut getVoltageOutput() {
-		return new PercentOut(OptionalUtil.ifPresent(wpiVictor, (VictorSP s, Double pos) -> {
+		return new PercentOut(wpiVictor.ifPresent((VictorSP s, Double pos) -> {
 			s.set(pos);
 		}));
 	}
