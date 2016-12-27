@@ -32,7 +32,8 @@ public class VictorHardware extends Hardware<PWM> {
 			s.set(pos);
 		}));
 	}
-	//TODO remove the port fault flag from here once its implemented in hardware
+
+	// TODO remove the port fault flag from here once its implemented in hardware
 	@Override
 	public Watchable[] getSubWatchables() {
 		return new Watchable[] { getVoltageOutput().getWatchable("voltage"),
@@ -45,9 +46,14 @@ public class VictorHardware extends Hardware<PWM> {
 		myVictor.setInverted(inverted);
 		wpiVictor = Optional.of(myVictor);
 	}
+	@Override
+	public void failInit() {
+		wpiVictor = Optional.empty();
+	}
 
 	@Override
 	protected String getHardwareIdentifier() {
 		return "Victor";
 	}
+
 }

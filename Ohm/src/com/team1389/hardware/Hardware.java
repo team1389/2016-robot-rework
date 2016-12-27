@@ -24,7 +24,7 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 	}
 
 	public abstract void init(T port);
-
+	public abstract void failInit();
 	public int getPort() {
 		return OptionalUtil.ifPresent(-1, port, PortInstance::index).get();
 	}
