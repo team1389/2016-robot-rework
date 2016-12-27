@@ -1,6 +1,7 @@
 package com.team1389.hardware.inputs.software;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
@@ -9,8 +10,8 @@ import com.team1389.watch.info.BooleanInfo;
 public class DigitalIn {
 	private BinaryInput input;
 
-	public DigitalIn(BinaryInput input) {
-		this.input = input;
+	public DigitalIn(Supplier<Boolean> input) {
+		this.input = input::get;
 	}
 
 	public DigitalIn(BinaryInput in, InputType type) {
@@ -19,7 +20,7 @@ public class DigitalIn {
 	}
 
 	public BooleanInfo getInfo(String name) {
-		return new BooleanInfo(name, this.input);
+		return new BooleanInfo(name, input::get);
 	}
 
 	public DigitalIn getSpecial(InputType type) {
@@ -58,7 +59,7 @@ public class DigitalIn {
 	}
 
 	public DigitalIn combineOR(DigitalIn... toCombine) {
-		Stream<BinaryInput> inps=Arrays.stream(toCombine).map(it->it.input);
+		Stream<BinaryInput> inps = Arrays.stream(toCombine).map(it -> it.input);
 		this.input = BinaryInput.combineOR(Stream.concat(inps, Stream.of(input)).toArray(BinaryInput[]::new));
 		return this;
 	}

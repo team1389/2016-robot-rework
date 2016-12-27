@@ -1,5 +1,7 @@
 package com.team1389.hardware.inputs.interfaces;
 
+import java.util.function.Supplier;
+
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Value;
@@ -12,7 +14,7 @@ import com.team1389.util.RangeUtil;
  *
  * @param <T> Used to make sure of the type of a stream in certain spots in the code
  */
-public interface ScalarInput<T extends Value> extends Input<Double> {
+public interface ScalarInput<T extends Value> extends Input<Double>, Supplier<Double> {
 	/**
 	 * @return The current value of this stream.
 	 */

@@ -1,7 +1,6 @@
 package com.team1389.hardware.registry;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.hardware.registry.port_types.CAN;
@@ -10,6 +9,7 @@ import com.team1389.hardware.registry.port_types.PCM;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.registry.port_types.PortInstance;
 import com.team1389.hardware.registry.port_types.USB;
+import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.Watcher;
 
