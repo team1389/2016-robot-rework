@@ -12,6 +12,7 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 	public Hardware(T requestedPort, Registry registry) {
 		this.port = registry.getPort(requestedPort);
 		if (!port.isPresent()) {
+			failInit();
 			System.out.println("hardware failed to initialize on " + requestedPort);
 		}
 		port.ifPresent(this::init);
