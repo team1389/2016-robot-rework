@@ -2,7 +2,6 @@ package com.team1389.hardware.outputs.hardware;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.Hardware;
@@ -13,12 +12,11 @@ import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
-import com.team1389.util.OptionalUtil;
+import com.team1389.util.Optional;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Watchable;
 
-import edu.wpi.first.wpilibj.CANSpeedController.ControlMode;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
@@ -41,57 +39,51 @@ public class CANTalonHardware extends Hardware<CAN> {
 		this(outInverted, false, requestedPort, registry);
 	}
 
-	public CANTalon getWrappedTalon() {
-		return wpiTalon.get();
-	}
-
-	public PercentOut getVoltageOutput() {
-		return new PercentOut((double voltage) -> {
-			voltageState.init();
-			wpiTalon.set(voltage);
-		});
-	}
-
-	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
-		return new RangeOut<Speed>((double speed) -> {
-			speedState.init();
-			wpiTalon.set(speed);
-		}, 0, 8192);
-	}
-
-	public RangeOut<Position> getPositionOutput(PIDConstants config) {
-
-		return new RangeOut<Position>((double position) -> {
-			positionState.init();
-			wpiTalon.set(position);
-		}, 0, 8192);
-
-	}
-
 	public RangeIn<Speed> getSpeedInput() {
 		return new RangeIn<Speed>(Speed.class, () -> {
-			wpiTalon.reverseSensor(inputInverted);
-			return wpiTalon.getSpeed();
+			return getSpeed();
 		}, 0, 1023);
 
 	}
 
 	public RangeIn<Position> getPositionInput() {
 		return new RangeIn<Position>(Position.class, () -> {
-			wpiTalon.reverseSensor(inputInverted);
-			return wpiTalon.getPosition();
+			return getPosition();
 		}, 0, 8912);
 	}
 
+	public PercentOut getVoltageOutput() {
+		return new PercentOut((double voltage) -> {
+			voltageState.init();
+			wpiTalon.ifPresent((CANTalon talon) -> {
+				talon.set(voltage);
+			});
+		});
+	}
+
+	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
+		setupSpeedState(config);
+		return new RangeOut<Speed>((double speed) -> {
+			speedState.init();
+			wpiTalon.ifPresent((CANTalon talon) -> {
+				talon.set(speed);
+			});
+		}, 0, 8192);
+	}
+
+	public RangeOut<Position> getPositionOutput(PIDConstants config) {
+		setupPositionState(config);
+		return new RangeOut<Position>((double position) -> {
+			positionState.init();
+			wpiTalon.ifPresent((CANTalon talon) -> {
+				talon.set(position);
+			});
+		}, 0, 8192);
+
+	}
+
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {
-		State followStuff = followingState;
-		followingState = () -> {
-			followStuff.init();
-			if (toFollow.wpiTalon.isPresent()) {
-				wpiTalon.get().set(toFollow.getPort());
-			}
-			wpiTalon.get().reverseOutput(toFollow.outputInverted ^ outputInverted);
-		};
+		setupFollowingState(toFollow);
 		return new CANTalonFollower() {
 			@Override
 			public void follow() {
@@ -100,6 +92,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 		};
 	}
 
+	// TODO implement talon watchable
 	@Override
 	public Watchable[] getSubWatchables() {
 		Map<String, String> info = new HashMap<>();
@@ -117,7 +110,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 			break;
 		case Position:
 			info.put("position", "" + getPositionInput());
-			info.put("setPoint", "" + );
+			info.put("setPoint", "" + getSetpoint());
 			break;
 		case Speed:
 			break;
@@ -146,41 +139,82 @@ public class CANTalonHardware extends Hardware<CAN> {
 			talon.setInverted(outputInverted);
 			talon.changeControlMode(TalonControlMode.PercentVbus);
 		});
-		speedState = stateTracker.newState(() -> {
-			talon.reverseOutput(outputInverted);
-			talon.reverseSensor(inputInverted);
-			talon.changeControlMode(TalonControlMode.Speed);
-			setPidConstants(config);
-		});
-		positionState = stateTracker.newState(() -> {
-			talon.reverseOutput(outputInverted);
-			talon.reverseSensor(inputInverted);
-			talon.changeControlMode(TalonControlMode.Position);
-			setPidConstants(config);
-		});
-		followingState = stateTracker.newState(() -> {
-			talon.changeControlMode(TalonControlMode.Follower);
-		});
 		talon.setPosition(0);
 		wpiTalon = Optional.of(talon);
 	}
 
-	private void setPidConstants(PIDConstants pidConstants) {
+	private void setupPositionState(PIDConstants config) {
+		positionState = stateTracker.newState(() -> {
+			if (wpiTalon.isPresent()) {
+				CANTalon talon = getWrappedTalon();
+				talon.reverseOutput(outputInverted);
+				talon.reverseSensor(inputInverted);
+				talon.changeControlMode(TalonControlMode.Position);
+				setPID(config);
+			}
+		});
+	}
+
+	private void setupSpeedState(PIDConstants config) {
+		speedState = stateTracker.newState(() -> {
+			if (wpiTalon.isPresent()) {
+				CANTalon talon = getWrappedTalon();
+				talon.reverseOutput(outputInverted);
+				talon.reverseSensor(inputInverted);
+				talon.changeControlMode(TalonControlMode.Speed);
+				setPID(config);
+			}
+		});
+	}
+
+	private void setupFollowingState(CANTalonHardware toFollow) {
+		followingState = stateTracker.newState(() -> {
+			if (wpiTalon.isPresent() && toFollow.wpiTalon.isPresent()) {
+				CANTalon talon = wpiTalon.get();
+				talon.changeControlMode(TalonControlMode.Follower);
+				talon.set(toFollow.getPort());
+				talon.reverseOutput(toFollow.outputInverted ^ outputInverted);
+			}
+		});
+	}
+
+	private void setPID(PIDConstants pidConstants) {
 		wpiTalon.ifPresent((CANTalon talon) -> {
 			talon.setPID(pidConstants.p, pidConstants.i, pidConstants.d);
 		});
 	}
 
-	private Double getSetpoint() {
-		return OptionalUtil.ifPresent(0.0, wpiTalon, (CANTalon talon) -> {
+	public double getSetpoint() {
+		return wpiTalon.ifPresent(0.0, (CANTalon talon) -> {
 			return talon.getSetpoint();
 		}).get();
 	}
 
-	private TalonControlMode getControlMode() {
-		return OptionalUtil.ifPresent(TalonControlMode.Disabled, wpiTalon, (CANTalon talon) -> {
+	public TalonControlMode getControlMode() {
+		return wpiTalon.ifPresent(TalonControlMode.Disabled, (CANTalon talon) -> {
 			return talon.getControlMode();
 		}).get();
+	}
+
+	private double getPosition() {
+		return wpiTalon.ifPresent(0.0, (CANTalon talon) -> {
+			return talon.getPosition();
+		}).get();
+	}
+
+	private double getSpeed() {
+		return wpiTalon.ifPresent(0.0, (CANTalon talon) -> {
+			return talon.getSpeed();
+		}).get();
+	}
+
+	public CANTalon getWrappedTalon() {
+		return wpiTalon.get();
+	}
+
+	@Override
+	public void failInit() {
+		wpiTalon = Optional.empty();
 	}
 
 }
