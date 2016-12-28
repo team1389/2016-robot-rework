@@ -21,4 +21,9 @@ public class ResourceManager<T extends PortInstance> {
 		return usedPorts.add(t);
 	}
 
+	@Override
+	public String toString() {
+		return usedPorts.toString();
+	}
+
 }

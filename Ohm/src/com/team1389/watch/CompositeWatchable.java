@@ -1,8 +1,11 @@
 package com.team1389.watch;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import com.team1389.util.AddList;
+import com.team1389.util.Optional;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
@@ -26,6 +29,14 @@ public interface CompositeWatchable extends Watchable {
 	@Override
 	public default double getLoggable() {
 		return 0;
+	}
+
+	@Override
+	public default Map<String, Watchable> getFlat(Optional<String> parent) {
+		Map<String, Watchable> map = new HashMap<>();
+		getSubWatchables(stem)
+				.forEach(w -> map.putAll(w.getFlat(Optional.of(parent.ifPresent(getName(), this::getFullName).get()))));
+		return map;
 	}
 
 	public static CompositeWatchable of(String name, UnaryOperator<AddList<Watchable>> subWatchables) {

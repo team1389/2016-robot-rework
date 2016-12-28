@@ -22,6 +22,14 @@ public abstract class PortInstance {
 		return getPortType().name() + " port " + index;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof PortInstance) {
+			return ((PortInstance) o).index == this.index;
+		}
+		return false;
+	}
+
 	public static <T extends PortInstance> int checkIndex(T port) {
 		return port.index();
 	}

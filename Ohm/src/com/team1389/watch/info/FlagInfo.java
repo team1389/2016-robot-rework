@@ -13,6 +13,8 @@ public class FlagInfo extends BooleanInfo {
 	public void publishUnderName(String name, ITable table) {
 		if (in.getAsBoolean()) {
 			super.publishUnderName(name, table);
+		} else {
+			table.delete(name);
 		}
 	}
 

@@ -10,7 +10,7 @@ import com.team1389.watch.info.FlagInfo;
 
 public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	Optional<String> specificHardwareName;
-	protected Optional<T> port;
+	final protected Optional<T> port;
 
 	public Hardware(T requestedPort, Registry registry) {
 		this.port = registry.getPort(requestedPort);
@@ -19,6 +19,8 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 			System.out.println("hardware failed to initialize on " + requestedPort);
 		}
 		port.ifPresent(this::init);
+		specificHardwareName = Optional.empty();
+		registry.registerWatchable(this);
 	}
 
 	public void setName(String specificHardwareName) {
@@ -43,6 +45,6 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(new FlagInfo("port fault", port::isPresent));
+		return stem.put(new FlagInfo("port fault", () -> !port.isPresent()));
 	}
 }
