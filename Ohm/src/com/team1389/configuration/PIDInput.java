@@ -2,6 +2,7 @@ package com.team1389.configuration;
 
 import java.util.function.Consumer;
 
+import com.team1389.util.AddList;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInput;
@@ -31,7 +32,7 @@ public class PIDInput implements CompositeWatchable {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { p, i, d };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(p, i, d);
 	}
 }

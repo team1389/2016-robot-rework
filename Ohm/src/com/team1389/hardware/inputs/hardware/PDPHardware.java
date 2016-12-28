@@ -1,16 +1,19 @@
 package com.team1389.hardware.inputs.hardware;
 
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.SensorBase;
 
 public class PDPHardware extends Hardware<CAN> {
 	static PDPHardware instance;
@@ -32,18 +35,18 @@ public class PDPHardware extends Hardware<CAN> {
 	public void get(Consumer<Registry> hardware) {
 
 	}
-	//TODO make monitor
+
 	@Override
-	public Watchable[] getSubWatchables() {
-	/*	return Stream
-				.concat(IntStream.range(0, SensorBase.kPDPChannels).mapToObj(port -> new NumberInfo(port + "", wpiPDP.ifPresent(0.0, pdp -> pdp.getCurrent(port))
-						, Arrays.stream(new Watchable[] { new NumberInfo("total current", () -> {
-					return wpiPDP.getTotalCurrent();
-				}) })).toArray(Watchable[]::new)));
-				*/
-		return null;
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		stem.addAll(
+				IntStream.range(0, SensorBase.kPDPChannels).
+				mapToObj(port ->getCurrent(port).getWatchable("port "+port+" current"));
+		return stem;
 	}
-	
+
+	public RangeIn<Value> getCurrent(int port) {
+		return new RangeIn<Value>(Value.class, wpiPDP.ifPresent(0.0, pdp -> pdp.getCurrent(port)), 0, 100);
+	}
 
 	@Override
 	protected String getHardwareIdentifier() {

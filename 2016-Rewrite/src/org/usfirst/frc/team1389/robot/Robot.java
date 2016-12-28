@@ -2,8 +2,6 @@
 package org.usfirst.frc.team1389.robot;
 
 import org.usfirst.frc.team1389.operation.TeleopMain;
-import org.usfirst.frc.team1389.robot.controls.ControlBoard;
-import org.usfirst.frc.team1389.systems.MotorVoltageTester;
 import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
@@ -76,11 +74,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testInit() {
-		testRunner = new SystemManager();
-		MotorVoltageTester motorVoltageTester = new MotorVoltageTester(robot.elevation.getVoltageOutput(),
-				ControlBoard.getInstance().intakeAxis, false);
-		testRunner.register(motorVoltageTester);
-		DebugDash.getInstance().watch(motorVoltageTester);
 	}
 
 	@Override

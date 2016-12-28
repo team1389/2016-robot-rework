@@ -4,6 +4,7 @@ import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
+import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.util.RangeUtil;
 import com.team1389.watch.CompositeWatchable;
@@ -109,12 +110,12 @@ public class FieldOriented implements CompositeWatchable {
 	 * This is used to display values on the smart dash board Uses lambda expressions, see me or @amind for explanation
 	 */
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { new NumberInfo("Left wheels", () -> {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(new NumberInfo("Left wheels", () -> {
 			return signal.leftMotor;
 		}), new NumberInfo("Right wheels", () -> {
 			return signal.rightMotor;
-		}), gyro.getWatchable("Gyro") };
+		}), gyro.getWatchable("Gyro"));
 	}
 
 }

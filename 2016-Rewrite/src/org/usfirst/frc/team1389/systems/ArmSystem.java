@@ -9,6 +9,7 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.System;
+import com.team1389.util.AddList;
 import com.team1389.watch.Watchable;
 
 public class ArmSystem extends System {
@@ -23,7 +24,8 @@ public class ArmSystem extends System {
 	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, AngleIn armVal) {
 		this.buttons = map;
 		this.armVal = armVal;
-		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, 0, 0), armVal, elevator.offset(.147));
+		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, 0, 0), armVal,
+				elevator.offset(.147));
 		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(30, 0);
 		this.inputAngle = 0;
 	}
@@ -71,9 +73,8 @@ public class ArmSystem extends System {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { buttons.getWatchable("target location"), armVal.getWatchable("arm position"),
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(buttons.getWatchable("target location"), armVal.getWatchable("arm position"),
 				elevatorPID.getSetpointSetter().getWatchable("arm setpoint"),
-				elevatorPID.getOutput().getWatchable("arm vOut"), elevatorPID.getPIDTuner("arm controller") };
-	}
-}
+				elevatorPID.getOutput().getWatchable("arm vOut"), elevatorPID.getPIDTuner("arm controller"));
+}}

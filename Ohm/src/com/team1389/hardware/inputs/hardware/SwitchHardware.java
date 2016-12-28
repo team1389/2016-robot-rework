@@ -4,6 +4,7 @@ import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.DIO;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
@@ -30,8 +31,8 @@ public class SwitchHardware extends Hardware<DIO> {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getRawSwitch().getInfo("val") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(getRawSwitch().getInfo("val"));
 	}
 
 	@Override

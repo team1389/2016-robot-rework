@@ -90,7 +90,6 @@ public class CANTalonHardware extends Hardware<CAN> {
 		};
 	}
 
-	// TODO implement talon watchable
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		stem = super.getSubWatchables(stem);
@@ -105,6 +104,8 @@ public class CANTalonHardware extends Hardware<CAN> {
 		case MotionProfile:
 			break;
 		case PercentVbus:
+			stem.put(new NumberInfo("voltage", this::getVoltage), 
+					getPositionInput().getWatchable("position"));
 			break;
 		case Position:
 			stem.put(getPositionInput().getWatchable("position"), 
