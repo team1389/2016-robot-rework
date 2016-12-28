@@ -4,6 +4,7 @@ import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
@@ -20,14 +21,12 @@ public class Victor888Hardware extends Hardware<PWM> {
 	Optional<Victor> wpiVictor;
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getVoltageOutput().getWatchable("voltage") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return super.getSubWatchables(stem).put(getVoltageOutput().getWatchable("voltage"));
 	}
 
 	public PercentOut getVoltageOutput() {
-		return new PercentOut(wpiVictor.ifPresent((Victor s, Double pos) -> {
-			s.set(pos);
-		}));
+		return new PercentOut(wpiVictor.ifPresent((s, pos) -> s.set(pos)));
 	}
 
 	@Override

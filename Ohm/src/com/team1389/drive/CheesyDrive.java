@@ -3,6 +3,7 @@ package com.team1389.drive;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
+import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
@@ -122,13 +123,11 @@ public class CheesyDrive implements CompositeWatchable {
 		return "Cheesy Drive";
 	}
 
-	// TODO think about watchable implementation for drive classes
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { new NumberInfo("leftWheels", () -> {
-			return mSignal.leftMotor;
-		}), new NumberInfo("rightWheels", () -> {
-			return mSignal.rightMotor;
-		}), quickTurnButton.getInfo("quickTurnButton") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(
+				new NumberInfo("leftWheels", () -> mSignal.leftMotor),
+				new NumberInfo("rightWheels", () -> mSignal.rightMotor), 
+				quickTurnButton.getInfo("quickTurnButton"));
 	}
 }

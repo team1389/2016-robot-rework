@@ -1,8 +1,5 @@
 package com.team1389.hardware.outputs.hardware;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -12,10 +9,13 @@ import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.NumberInfo;
+import com.team1389.watch.info.StringInfo;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
@@ -53,17 +53,15 @@ public class CANTalonHardware extends Hardware<CAN> {
 	}
 
 	public PercentOut getVoltageOutput() {
-		return new PercentOut((double voltage) -> {
+		return new PercentOut(voltage -> {
 			voltageState.init();
-			wpiTalon.ifPresent((CANTalon talon) -> {
-				talon.set(voltage);
-			});
+			wpiTalon.ifPresent(talon -> talon.set(voltage));
 		});
 	}
 
 	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
 		setupSpeedState(config);
-		return new RangeOut<Speed>((double speed) -> {
+		return new RangeOut<Speed>(speed -> {
 			speedState.init();
 			wpiTalon.ifPresent((CANTalon talon) -> {
 				talon.set(speed);
@@ -73,7 +71,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	public RangeOut<Position> getPositionOutput(PIDConstants config) {
 		setupPositionState(config);
-		return new RangeOut<Position>((double position) -> {
+		return new RangeOut<Position>(position -> {
 			positionState.init();
 			wpiTalon.ifPresent((CANTalon talon) -> {
 				talon.set(position);
@@ -94,9 +92,9 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	// TODO implement talon watchable
 	@Override
-	public Watchable[] getSubWatchables() {
-		Map<String, String> info = new HashMap<>();
-		info.put("mode", getControlMode().name());
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		stem = super.getSubWatchables(stem);
+		stem.put(new StringInfo("mode", getControlMode()::name));
 		switch (getControlMode()) {
 		case Current:
 			break;
@@ -109,18 +107,22 @@ public class CANTalonHardware extends Hardware<CAN> {
 		case PercentVbus:
 			break;
 		case Position:
-			info.put("position", "" + getPositionInput());
-			info.put("setPoint", "" + getSetpoint());
+			stem.put(getPositionInput().getWatchable("position"), 
+					new NumberInfo("setpoint", this::getSetpoint));
 			break;
 		case Speed:
+			stem.put(getSpeedInput().getWatchable("speed"), 
+					new NumberInfo("setpoint", this::getSetpoint));
 			break;
 		case Voltage:
+			stem.put(new NumberInfo("voltage", this::getVoltage), 
+					getPositionInput().getWatchable("position"));
 			break;
 		default:
 			break;
 
 		}
-		return null;
+		return stem;
 	}
 
 	@Override
@@ -179,32 +181,38 @@ public class CANTalonHardware extends Hardware<CAN> {
 	}
 
 	private void setPID(PIDConstants pidConstants) {
-		wpiTalon.ifPresent((CANTalon talon) -> {
+		wpiTalon.ifPresent(talon -> {
 			talon.setPID(pidConstants.p, pidConstants.i, pidConstants.d);
 		});
 	}
 
 	public double getSetpoint() {
-		return wpiTalon.ifPresent(0.0, (CANTalon talon) -> {
+		return wpiTalon.ifPresent(0.0, talon -> {
 			return talon.getSetpoint();
 		}).get();
 	}
 
 	public TalonControlMode getControlMode() {
-		return wpiTalon.ifPresent(TalonControlMode.Disabled, (CANTalon talon) -> {
+		return wpiTalon.ifPresent(TalonControlMode.Disabled, talon -> {
 			return talon.getControlMode();
 		}).get();
 	}
 
 	private double getPosition() {
-		return wpiTalon.ifPresent(0.0, (CANTalon talon) -> {
+		return wpiTalon.ifPresent(0.0, talon -> {
 			return talon.getPosition();
 		}).get();
 	}
 
 	private double getSpeed() {
-		return wpiTalon.ifPresent(0.0, (CANTalon talon) -> {
+		return wpiTalon.ifPresent(0.0, talon -> {
 			return talon.getSpeed();
+		}).get();
+	}
+
+	private double getVoltage() {
+		return wpiTalon.ifPresent(0.0, talon -> {
+			return talon.getOutputVoltage();
 		}).get();
 	}
 

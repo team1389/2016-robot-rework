@@ -18,7 +18,7 @@ public class PotentiometerHardware extends Hardware<Analog> {
 	private Optional<AnalogPotentiometer> wpiPot;
 
 	public RangeIn<Position> getAnalogInput() {
-		return new RangeIn<>(Position.class, wpiPot.ifPresent(0.0, (AnalogPotentiometer pot) -> {
+		return new RangeIn<>(Position.class, wpiPot.ifPresent(0.0, pot -> {
 			return pot.get();
 		}), 0, 1);
 	}

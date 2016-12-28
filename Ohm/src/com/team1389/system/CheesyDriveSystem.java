@@ -3,6 +3,7 @@ package com.team1389.system;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
@@ -108,12 +109,11 @@ public class CheesyDriveSystem extends System {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { new NumberInfo("leftWheels", () -> {
-			return mSignal.leftMotor;
-		}), new NumberInfo("rightWheels", () -> {
-			return mSignal.rightMotor;
-		}), quickTurnButton.getInfo("quickTurnButton") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.add(
+			new NumberInfo("leftWheels",() -> mSignal.leftMotor),
+			new NumberInfo("leftWheels", () -> mSignal.rightMotor),
+			quickTurnButton.getInfo("quickTurnButton"));
 	}
 
 }

@@ -4,6 +4,7 @@ import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PCM;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
@@ -17,14 +18,12 @@ public class FlashlightHardware extends Hardware<PCM> {
 	private Optional<Solenoid> wpiSolenoid;
 
 	public DigitalOut getDigitalOut() {
-		return new DigitalOut(wpiSolenoid.ifPresent((Solenoid s, Boolean pos) -> {
-			s.set(pos);
-		}));
+		return new DigitalOut(wpiSolenoid.ifPresent((s, pos) -> s.set(pos)));
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getDigitalOut().getWatchable("output") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return super.getSubWatchables(stem).put(getDigitalOut().getWatchable("light"));
 	}
 
 	@Override

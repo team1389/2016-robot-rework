@@ -1,24 +1,20 @@
 package com.team1389.hardware.inputs.hardware;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.NumberInfo;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SensorBase;
 
 public class PDPHardware extends Hardware<CAN> {
 	static PDPHardware instance;
-	PowerDistributionPanel wpiPDP;
+	Optional<PowerDistributionPanel> wpiPDP;
 
 	public static PDPHardware getInstance(Registry registry) {
 		return instance;
@@ -30,24 +26,24 @@ public class PDPHardware extends Hardware<CAN> {
 
 	public RangeIn<Value> getCurrentIn(int port) {
 		get(PDPHardware::new);
-		return new RangeIn<Value>(Value.class, () -> {
-			return wpiPDP.getCurrent(port);
-		}, 0, 1);
-	}
-	
-	public void get(Consumer<Registry> hardware){
-		
+		return new RangeIn<Value>(Value.class, wpiPDP.ifPresent(0.0, pdp -> pdp.getTotalCurrent()), 0, 1);
 	}
 
+	public void get(Consumer<Registry> hardware) {
+
+	}
+	//TODO make monitor
 	@Override
 	public Watchable[] getSubWatchables() {
-		return Stream
-				.concat(IntStream.range(0, SensorBase.kPDPChannels).mapToObj(port -> new NumberInfo(port + "", () -> {
-					return wpiPDP.getCurrent(port);
-				})), Arrays.stream(new Watchable[] { new NumberInfo("total current", () -> {
+	/*	return Stream
+				.concat(IntStream.range(0, SensorBase.kPDPChannels).mapToObj(port -> new NumberInfo(port + "", wpiPDP.ifPresent(0.0, pdp -> pdp.getCurrent(port))
+						, Arrays.stream(new Watchable[] { new NumberInfo("total current", () -> {
 					return wpiPDP.getTotalCurrent();
-				}) })).toArray(Watchable[]::new);
+				}) })).toArray(Watchable[]::new)));
+				*/
+		return null;
 	}
+	
 
 	@Override
 	protected String getHardwareIdentifier() {

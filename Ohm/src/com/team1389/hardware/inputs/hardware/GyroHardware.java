@@ -4,6 +4,7 @@ import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.Analog;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
@@ -18,14 +19,14 @@ public class GyroHardware extends Hardware<Analog> {
 	private Optional<Gyro> wpiGyro;
 
 	public AngleIn getAngleInput() {
-		return new AngleIn(wpiGyro.ifPresent(0.0, (Gyro gyr) -> {
+		return new AngleIn(wpiGyro.ifPresent(0.0, gyr -> {
 			return gyr.getAngle();
 		}));
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getAngleInput().getWatchable("angle") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(getAngleInput().getWatchable("angle"));
 	}
 
 	@Override

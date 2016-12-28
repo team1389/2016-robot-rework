@@ -3,13 +3,13 @@ package com.team1389.hardware.outputs.hardware;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.util.AddList;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 
@@ -67,8 +67,8 @@ public class CANTalonGroup implements CompositeWatchable {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return Stream.concat(followers.stream().flatMap(follower -> Arrays.stream(follower.getSubWatchables())),
-				Arrays.stream(main.getSubWatchables())).toArray(Watchable[]::new);
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		stem.addAll(followers);
+		return stem.put(main);
 	}
 }

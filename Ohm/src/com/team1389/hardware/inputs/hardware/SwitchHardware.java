@@ -24,7 +24,7 @@ public class SwitchHardware extends Hardware<DIO> {
 	Optional<DigitalInput> wpiSwitch;
 
 	public DigitalIn getRawSwitch() {
-		return new DigitalIn(wpiSwitch.ifPresent(false, (DigitalInput inp) -> {
+		return new DigitalIn(wpiSwitch.ifPresent(false, inp -> {
 			return inverted ? !inp.get() : inp.get();
 		}));
 	}

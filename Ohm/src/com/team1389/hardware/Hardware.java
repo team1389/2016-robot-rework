@@ -2,8 +2,11 @@ package com.team1389.hardware;
 
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PortInstance;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.CompositeWatchable;
+import com.team1389.watch.Watchable;
+import com.team1389.watch.info.FlagInfo;
 
 public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	Optional<String> specificHardwareName;
@@ -37,5 +40,9 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 		String defaultName = getHardwareIdentifier() + " " + getPort();
 		return specificHardwareName.orElse(defaultName);
 	}
-	// TODO subwatchables use streams, make port fault a watchable of all hardware
+
+	@Override
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(new FlagInfo("port fault", port::isPresent));
+	}
 }

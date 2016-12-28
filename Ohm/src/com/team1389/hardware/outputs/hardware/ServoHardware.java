@@ -8,6 +8,7 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.value_types.Position;
+import com.team1389.util.AddList;
 import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
@@ -26,14 +27,12 @@ public class ServoHardware extends Hardware<PWM> {
 	Optional<Servo> wpiServo;
 
 	public RangeOut<Position> getPositionOutput() {
-		return new RangeOut<Position>(wpiServo.ifPresent((Servo s, Double pos) -> {
-			s.set(pos);
-		}), 0, 1);
+		return new RangeOut<Position>(wpiServo.ifPresent((s, pos) -> s.set(pos)), 0, 1);
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getAngleInput().getWatchable("angle") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return super.getSubWatchables(stem).put(getAngleInput().getWatchable("angle"));
 	}
 
 	public RangeIn<Position> getPositionInput() {
