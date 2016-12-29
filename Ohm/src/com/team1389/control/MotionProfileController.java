@@ -1,7 +1,5 @@
 package com.team1389.control;
 
-import java.util.Map;
-
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.hardware.inputs.hardware.Timer;
@@ -12,12 +10,8 @@ import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.motion_profile.MotionProfile;
-import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 
-import edu.wpi.first.wpilibj.tables.ITable;
-
-public class MotionProfileController extends SynchronousPID{
+public class MotionProfileController extends SynchronousPID {
 	MotionProfile following;
 	double startPos;
 	RangeIn<Speed> vel;
@@ -46,7 +40,6 @@ public class MotionProfileController extends SynchronousPID{
 		if (following != null && !following.isFinished(time)) {
 			super.setSetpoint(following.getPosition(time) + startPos);
 		}
-		//System.out.println("Theoretical Position: " + super.getSetpoint());
 		double calculate = calculate(pos.get());
 		out.set(calculate);
 	}
@@ -63,6 +56,5 @@ public class MotionProfileController extends SynchronousPID{
 			return exitCondition.get();
 		});
 	}
-
 
 }
