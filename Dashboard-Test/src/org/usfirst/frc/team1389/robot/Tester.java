@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1389.robot;
 
+import org.usfirst.frc.team1389.robot.SimMotor.Motor;
+
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.control.MotionProfileController;
 import com.team1389.motion_profile.ProfileUtil;
@@ -20,15 +22,13 @@ public class Tester {
 	static MotionProfileController cont;
 
 	public static void init() {
-		SimMotor sim = new SimMotor();
+		SimMotor sim = new SimMotor(Motor.CIM);
 		cont = new MotionProfileController(.03, .001, 0,
 				sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI),
-				sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI), 
-				sim.getVoltageOutput());
+				sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI), sim.getVoltageOutput());
 		cont.followProfile(ProfileUtil.generate2(-20, 0, .05, .05, 8));
 		dash.watch(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("pos"));
 		dash.watch(sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("speed"));
-
 	}
 
 	public static void update() {
