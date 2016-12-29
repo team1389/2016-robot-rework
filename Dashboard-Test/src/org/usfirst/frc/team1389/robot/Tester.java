@@ -2,7 +2,9 @@ package org.usfirst.frc.team1389.robot;
 
 import org.usfirst.frc.team1389.robot.SimMotor.Motor;
 
+import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandScheduler;
+import com.team1389.command_framework.CommandUtil;
 import com.team1389.control.MotionProfileController;
 import com.team1389.motion_profile.ProfileUtil;
 import com.team1389.system.SystemManager;
@@ -29,6 +31,11 @@ public class Tester {
 		cont.followProfile(ProfileUtil.generate2(-20, 0, .05, .05, 8));
 		dash.watch(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("pos"));
 		dash.watch(sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("speed"));
+		scheduler.schedule(CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
+			System.out.println(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).get());
+			cont.followProfile(ProfileUtil.generate2(0, 0, .001, .001, 8));
+			return true;
+		})));
 	}
 
 	public static void update() {
