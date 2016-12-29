@@ -60,7 +60,7 @@ public class PathFollowingSystem extends VelocityHeadingSystem {
 		return pathFollowingController_.isDone();
 	}
 
-	private void update() {
+	public void update() {
 		RigidTransform2d robot_pose = state.get();
 		RigidTransform2d.Delta command = pathFollowingController_.update(robot_pose, Timer.getFPGATimestamp());
 		Kinematics.DriveVelocity setpoint = kinematics.inverseKinematics(command);

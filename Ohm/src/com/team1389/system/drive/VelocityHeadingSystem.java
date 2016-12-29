@@ -17,7 +17,7 @@ public class VelocityHeadingSystem {
 
 	}
 
-	private void update() {
+	public void update() {
 		Rotation2d actualGyroAngle = Rotation2d.fromDegrees(gyro.get());
 
 		mLastHeadingErrorDegrees = velocityHeadingSetpoint_.getHeading().rotateBy(actualGyroAngle.inverse())
