@@ -1,8 +1,20 @@
 package com.team1389.hardware.inputs.interfaces;
-
+/**
+ * represents a stream of boolean values, and various options to manipulate them
+ * @author Kenneth
+ *
+ */
 public interface BinaryInput {
+	/**
+	 * 
+	 * @return current value of stream
+	 */
 	public boolean get();
-
+	/**
+	 * 
+	 * @param in stream of boolean
+	 * @return
+	 */
 	public static BinaryInput invert(BinaryInput in) {
 		return () -> {
 			return !in.get();
