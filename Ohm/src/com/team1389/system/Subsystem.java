@@ -4,8 +4,8 @@ import com.team1389.command_framework.CommandScheduler;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.watch.CompositeWatchable;
 
-public abstract class System implements CompositeWatchable {
-	public System() {
+public abstract class Subsystem implements CompositeWatchable {
+	public Subsystem() {
 		scheduler = new CommandScheduler();
 		COMMAND_CANCEL = () -> {
 			scheduler.cancelAll();

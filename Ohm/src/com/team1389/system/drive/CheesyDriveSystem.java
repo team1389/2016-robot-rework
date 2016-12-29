@@ -1,12 +1,12 @@
-package com.team1389.system;
+package com.team1389.system.drive;
 
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.hardware.outputs.software.PercentOut;
+import com.team1389.hardware.value_types.Percent;
+import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.NumberInfo;
 
 /**
  * hellow
@@ -14,30 +14,28 @@ import com.team1389.watch.info.NumberInfo;
  * @author amind
  *
  */
-public class CheesyDriveSystem extends System {
-	private PercentOut leftMotor;
-	private PercentOut rightMotor;
+public class CheesyDriveSystem extends Subsystem {
+	private DriveOut<Percent> drive;
 	private PercentIn throttle;
 	private PercentIn wheel;
 	private DigitalIn quickTurnButton;
-	private boolean isQuickTurn;
+
+	private DriveSignal mSignal = DriveSignal.NEUTRAL;
+
 	private double mQuickStopAccumulator;
-	private DriveSignal mSignal = new DriveSignal(0, 0);
 	private double kTurnSensitivity;
 
-	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
-			DigitalIn quickTurnButton, double turnSensitivity) {
-		this.leftMotor = leftMotor;
-		this.rightMotor = rightMotor;
+	public CheesyDriveSystem(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton,
+			double turnSensitivity) {
+		this.drive = drive;
 		this.throttle = throttle;
 		this.wheel = wheel;
 		this.quickTurnButton = quickTurnButton;
 		this.kTurnSensitivity = turnSensitivity;
 	}
 
-	public CheesyDriveSystem(PercentOut leftMotor, PercentOut rightMotor, PercentIn throttle, PercentIn wheel,
-			DigitalIn quickTurnButton) {
-		this(leftMotor, rightMotor, throttle, wheel, quickTurnButton, 1.0);
+	public CheesyDriveSystem(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton) {
+		this(drive, throttle, wheel, quickTurnButton, 1.0);
 	}
 
 	@Override
@@ -48,10 +46,18 @@ public class CheesyDriveSystem extends System {
 
 	@Override
 	public void update() {
-		isQuickTurn = quickTurnButton.get();
-		mSignal = cheesyDrive(throttle.get(), wheel.get(), isQuickTurn);
-		leftMotor.set(mSignal.leftMotor);
-		rightMotor.set(mSignal.rightMotor);
+		mSignal = cheesyDrive(throttle.get(), wheel.get(), quickTurnButton.get());
+		drive.set(mSignal);
+	}
+
+	@Override
+	public String getName() {
+		return "Drive System";
+	}
+
+	@Override
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(drive, quickTurnButton.getWatchable("quickTurnButton"));
 	}
 
 	public void setTurnSensitivity(double val) {
@@ -101,19 +107,6 @@ public class CheesyDriveSystem extends System {
 		mSignal.rightMotor = rightPwm;
 		mSignal.leftMotor = leftPwm;
 		return mSignal;
-	}
-
-	@Override
-	public String getName() {
-		return "Drive System";
-	}
-
-	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.add(
-			new NumberInfo("leftWheels",() -> mSignal.leftMotor),
-			new NumberInfo("leftWheels", () -> mSignal.rightMotor),
-			quickTurnButton.getInfo("quickTurnButton"));
 	}
 
 }

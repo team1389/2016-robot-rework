@@ -19,7 +19,7 @@ public class DigitalIn {
 		getSpecial(type);
 	}
 
-	public BooleanInfo getInfo(String name) {
+	public BooleanInfo getWatchable(String name) {
 		return new BooleanInfo(name, input::get);
 	}
 

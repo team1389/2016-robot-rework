@@ -32,7 +32,7 @@ public class SwitchHardware extends Hardware<DIO> {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(getRawSwitch().getInfo("val"));
+		return stem.put(getRawSwitch().getWatchable("val"));
 	}
 
 	@Override

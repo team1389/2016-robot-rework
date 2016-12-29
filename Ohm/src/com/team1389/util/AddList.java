@@ -9,7 +9,7 @@ public class AddList<T> extends ArrayList<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@SuppressWarnings("unchecked")
 	public AddList<T> put(T... ts) {
 		addAll(Arrays.asList(ts));

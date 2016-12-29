@@ -1,6 +1,7 @@
 package com.team1389.hardware.inputs.hardware;
 
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.team1389.hardware.Hardware;
@@ -38,9 +39,9 @@ public class PDPHardware extends Hardware<CAN> {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		stem.addAll(
-				IntStream.range(0, SensorBase.kPDPChannels).
-				mapToObj(port ->getCurrent(port).getWatchable("port "+port+" current"));
+		stem.addAll(IntStream.range(0, SensorBase.kPDPChannels)
+				.mapToObj(port -> getCurrent(port).getWatchable("port " + port + " current"))
+				.collect(Collectors.toList()));
 		return stem;
 	}
 
