@@ -28,8 +28,9 @@ public interface CompositeWatchable extends Watchable {
 
 	@Override
 	public default double getLoggable() {
-		
+		getSubWatchables(stem).forEach(action);
 	}
+	
 
 	@Override
 	public default Map<String, Watchable> getFlat(Optional<String> parent) {
