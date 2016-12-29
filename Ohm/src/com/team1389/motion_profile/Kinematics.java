@@ -18,7 +18,7 @@ public class Kinematics {
 
 	@Override
 	public String toString() {
-		return "Vo: " + Vo + " V: " + V + " a: " + a + " t: " + t + " S: " + X;
+		return "Vo: " + Vo + " Vf: " + V + " a: " + a + " t: " + t + " S: " + X;
 	}
 
 	public Kinematics solveSystem() {
@@ -58,6 +58,7 @@ public class Kinematics {
 				X = 0;
 			} else {
 				tt = (tV - tVo) / ta;
+				//System.out.println((tV - tVo) + " ::: " + ta);
 				t = tt;
 				X = tVo * tt + ta * tt * tt / 2;
 			}
@@ -132,7 +133,18 @@ public class Kinematics {
 				t = (tV - tVo) / ta;
 			}
 		}
+		/*if(tV != Double.NaN && tVo != Double.NaN){
+			if(Math.signum(ta) != Math.signum(tV - tVo)){
+				a *= -1;
+			}
+			if(Math.signum(tS) != Math.signum(tV + tVo)){
+				tS *= -1;
+			}
+		}*/
+		
+		
 		return this;
 	}
+	
 
 }
