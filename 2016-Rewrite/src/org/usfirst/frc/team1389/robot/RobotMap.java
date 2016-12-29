@@ -13,9 +13,9 @@ public class RobotMap {
 	protected static final int can_LEFT_MOTOR_A = 4; protected static final boolean inv_LEFT_MOTOR_A = true;
 	protected static final int can_LEFT_MOTOR_B = 5; protected static final boolean inv_LEFT_MOTOR_B = true;
 	protected static final int can_LEFT_MOTOR_C = 6; protected static final boolean inv_LEFT_MOTOR_C = true;
-	protected static final int can_RIGHT_MOTOR_A = 2; protected static final boolean inv_RIGHT_MOTOR_A = true;
-	protected static final int can_RIGHT_MOTOR_B = 1; protected static final boolean inv_RIGHT_MOTOR_B = true;
-	protected static final int can_RIGHT_MOTOR_C = 3; protected static final boolean inv_RIGHT_MOTOR_C = true;
+	protected static final int can_RIGHT_MOTOR_A = 2; protected static final boolean inv_RIGHT_MOTOR_A = false;
+	protected static final int can_RIGHT_MOTOR_B = 1; protected static final boolean inv_RIGHT_MOTOR_B = false;
+	protected static final int can_RIGHT_MOTOR_C = 3; protected static final boolean inv_RIGHT_MOTOR_C = false;
 	
 	//Arm
 	protected static final int can_TURRET_MOTOR = 10; protected static final boolean inv_TURRET_MOTOR = false;

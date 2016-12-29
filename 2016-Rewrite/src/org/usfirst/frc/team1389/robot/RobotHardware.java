@@ -23,22 +23,12 @@ import edu.wpi.first.wpilibj.SPI;
  * @see RobotMap
  */
 public class RobotHardware extends RobotLayout {
-	private static RobotHardware mInstance = new RobotHardware();
-
-	/**
-	 * Returns the initialized instance of the set all robot hardware
-	 * 
-	 * @return an initialized instance of RobotHardware
-	 */
-	public static RobotHardware getInstance() {
-		return mInstance;
-	}
 
 	/**
 	 * Initializes robot hardware by subsystem. <br>
 	 * note: use this method as an index to show hardware initializations that occur, and to find the init code for a particular system's hardware
 	 */
-	private RobotHardware() {
+	protected RobotHardware() {
 		registry = new Registry();
 		navX = new NavXHardware(SPI.Port.kMXP, registry);
 		initDriveTrain();
@@ -47,10 +37,13 @@ public class RobotHardware extends RobotLayout {
 		initIntake();
 	}
 
+	public Registry getRegistry() {
+		return registry;
+	}
+
 	private void initTurret() {
 		turretGyro = new GyroHardware(new Analog(anlg_TURRET_GYRO), registry);
 		turret = new CANTalonHardware(inv_TURRET_MOTOR, new CAN(can_TURRET_MOTOR), registry);
-		turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
 	}
 
 	private void initArm() {
@@ -64,7 +57,6 @@ public class RobotHardware extends RobotLayout {
 		IRsensor1 = new SwitchHardware(sinv_INTAKE_IR_A, new DIO(dio_INTAKE_IR_A), registry);
 		IRsensor2 = new SwitchHardware(sinv_INTAKE_IR_B, new DIO(dio_INTAKE_IR_B), registry);
 		intake = new VictorHardware(inv_INTAKE_MOTOR, new PWM(pwm_INTAKE_MOTOR), registry);
-		IRsensors = IRsensor1.getRawSwitch().combineOR(IRsensor2.getRawSwitch());
 	}
 
 	private void initDriveTrain() {
@@ -74,7 +66,7 @@ public class RobotHardware extends RobotLayout {
 		rightA = new CANTalonHardware(sinv_RIGHT_ENCODER, inv_RIGHT_MOTOR_A, new CAN(can_RIGHT_MOTOR_A), registry);
 		rightA = new CANTalonHardware(inv_RIGHT_MOTOR_B, new CAN(can_RIGHT_MOTOR_B), registry);
 		rightA = new CANTalonHardware(inv_RIGHT_MOTOR_C, new CAN(can_RIGHT_MOTOR_C), registry);
-		
+
 		leftDrive = new CANTalonGroup(leftA, leftB, leftC);
 		rightDrive = new CANTalonGroup(rightA, rightB, rightC);
 	}

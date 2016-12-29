@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1389.operation;
 
-import org.usfirst.frc.team1389.robot.RobotHardware;
+import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.ArmSystem;
 import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
@@ -8,9 +8,7 @@ import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.systems.TurretSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
-import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
-import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
@@ -19,9 +17,9 @@ import com.team1389.system.drive.CheesyDriveSystem;
 public class TeleopMain {
 	SystemManager manager;
 	ControlBoard controls;
-	RobotHardware robot;
+	RobotSoftware robot;
 
-	public TeleopMain(RobotHardware robot) {
+	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
 	}
 
@@ -56,22 +54,16 @@ public class TeleopMain {
 				map.new ButtonEnum(controls.armButtonB, ArmLocation.DEFENSE),
 				map.new ButtonEnum(controls.armButtonC, ArmLocation.VERTICAL),
 				map.new ButtonEnum(controls.armButtonD, ArmLocation.LOW_GOAL));
-		AngleIn armVal = robot.armPot.getAnalogInput().mapToRange(120, 0).setRange(0, 76).mapToRange(0, 90)
-				.setRange(0, 360).mapToAngle();
-		ArmSystem armSystem = new ArmSystem(elevator, map, armVal);
+		ArmSystem armSystem = new ArmSystem(elevator, map, robot.armVal);
 		return armSystem;
 	}
 
 	public Subsystem setupIntakeSystem() {
 		PercentOut motor = robot.intake.getVoltageOutput();
-		DigitalIn IRsensors = robot.IRsensors;
-		return new IntakeSystem(motor, IRsensors, controls.intakeAxis, controls.intakeOverride);
+		return new IntakeSystem(motor, robot.IRsensors, controls.intakeAxis, controls.intakeOverride);
 	}
 
 	public Subsystem setupDriveSystem() {
-		PercentOut left = robot.leftDrive.getVoltageOutput();
-		PercentOut right = robot.rightDrive.getVoltageOutput().invert();
-
-		return new CheesyDriveSystem(left, right, controls.throttle, controls.wheel.invert(), controls.quickTurn);
+		return new CheesyDriveSystem(robot.drive, controls.throttle, controls.wheel.invert(), controls.quickTurn);
 	}
 }
