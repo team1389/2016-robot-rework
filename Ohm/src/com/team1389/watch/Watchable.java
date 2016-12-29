@@ -1,6 +1,8 @@
 package com.team1389.watch;
 
+import java.io.FileWriter;
 import java.util.Map;
+
 
 import com.team1389.util.Optional;
 
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.tables.ITable;
 public interface Watchable {
 
 	public String getName();
+	void log(FileWriter fileWriter);
 
 	/**
 	 * @param name that the value will be stored under
@@ -44,8 +47,9 @@ public interface Watchable {
 	public default String getFullName(String parent) {
 		return parent + "." + getName();
 	}
+	
 
 	public String getPrintString();
 
-	public double getLoggable();
+	
 }

@@ -67,11 +67,6 @@ public class Watcher {
 			}
 	}
 	
-	public void log(){
-		for (Entry<String, Watchable> info : flatWatchables.entrySet()) {
-			info
-		}
-	}
 
 	/**
 	 * 

@@ -1,5 +1,6 @@
 package com.team1389.watch;
 
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
@@ -26,9 +27,8 @@ public interface CompositeWatchable extends Watchable {
 		return s;
 	}
 
-	@Override
-	public default double getLoggable() {
-		getSubWatchables(stem).forEach(action);
+	public default void getLoggable(FileWriter f) {
+		getSubWatchables(stem).forEach(w -> w.log(f));
 	}
 	
 
@@ -52,6 +52,14 @@ public interface CompositeWatchable extends Watchable {
 			public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 				return subWatchables.apply(stem);
 			}
+
+			@Override
+			public void log(FileWriter fileWriter) {
+			}
+
+			
+
+			
 
 		};
 	}
