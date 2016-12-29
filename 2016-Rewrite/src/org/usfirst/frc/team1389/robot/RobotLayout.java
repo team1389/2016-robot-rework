@@ -3,20 +3,16 @@ import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.NavXHardware;
 import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
-import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.hardware.CANTalonGroup;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.value_types.Angle;
 
 public class RobotLayout extends RobotMap{
 	public Registry registry;
 	
 	public SwitchHardware IRsensor1;
 	public SwitchHardware IRsensor2;
-	public DigitalIn IRsensors;
 	
 	CANTalonHardware leftA;
 	CANTalonHardware leftB;
@@ -25,7 +21,6 @@ public class RobotLayout extends RobotMap{
 	
 	public GyroHardware turretGyro;
 	public NavXHardware navX;
-	public RangeIn<Angle> turretAngle;
 	
 	
 	public PotentiometerHardware armPot;

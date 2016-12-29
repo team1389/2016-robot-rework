@@ -1,5 +1,7 @@
 package com.team1389.hardware.outputs.software;
 
+import java.util.function.Consumer;
+
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 import com.team1389.hardware.value_types.Value;
@@ -17,9 +19,14 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		this.min = min;
 		this.max = max;
 	}
+	public RangeOut(Consumer<Double> out,double min,double max){
+		this.min = min;
+		this.max = max;
+		output=out::accept;
+	}
 
 	@Override
-	public double get() {
+	public Double get() {
 		return lastVal;
 	}
 
@@ -106,10 +113,26 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		return cast();
 	}
 
+	public <R extends RangeOut<T>> R offset(ScalarInput<?> offsetAmt) {
+		output = ScalarOutput.offset(output, offsetAmt);
+		return cast();
+	}
+
+	public <R extends RangeOut<T>> R offset(double amt) {
+		return offset(() -> {
+			return amt;
+		});
+	}
+
 	public RangeOut<T> scale(double factor) {
 		output = ScalarOutput.scale(output, factor);
 		max *= factor;
 		min *= factor;
+		return this;
+	}
+	public RangeOut<T> setRange(int min, int max) {
+		this.min=min;
+		this.max=max;
 		return this;
 	}
 }

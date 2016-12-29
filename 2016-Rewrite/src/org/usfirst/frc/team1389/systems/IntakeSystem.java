@@ -3,10 +3,11 @@ package org.usfirst.frc.team1389.systems;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.system.System;
+import com.team1389.system.Subsystem;
+import com.team1389.util.AddList;
 import com.team1389.watch.Watchable;
 
-public class IntakeSystem extends System {
+public class IntakeSystem extends Subsystem {
 	PercentIn joystick;
 	PercentOut motor;
 	DigitalIn IRSensors;
@@ -44,9 +45,9 @@ public class IntakeSystem extends System {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { motor.getWatchable("intake voltage"), IRSensors.getInfo("has ball"),
-				override.getInfo("manual override") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(motor.getWatchable("intake voltage"), IRSensors.getWatchable("has ball"),
+				override.getWatchable("manual override"));
 	}
 
 }

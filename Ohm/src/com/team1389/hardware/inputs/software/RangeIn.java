@@ -1,5 +1,7 @@
 package com.team1389.hardware.inputs.software;
 
+import java.util.function.Supplier;
+
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Value;
@@ -8,11 +10,18 @@ import com.team1389.watch.info.NumberInfo;
 
 public class RangeIn<T extends Value> {
 	public Class<T> type;
-	protected ScalarInput<T> input;//interface that represents a single method that returns a double
+	protected ScalarInput<T> input;// interface that represents a single method that returns a double
 	protected double max, min;
 
 	public RangeIn(Class<T> type, ScalarInput<T> val, double min, double max) {
 		this.input = val;
+		this.min = min;
+		this.max = max;
+		this.type = type;
+	}
+
+	public RangeIn(Class<T> type, Supplier<Double> val, double min, double max) {
+		this.input = val::get;
 		this.min = min;
 		this.max = max;
 		this.type = type;
@@ -26,6 +35,10 @@ public class RangeIn<T extends Value> {
 
 	public double get() {
 		return input.get();
+	}
+
+	public ScalarInput<T> getStream() {
+		return input;
 	}
 
 	public double min() {
@@ -44,6 +57,7 @@ public class RangeIn<T extends Value> {
 	 * maps this range to an angle value
 	 * 
 	 * @return the mapped range
+	 * 
 	 */
 	public AngleIn mapToAngle() {
 		return new AngleIn(this);

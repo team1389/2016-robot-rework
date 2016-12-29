@@ -11,6 +11,5 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TankDriveSim/Jinput"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/TrajectoryLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

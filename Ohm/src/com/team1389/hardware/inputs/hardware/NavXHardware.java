@@ -3,6 +3,7 @@ package com.team1389.hardware.inputs.hardware;
 import com.kauailabs.navx.frc.AHRS;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.registry.Registry;
+import com.team1389.util.AddList;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 
@@ -19,7 +20,7 @@ public class NavXHardware implements CompositeWatchable {
 
 	public AngleIn getAngleInput() {
 		return new AngleIn(() -> {
-			return navX.getYaw();
+			return (double) navX.getYaw();
 		});
 	}
 
@@ -28,8 +29,9 @@ public class NavXHardware implements CompositeWatchable {
 		return "NavX";
 	}
 
+	// TODO add NavX capabilities
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getAngleInput().getWatchable("yaw") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(getAngleInput().getWatchable("yaw"));
 	}
 }

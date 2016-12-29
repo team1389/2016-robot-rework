@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SystemManager {
-	ArrayList<System> systems;
+	ArrayList<Subsystem> systems;
 	boolean hasInited;
 
-	public SystemManager(System... systems) {
+	public SystemManager(Subsystem... systems) {
 		this.systems = new ArrayList<>();
 		this.systems.addAll(Arrays.asList(systems));
 		hasInited = false;
 	}
 
-	public void register(System... systems) {
+	public void register(Subsystem... systems) {
 		if (hasInited) {
-			for (System system : systems) {
+			for (Subsystem system : systems) {
 				system.init();
 			}
 		}
@@ -24,13 +24,13 @@ public class SystemManager {
 
 	public void init() {
 		hasInited = true;
-		for (System system : systems) {
+		for (Subsystem system : systems) {
 			system.init();
 		}
 	}
 
 	public void update() {
-		for (System system : systems) {
+		for (Subsystem system : systems) {
 			system.thisUpdate();
 		}
 	}

@@ -5,8 +5,11 @@ import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.AngleOut;
 import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.value_types.Position;
+import com.team1389.util.AddList;
+import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -17,44 +20,47 @@ import edu.wpi.first.wpilibj.Servo;
  * @author Jacob Prinz
  */
 public class ServoHardware extends Hardware<PWM> {
-	Servo wpiServo;
+	public ServoHardware(PWM requestedPort, Registry registry) {
+		super(requestedPort, registry);
+	}
+
+	Optional<Servo> wpiServo;
 
 	public RangeOut<Position> getPositionOutput() {
-		return new RangeOut<Position>((double val) -> {
-			wpiServo.set(val);
-		}, 0, 1);
+		return new RangeOut<Position>(wpiServo.ifPresent((s, pos) -> s.set(pos)), 0, 1);
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { getAngleInput().getWatchable("angle") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return super.getSubWatchables(stem).put(getAngleInput().getWatchable("angle"));
 	}
 
 	public RangeIn<Position> getPositionInput() {
-		return new RangeIn<Position>(Position.class, () -> {
-			return wpiServo.getPosition();
-		}, 0, 1);
+		return new RangeIn<Position>(Position.class, wpiServo.ifPresent(0.0, (Servo s) -> {
+			return s.get();
+		}), 0, 1);
 	}
 
 	public AngleIn getAngleInput() {
-		return new AngleIn(() -> {
-			return wpiServo.getAngle();
-		});
+		return getPositionInput().mapToRange(0, 180).setRange(0, 360).mapToAngle();
 	}
 
 	public AngleOut getAngleOutput() {
-		return new AngleOut((double val) -> {
-			wpiServo.setAngle(val);
-		});
-	}
-
-	@Override
-	public void init(int port) {
-		wpiServo = new Servo(port);
+		return getPositionOutput().mapToRange(0, 180).setRange(0, 360).mapToAngle();
 	}
 
 	@Override
 	protected String getHardwareIdentifier() {
 		return "Servo";
+	}
+
+	@Override
+	public void init(PWM port) {
+		wpiServo = Optional.of(new Servo(port.index()));
+	}
+
+	@Override
+	public void failInit() {
+		wpiServo = Optional.empty();
 	}
 }

@@ -12,7 +12,7 @@ public class ToggledBinaryInput implements BinaryInput {
 	}
 
 	@Override
-	public boolean get() {
+	public Boolean get() {
 		return toggleIn.get(input.get());
 	}
 

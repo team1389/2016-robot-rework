@@ -1,20 +1,17 @@
 package com.team1389.hardware.inputs.interfaces;
+import java.util.function.Supplier;
+
+
 /**
  * represents a stream of boolean values, and various options to manipulate them
  * @author Kenneth
  *
  */
-public interface BinaryInput {
-	/**
-	 * 
-	 * @return current value of stream
-	 */
-	public boolean get();
-	/**
-	 * 
-	 * @param in stream of boolean
-	 * @return
-	 */
+
+public interface BinaryInput extends Input<Boolean>, Supplier<Boolean>{
+	@Override
+	public Boolean get();
+
 	public static BinaryInput invert(BinaryInput in) {
 		return () -> {
 			return !in.get();

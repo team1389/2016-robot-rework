@@ -1,11 +1,9 @@
 package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.systems.ArmSystem;
-import org.usfirst.frc.team1389.systems.ArmSystem.ArmLocation;
-
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.control.MotionProfileController;
-import com.team1389.hardware.inputs.software.ButtonEnumMap;
+import com.team1389.hardware.registry.Registry;
+import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -22,14 +20,23 @@ public class Tester {
 	static SystemManager manager;
 	static MotionProfileController cont;
 	double value;
+	static FakeHardware h;
+	static Registry r;
+
 	public static void init() {
-		ButtonEnumMap<ArmLocation> testButtons = new ButtonEnumMap<>(ArmLocation.DEFENSE);
-		ArmSystem system = new ArmSystem(robot.voltOut1, testButtons, robot.posIn1.mapToAngle());
-		dash.watch(system);
-		manager.register(system);
+		
+		r = new Registry();
+		h = new FakeHardware(new PWM(0), r);
+		dash.watch(h);
 	}
 
+	static boolean flag = false;
 	public static void update() {
+		if (h.getTimer().get() > 5 && !flag) {
+			flag = true;
+			h = new FakeHardware(new PWM(0), r);
+			dash.watch(h);
+		}
 	}
 
 	public static void main(String[] args) throws InterruptedException {

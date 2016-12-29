@@ -8,10 +8,11 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
-import com.team1389.system.System;
+import com.team1389.system.Subsystem;
+import com.team1389.util.AddList;
 import com.team1389.watch.Watchable;
 
-public class TurretSystem extends System {
+public class TurretSystem extends Subsystem {
 	PercentOut voltRange;
 
 	RangeIn<Percent> joystick;
@@ -55,8 +56,8 @@ public class TurretSystem extends System {
 	}
 
 	@Override
-	public Watchable[] getSubWatchables() {
-		return new Watchable[] { turretAngle.getWatchable("turret Angle") };
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(turretAngle.getWatchable("turret Angle"));
 	}
 
 }

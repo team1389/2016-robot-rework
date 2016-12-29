@@ -2,8 +2,6 @@
 package org.usfirst.frc.team1389.robot;
 
 import org.usfirst.frc.team1389.operation.TeleopMain;
-import org.usfirst.frc.team1389.robot.controls.ControlBoard;
-import org.usfirst.frc.team1389.systems.MotorVoltageTester;
 import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
@@ -17,7 +15,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the manifest file in the resource directory.
  */
 public class Robot extends IterativeRobot {
-	RobotHardware robot;
+	RobotSoftware robot;
 	TeleopMain teleOperator;
 	AutoModeExecuter autoModeExecuter;
 
@@ -26,15 +24,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		try {
-			DebugDash.getInstance().clearWatchers();
-			robot = RobotHardware.getInstance();
-			teleOperator = new TeleopMain(robot);
-			autoModeExecuter = new AutoModeExecuter();
-		} catch (Exception e) {
-			System.out.println("hi");
-		}
-		;
+		DebugDash.getInstance().clearWatchers();
+		robot = RobotSoftware.getInstance();
+		teleOperator = new TeleopMain(robot);
+		autoModeExecuter = new AutoModeExecuter();
 	}
 
 	@Override
@@ -81,11 +74,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testInit() {
-		testRunner = new SystemManager();
-		MotorVoltageTester motorVoltageTester = new MotorVoltageTester(robot.elevation.getVoltageOutput(),
-				ControlBoard.getInstance().intakeAxis, false);
-		testRunner.register(motorVoltageTester);
-		DebugDash.getInstance().watch(motorVoltageTester);
 	}
 
 	@Override
