@@ -47,6 +47,7 @@ public class SimMotor {
 
 	public SimMotor(Motor motor) {
 		this.motor = motor;
+		timer=new Timer();
 		hasWeight = false;
 		I = .001;
 	}

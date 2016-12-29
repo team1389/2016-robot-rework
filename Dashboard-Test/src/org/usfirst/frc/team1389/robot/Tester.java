@@ -33,6 +33,8 @@ public class Tester {
 
 	public static void update() {
 		cont.update();
+		dash.publish(Watcher.DASHBOARD);
+
 	}
 
 	public static void main(String[] args) throws InterruptedException {
