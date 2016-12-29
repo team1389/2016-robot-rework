@@ -64,6 +64,12 @@ public class Watcher {
 	public void publish(ITable table) {
 		for (Entry<String, Watchable> info : flatWatchables.entrySet()) {
 			info.getValue().publishUnderName(info.getKey(), table);
+			}
+	}
+	
+	public void log(){
+		for (Entry<String, Watchable> info : flatWatchables.entrySet()) {
+			info
 		}
 	}
 

@@ -28,7 +28,7 @@ public interface CompositeWatchable extends Watchable {
 
 	@Override
 	public default double getLoggable() {
-		return 0;
+		
 	}
 
 	@Override
