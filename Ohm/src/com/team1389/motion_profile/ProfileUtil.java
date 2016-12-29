@@ -31,6 +31,33 @@ public class ProfileUtil {
 		}
 	}
 
+	public static MotionProfile generate2(double dx, double Vo, double maxAccel, double maxDecel, double maxSpeed){
+		maxDecel *= -1;
+		boolean inverted = false;
+		if(dx < 0){
+			Vo *= -1;
+			dx *= -1;
+			inverted = true;
+		}
+		
+		Kinematics accelSegment = new Kinematics(Vo, maxSpeed, Double.NaN, maxAccel, Double.NaN);
+		Kinematics decelSegment = new Kinematics(maxSpeed, 0, Double.NaN, maxDecel, Double.NaN);
+		double diff = dx - (accelSegment.X + decelSegment.X);
+		if(diff < 0){
+			//Complicated math, i will explain later, not too important though, just calculated max speed
+			//Im like 90% sure its right
+			double v2 = Math.sqrt((dx + Vo * Vo / 2.0 / maxAccel) / (1.0 / 2.0 / maxAccel + 1.0 / 2.0 / (maxDecel * -1.0)));
+			
+			accelSegment = new Kinematics(Vo, v2, Double.NaN, maxAccel, Double.NaN);
+			decelSegment = new Kinematics(v2, 0, Double.NaN, maxDecel, Double.NaN);
+			return combine(new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(decelSegment, inverted));
+		}
+		else{
+			return combine(new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(0, diff, maxSpeed, inverted),
+					new ConstantAccelProfile(decelSegment, inverted));
+		}
+	}
+	
 	public static MotionProfile combine(MotionProfile... motionProfiles) {
 		MotionProfile combined = null;
 		for (MotionProfile motionProfile : motionProfiles) {
