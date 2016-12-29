@@ -40,7 +40,7 @@ public class MotionProfileController extends SynchronousPID {
 		if (following != null && !following.isFinished(time)) {
 			super.setSetpoint(following.getPosition(time) + startPos);
 		}
-		//System.out.println("Theoretical: " + super.getSetpoint());
+		System.out.println("Theoretical: " + super.getSetpoint());
 		double calculate = calculate(pos.get());
 		out.set(calculate);
 	}

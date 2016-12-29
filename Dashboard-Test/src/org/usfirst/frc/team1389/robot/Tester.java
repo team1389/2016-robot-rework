@@ -23,18 +23,16 @@ public class Tester {
 
 	public static void init() {
 		SimMotor sim = new SimMotor(Motor.CIM);
-		cont = new MotionProfileController(.03, .001, 0,
+		cont = new MotionProfileController(.03, 0, 0,
 				sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI),
 				sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI), sim.getVoltageOutput());
-		cont.followProfile(ProfileUtil.generate2(-20, 0, .05, .05, 8));
+		cont.followProfile(ProfileUtil.generate2(5, -3, 1, .1, 6));
 		dash.watch(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("pos"));
 		dash.watch(sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("speed"));
 	}
 
 	public static void update() {
 		cont.update();
-		dash.publish(Watcher.DASHBOARD);
-
 	}
 
 	public static void main(String[] args) throws InterruptedException {

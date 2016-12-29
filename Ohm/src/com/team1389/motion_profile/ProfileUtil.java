@@ -11,6 +11,7 @@ public class ProfileUtil {
 			maxDecel *= -Math.signum(dx);
 			maxVel *= Math.signum(dx);
 		}
+		
 		Kinematics accelSegment = new Kinematics(Vo, maxVel, Double.NaN, maxAccel, Double.NaN);
 		Kinematics decelSegment = new Kinematics(maxVel, 0, Double.NaN, maxDecel, Double.NaN);
 		double diff = dx - (accelSegment.X + decelSegment.X);
@@ -32,6 +33,8 @@ public class ProfileUtil {
 	}
 
 	public static MotionProfile generate2(double dx, double Vo, double maxAccel, double maxDecel, double maxSpeed){
+		double originaldx = dx;
+		
 		maxDecel *= -1;
 		boolean inverted = false;
 		if(dx < 0){
@@ -40,14 +43,23 @@ public class ProfileUtil {
 			inverted = true;
 		}
 		
+		if(Vo < 0){
+			Kinematics slowDown = new Kinematics(Vo, 0, Double.NaN, -maxDecel, Double.NaN);
+			//System.out.println(dx - slowDown.X);
+			return combine(new ConstantAccelProfile(slowDown, inverted), generate2(/*these should be opposite signs*/ dx - slowDown.X, 0, maxAccel, -maxDecel, maxSpeed));
+		}
+		
+		
+		//From here on out, it is assumed vo > 0
 		Kinematics accelSegment = new Kinematics(Vo, maxSpeed, Double.NaN, maxAccel, Double.NaN);
 		Kinematics decelSegment = new Kinematics(maxSpeed, 0, Double.NaN, maxDecel, Double.NaN);
+		
 		double diff = dx - (accelSegment.X + decelSegment.X);
 		if(diff < 0){
 			
 			Kinematics testAccel = new Kinematics(Vo, 0, Double.NaN, -maxAccel, Double.NaN);
 			//Cant stop in time
-			if(Math.signum(dx) == Math.signum(Vo) && testAccel.X > dx){
+			if(testAccel.X > dx){
 				double changeX = testAccel.X - dx;
 				//I could probably add a method or something for this code and the below code
 				//In fact, theres probably a way to do it with kinematics
