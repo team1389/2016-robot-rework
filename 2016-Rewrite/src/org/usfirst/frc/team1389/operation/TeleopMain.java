@@ -12,9 +12,9 @@ import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.outputs.software.PercentOut;
-import com.team1389.system.CheesyDriveSystem;
-import com.team1389.system.System;
+import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
+import com.team1389.system.drive.CheesyDriveSystem;
 
 public class TeleopMain {
 	SystemManager manager;
@@ -27,10 +27,10 @@ public class TeleopMain {
 
 	public void init() {
 		controls = ControlBoard.getInstance();
-		System driveSystem = setupDriveSystem();
-		System armSystem = setupArmSystem();
-		System intakeSystem = setupIntakeSystem();
-		System turretSystem = setupTurretSystem();
+		Subsystem driveSystem = setupDriveSystem();
+		Subsystem armSystem = setupArmSystem();
+		Subsystem intakeSystem = setupIntakeSystem();
+		Subsystem turretSystem = setupTurretSystem();
 
 		manager = new SystemManager(driveSystem, intakeSystem, armSystem, turretSystem);
 		manager.init();
@@ -62,13 +62,13 @@ public class TeleopMain {
 		return armSystem;
 	}
 
-	public System setupIntakeSystem() {
+	public Subsystem setupIntakeSystem() {
 		PercentOut motor = robot.intake.getVoltageOutput();
 		DigitalIn IRsensors = robot.IRsensors;
 		return new IntakeSystem(motor, IRsensors, controls.intakeAxis, controls.intakeOverride);
 	}
 
-	public System setupDriveSystem() {
+	public Subsystem setupDriveSystem() {
 		PercentOut left = robot.leftDrive.getVoltageOutput();
 		PercentOut right = robot.rightDrive.getVoltageOutput().invert();
 

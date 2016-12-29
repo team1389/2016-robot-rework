@@ -8,11 +8,11 @@ import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
-import com.team1389.system.System;
+import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
 import com.team1389.watch.Watchable;
 
-public class ArmSystem extends System {
+public class ArmSystem extends Subsystem {
 
 	public RangeOut<Angle> elevator;
 	SynchronousPIDController<Percent, Angle> elevatorPID;
