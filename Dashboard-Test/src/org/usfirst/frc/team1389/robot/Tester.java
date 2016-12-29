@@ -24,13 +24,13 @@ public class Tester {
 	static Registry r;
 
 	public static void init() {
+		
 		r = new Registry();
 		h = new FakeHardware(new PWM(0), r);
 		dash.watch(h);
 	}
 
 	static boolean flag = false;
-
 	public static void update() {
 		if (h.getTimer().get() > 5 && !flag) {
 			flag = true;

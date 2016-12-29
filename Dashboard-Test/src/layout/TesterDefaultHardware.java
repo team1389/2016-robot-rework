@@ -27,14 +27,14 @@ public class TesterDefaultHardware extends TesterLayout {
 		}, 0, 1);
 		speedIn2 = new RangeIn<Speed>(Speed.class, () -> {
 			return speed2;
-		}, 0, 8192);
+		}, 0, 1);
 
 		posIn1 = new RangeIn<Position>(Position.class, () -> {
 			return pos1;
 		}, 0, 1);
 		posIn2 = new RangeIn<Position>(Position.class, () -> {
 			return pos2;
-		}, 0, 8192);
+		}, 0, 1);
 		new Thread(() -> {
 			double lastLoop = System.currentTimeMillis();
 			while (true) {
