@@ -48,26 +48,21 @@ public class ProfileUtil {
 			Kinematics testAccel = new Kinematics(Vo, 0, Double.NaN, -maxAccel, Double.NaN);
 			//Cant stop in time
 			if(Math.signum(dx) == Math.signum(Vo) && testAccel.X > dx){
-				System.out.println("Cant stop in time");
 				double changeX = testAccel.X - dx;
+				//I could probably add a method or something for this code and the below code
+				//In fact, theres probably a way to do it with kinematics
 				double v2 = -Math.sqrt(changeX / (1.0 / 2.0 / maxAccel + 1.0 / 2.0 / (maxDecel * -1.0)));
 				accelSegment = new Kinematics(0, v2, Double.NaN, -maxAccel, Double.NaN);
 				decelSegment = new Kinematics(v2, 0, Double.NaN, -maxDecel, Double.NaN);
-				System.out.println(testAccel);
-				System.out.println(accelSegment);
-				System.out.println(decelSegment);
 				return combine(new ConstantAccelProfile(testAccel, inverted), 
 						new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(decelSegment, inverted));
-
 			}
 			
 			//Complicated math, i will explain later, not too important though, just calculated max speed
 			//Im like 90% sure its right
 			double v2 = Math.sqrt((dx + Vo * Vo / 2.0 / maxAccel) / (1.0 / 2.0 / maxAccel + 1.0 / 2.0 / (maxDecel * -1.0)));
 			accelSegment = new Kinematics(Vo, v2, Double.NaN, maxAccel, Double.NaN);
-			System.out.println(accelSegment);
 			decelSegment = new Kinematics(v2, 0, Double.NaN, maxDecel, Double.NaN);
-			System.out.println(decelSegment);
 			return combine(new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(decelSegment, inverted));
 		}
 		else{

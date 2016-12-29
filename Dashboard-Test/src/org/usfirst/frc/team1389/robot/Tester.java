@@ -25,7 +25,7 @@ public class Tester {
 				sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI),
 				sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI), 
 				sim.getVoltageOutput());
-		cont.followProfile(ProfileUtil.generate2(3, 6, 1, 1, 8));
+		cont.followProfile(ProfileUtil.generate2(-3, -6, 1, 1, 8));
 		dash.watch(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("pos"));
 		dash.watch(sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("speed"));
 		dash.publish(Watcher.DASHBOARD);
