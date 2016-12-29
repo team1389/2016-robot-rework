@@ -27,14 +27,19 @@ public interface CompositeWatchable extends Watchable {
 		return s;
 	}
 
-	public default void logInLog(FileWriter f) {
-		try{f.append("\n");
-		getSubWatchables(stem).forEach(w -> {w.log(f);
-		w.log(fileWriter););};
-		}catch (Exception e){
+	public default void log(FileWriter f) {
+		try{
+			f.append("\n"); 
+		for(Watchable w: getSubWatchables(stem)){
+		
+			f.append((Double.toString(w.getLoggable())));
+			f.append(",");
+			
+			
+			}
+		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-	
 		}
 	
 
@@ -60,9 +65,11 @@ public interface CompositeWatchable extends Watchable {
 			}
 
 			@Override
-			public void log(FileWriter fileWriter) {
+			public double getLoggable() {
+				return 0;
 			}
 
+			
 			
 
 			

@@ -47,10 +47,10 @@ public interface Watchable {
 	public default String getFullName(String parent) {
 		return parent + "." + getName();
 	}
-	public default void log(FileWriter fileWriter, double val){
-		fileWriter.append();
-		
+	public default double getLoggable(){
+		return 0;
 	}
+		
 	
 
 	public String getPrintString();
