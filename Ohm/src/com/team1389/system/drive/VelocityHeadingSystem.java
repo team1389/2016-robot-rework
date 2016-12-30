@@ -6,6 +6,7 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.trajectory.Rotation2d;
 
 public class VelocityHeadingSystem {
+	//TODO figure out how to use this drive algorithm
 	protected DriveOut<Speed> drive;
 	private AngleIn gyro;
 
@@ -14,7 +15,8 @@ public class VelocityHeadingSystem {
 	private SynchronousPID velocityHeadingPid_;
 
 	public VelocityHeadingSystem(DriveOut<Speed> drive, AngleIn gyro) {
-
+		this.drive = drive;
+		this.gyro = gyro;
 	}
 
 	public void update() {
