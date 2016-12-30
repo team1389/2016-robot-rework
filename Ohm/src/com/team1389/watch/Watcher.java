@@ -33,7 +33,7 @@ public class Watcher{
 	
 	public Watcher() {
 		try{
-		FILEWRITER =new FileWriter("log.csv");
+		FILEWRITER =new FileWriter("log.tsv");
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}
