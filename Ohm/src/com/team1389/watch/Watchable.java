@@ -1,6 +1,7 @@
 package com.team1389.watch;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 
 
@@ -39,6 +40,7 @@ public interface Watchable {
 	 * publishing using name provided by object
 	 * 
 	 * @param table where key+value is published to
+	 * 
 	 */
 	public default void publish(ITable table) {
 		publishUnderName(getName(), table);
@@ -47,10 +49,14 @@ public interface Watchable {
 	public default String getFullName(String parent) {
 		return parent + "." + getName();
 	}
+	
 	public default double getLoggable(){
 		return 0;
 	}
-		
+
+	void log(FileWriter f);
+	void logKey(FileWriter f);
+	
 	
 
 	public String getPrintString();

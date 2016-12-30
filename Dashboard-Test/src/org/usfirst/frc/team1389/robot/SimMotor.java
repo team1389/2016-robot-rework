@@ -98,7 +98,6 @@ public class SimMotor {
 		currentTorque = motorTorque(voltage, omega)*gearReduction; // calculate torque from motor, which depends on the voltage and the current speed
 		// calculate the torque of gravity
 		double torqueGravity = g * m * Math.cos(theta) * rCenterMass;
-		System.out.println(torqueGravity + " " + currentTorque);
 		alpha = (currentTorque - torqueGravity) / I;
 		omega += alpha * dt; // add to velocity
 		theta += omega * dt; // add to position

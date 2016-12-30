@@ -33,7 +33,7 @@ public class Watcher{
 	
 	public Watcher() {
 		try{
-		FILEWRITER =new FileWriter("log.tsv");
+		FILEWRITER = new FileWriter("log.tsv");
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}
@@ -86,12 +86,15 @@ public class Watcher{
 			catch(IOException e){
 				e.getMessage();
 			}
-		
+		check = true;
 		}
-		for(Watchable w: watchables ){
+		
+			for(Watchable w: watchables ){
+		
 			try{
 				f.append(Double.toString(w.getLoggable()));
 				f.append("\t");
+				f.flush();
 				
 			}
 			catch(IOException e){
@@ -104,7 +107,8 @@ public class Watcher{
 		catch(IOException e){
 			System.out.println(e.getMessage());
 		}
-	}
+		}
+	
 	public void closeLog(FileWriter f){
 		try{
 			f.close();

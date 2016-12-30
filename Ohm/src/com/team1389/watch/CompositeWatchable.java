@@ -26,7 +26,7 @@ public interface CompositeWatchable extends Watchable {
 		String s = "";
 		return s;
 	}
-
+	@Override
 	public default void log(FileWriter f) {
 	
 		for(Watchable w: getSubWatchables(stem)){
@@ -37,6 +37,13 @@ public interface CompositeWatchable extends Watchable {
 			}catch(Exception e){
 				System.out.println(e.getMessage());
 			}
+		}
+		}
+	@Override
+	public default void logKey(FileWriter f) {
+		
+		for(Watchable w: getSubWatchables(stem)){
+			w.logKey(f);
 		}
 		}
 	

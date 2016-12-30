@@ -1,5 +1,7 @@
 package com.team1389.watch.info;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,22 @@ public abstract class SimpleWatchable implements Watchable {
 
 	public SimpleWatchable(String name) {
 		this.name = name;
+	}
+	public void log(FileWriter f) {
+		try{
+		f.append(Double.toString(this.getLoggable()));
+		f.append("\t");
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	public  void logKey(FileWriter f){
+		try{
+			f.append(this.getName());
+			f.append("t");
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+		}
 	}
 
 	@Override
