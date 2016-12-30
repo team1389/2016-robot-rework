@@ -11,7 +11,7 @@ public class ProfileUtil {
 			maxDecel *= -Math.signum(dx);
 			maxVel *= Math.signum(dx);
 		}
-		
+
 		Kinematics accelSegment = new Kinematics(Vo, maxVel, Double.NaN, maxAccel, Double.NaN);
 		Kinematics decelSegment = new Kinematics(maxVel, 0, Double.NaN, maxDecel, Double.NaN);
 		double diff = dx - (accelSegment.X + decelSegment.X);
@@ -32,57 +32,60 @@ public class ProfileUtil {
 		}
 	}
 
-	public static MotionProfile generate2(double dx, double Vo, double maxAccel, double maxDecel, double maxSpeed){
-		double originaldx = dx;
-		
+	public static MotionProfile generate2(double dx, double Vo, double maxAccel, double maxDecel, double maxSpeed) {
 		maxDecel *= -1;
 		boolean inverted = false;
-		if(dx < 0){
+		if (dx < 0) {
+			System.out.println(Vo);
 			Vo *= -1;
 			dx *= -1;
 			inverted = true;
 		}
-		
-		if(Vo < 0){
+
+		if (Vo < 0) {
+			System.out.println(true);
 			Kinematics slowDown = new Kinematics(Vo, 0, Double.NaN, -maxDecel, Double.NaN);
-			//System.out.println(dx - slowDown.X);
-			return combine(new ConstantAccelProfile(slowDown, inverted), generate2(/*these should be opposite signs*/ dx - slowDown.X, 0, maxAccel, -maxDecel, maxSpeed));
+			// System.out.println(dx - slowDown.X);
+			return combine(new ConstantAccelProfile(slowDown, inverted),
+					generate2((inverted ? -1 : 1) * (dx - slowDown.X), 0, maxAccel, -maxDecel, maxSpeed));
 		}
-		
-		
-		//From here on out, it is assumed vo > 0
+
+		// From here on out, it is assumed vo > 0
 		Kinematics accelSegment = new Kinematics(Vo, maxSpeed, Double.NaN, maxAccel, Double.NaN);
 		Kinematics decelSegment = new Kinematics(maxSpeed, 0, Double.NaN, maxDecel, Double.NaN);
-		
+
 		double diff = dx - (accelSegment.X + decelSegment.X);
-		if(diff < 0){
-			
+		if (diff < 0) {
+
 			Kinematics testAccel = new Kinematics(Vo, 0, Double.NaN, -maxAccel, Double.NaN);
-			//Cant stop in time
-			if(testAccel.X > dx){
+			// Cant stop in time
+			if (testAccel.X > dx) {
 				double changeX = testAccel.X - dx;
-				//I could probably add a method or something for this code and the below code
-				//In fact, theres probably a way to do it with kinematics
+				// I could probably add a method or something for this code and the below code
+				// In fact, theres probably a way to do it with kinematics
 				double v2 = -Math.sqrt(changeX / (1.0 / 2.0 / maxAccel + 1.0 / 2.0 / (maxDecel * -1.0)));
 				accelSegment = new Kinematics(0, v2, Double.NaN, -maxAccel, Double.NaN);
 				decelSegment = new Kinematics(v2, 0, Double.NaN, -maxDecel, Double.NaN);
-				return combine(new ConstantAccelProfile(testAccel, inverted), 
-						new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(decelSegment, inverted));
+				return combine(new ConstantAccelProfile(testAccel, inverted),
+						new ConstantAccelProfile(accelSegment, inverted),
+						new ConstantAccelProfile(decelSegment, inverted));
 			}
-			
-			//Complicated math, i will explain later, not too important though, just calculated max speed
-			//Im like 90% sure its right
-			double v2 = Math.sqrt((dx + Vo * Vo / 2.0 / maxAccel) / (1.0 / 2.0 / maxAccel + 1.0 / 2.0 / (maxDecel * -1.0)));
+
+			// Complicated math, i will explain later, not too important though, just calculated max speed
+			// Im like 90% sure its right
+			double v2 = Math
+					.sqrt((dx + Vo * Vo / 2.0 / maxAccel) / (1.0 / 2.0 / maxAccel + 1.0 / 2.0 / (maxDecel * -1.0)));
 			accelSegment = new Kinematics(Vo, v2, Double.NaN, maxAccel, Double.NaN);
 			decelSegment = new Kinematics(v2, 0, Double.NaN, maxDecel, Double.NaN);
-			return combine(new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(decelSegment, inverted));
-		}
-		else{
-			return combine(new ConstantAccelProfile(accelSegment, inverted), new ConstantAccelProfile(0, diff, maxSpeed, inverted),
+			return combine(new ConstantAccelProfile(accelSegment, inverted),
+					new ConstantAccelProfile(decelSegment, inverted));
+		} else {
+			return combine(new ConstantAccelProfile(accelSegment, inverted),
+					new ConstantAccelProfile(0, diff, maxSpeed, inverted),
 					new ConstantAccelProfile(decelSegment, inverted));
 		}
 	}
-	
+
 	public static MotionProfile combine(MotionProfile... motionProfiles) {
 		MotionProfile combined = null;
 		for (MotionProfile motionProfile : motionProfiles) {
