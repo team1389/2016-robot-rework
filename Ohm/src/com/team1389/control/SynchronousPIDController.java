@@ -32,7 +32,7 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 	}
 
 	public RangeOut<I> getSetpointSetter() {
-		return new RangeOut<I>(this::setTarget, source.min(), source.max());
+		return new RangeOut<I>(this::setSetpoint, source.min(), source.max());
 	}
 
 	public RangeIn<I> getSource() {

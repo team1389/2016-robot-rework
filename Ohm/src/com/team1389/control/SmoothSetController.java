@@ -21,7 +21,7 @@ public class SmoothSetController extends MotionProfileController {
 	}
 
 	@Override
-	public void setTarget(double target) {
+	public void setSetpoint(double target) {
 		if (this.setpoint != target) {
 			this.setpoint = target;
 			double err = target - pos.get();
@@ -30,8 +30,8 @@ public class SmoothSetController extends MotionProfileController {
 		}
 	}
 
-	public RangeOut<Position> getTargetSetter() {
-		return new RangeOut<Position>(this::setTarget, pos.min(), pos.max());
+	public RangeOut<Position> getSetpointSetter() {
+		return new RangeOut<Position>(this::setSetpoint, pos.min(), pos.max());
 	}
 
 }

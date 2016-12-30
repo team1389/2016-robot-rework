@@ -6,6 +6,7 @@ import com.team1389.command_framework.CommandScheduler;
 import com.team1389.control.SmoothSetController;
 import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
 import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.system.SystemManager;
@@ -24,20 +25,22 @@ public class Tester {
 	static SystemManager manager;
 	static SmoothSetController cont;
 	static DashboardScalarInput inp;
-
+	static RangeOut<Position> setter;
 	public static void init() {
-		SimMotor sim = new SimMotor(Motor.CIM);
-		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI);
-		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI);
+		SimMotor sim = new SimMotor(Motor.CIM, 7.5, 0.66, true);
+		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
+		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
 		dash.watch(pos.getWatchable("pos"), speed.getWatchable("speed"));
-		cont = new SmoothSetController(.03, 0, 0, 3, 3, 8, pos, speed, sim.getVoltageOutput());
+		cont = new SmoothSetController(.03, 0, 2, 10, 10, 30, pos, speed, sim.getVoltageOutput());
+	//	cont = new SynchronousPIDController<>(.03, 0, 0, pos, sim.getVoltageOutput());
 		inp = new DashboardScalarInput("setpoint", Watcher.DASHBOARD, 0.0);
-		cont.setTarget(20);
+		setter=cont.getSetpointSetter();
+		cont.setSetpoint(20);
 	}
 
 	public static void update() {
 		cont.update();
-		cont.setTarget(inp.get());
+		setter.set(inp.get());
 	}
 
 	public static void main(String[] args) throws InterruptedException {

@@ -58,7 +58,7 @@ public class TurnAngleCommand<O extends Value> extends Command {
 		if (!isAbsolute) {
 			angle += pid.getSource().get();
 		}
-		pid.setTarget(angle);
+		pid.setSetpoint(angle);
 	}
 
 	@Override

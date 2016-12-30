@@ -12,6 +12,7 @@ public class SimMotor {
 	public final static double g = 9.8; // acceleration of gravity (m/s^2)
 	private double I, rCenterMass, m; // moment of inertia
 	private boolean hasWeight = true;
+	private double gearReduction = 200;
 
 	private double theta = 0; // current angle
 	private double omega = 0; // current rate of rotation (rad/sec)
@@ -42,12 +43,12 @@ public class SimMotor {
 	}
 
 	public SimMotor(Motor motor, double m, double r, boolean hasWeight) {
-		this(motor, m, r, r / 2, hasWeight);
+		this(motor, m, r, r / 2, m * r * r / 3, hasWeight);
 	}
 
 	public SimMotor(Motor motor) {
 		this.motor = motor;
-		timer=new Timer();
+		timer = new Timer();
 		hasWeight = false;
 		I = .001;
 	}
@@ -57,11 +58,11 @@ public class SimMotor {
 	}
 
 	public RangeIn<Position> getPositionInput() {
-		return new RangeIn<Position>(Position.class, () -> theta, 0, 2 * Math.PI);
+		return new RangeIn<Position>(Position.class, () -> theta / gearReduction, 0, 2 * Math.PI);
 	}
 
 	public RangeIn<Speed> getSpeedInput() {
-		return new RangeIn<Speed>(Speed.class, () -> omega, 0, 2 * Math.PI);
+		return new RangeIn<Speed>(Speed.class, () -> omega / gearReduction, 0, 2 * Math.PI);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class SimMotor {
 	public void setVoltageNoGravity(double voltage) {
 		double dt = timer.get();
 		timer.zero();
-		currentTorque = motorTorque(voltage, omega); // calculate torque from motor, which depends on the voltage and the current speed
+		currentTorque = motorTorque(voltage, omega) * gearReduction; // calculate torque from motor, which depends on the voltage and the current speed
 		alpha = currentTorque / I;
 		omega += alpha * dt; // add to velocity
 		theta += omega * dt; // add to position
@@ -94,9 +95,10 @@ public class SimMotor {
 	public void setVoltageGravity(double voltage) {
 		double dt = timer.get();
 		timer.zero();
-		currentTorque = motorTorque(voltage, omega); // calculate torque from motor, which depends on the voltage and the current speed
+		currentTorque = motorTorque(voltage, omega)*gearReduction; // calculate torque from motor, which depends on the voltage and the current speed
 		// calculate the torque of gravity
 		double torqueGravity = g * m * Math.cos(theta) * rCenterMass;
+		System.out.println(torqueGravity + " " + currentTorque);
 		alpha = (currentTorque - torqueGravity) / I;
 		omega += alpha * dt; // add to velocity
 		theta += omega * dt; // add to position
