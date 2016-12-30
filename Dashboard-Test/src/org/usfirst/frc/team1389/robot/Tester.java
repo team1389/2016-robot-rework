@@ -28,12 +28,12 @@ public class Tester {
 		cont = new MotionProfileController(.03, 0, 0,
 				sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI),
 				sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI), sim.getVoltageOutput());
-		cont.followProfile(ProfileUtil.generate2(-20, 0, .05, .05, 6));
+		cont.followProfile(ProfileUtil.trapezoidal(-20, 0, .05, .05, 6));
 		dash.watch(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("pos"));
 		dash.watch(sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("speed"));
 		scheduler.schedule(CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
 			System.out.println(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).get());
-			cont.followProfile(ProfileUtil.generate2(-1,
+			cont.followProfile(ProfileUtil.trapezoidal(-1,
 					sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).get(), .05, .05, 8));
 			return true;
 		})));

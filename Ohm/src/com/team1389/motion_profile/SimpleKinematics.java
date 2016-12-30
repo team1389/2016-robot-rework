@@ -1,13 +1,9 @@
 package com.team1389.motion_profile;
 
-public class Kinematics {
+public class SimpleKinematics {
 	public double Vo, V, t, a, X;
 
-	public static void main(String[] args) {
-		System.out.println(new Kinematics(0, 10, Double.NaN, Double.NaN, 5).solveSystem());
-	}
-
-	public Kinematics(double v0, double vf, double t, double a, double S) {
+	public SimpleKinematics(double v0, double vf, double t, double a, double S) {
 		this.a = a;
 		this.Vo = v0;
 		this.t = t;
@@ -21,7 +17,7 @@ public class Kinematics {
 		return "Vo: " + Vo + " Vf: " + V + " a: " + a + " t: " + t + " S: " + X;
 	}
 
-	public Kinematics solveSystem() {
+	public SimpleKinematics solveSystem() {
 		int code = 0;
 		code = Double.isNaN(X) ? code : code | 1;
 		code = code << 1;
@@ -35,7 +31,7 @@ public class Kinematics {
 		return solveSystem(code);
 	}
 
-	private Kinematics solveSystem(int code) {
+	private SimpleKinematics solveSystem(int code) {
 		double tS = X;
 		double tVo = Vo;
 		double tV = V;
