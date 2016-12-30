@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.tables.ITable;
  */
 public class Watcher{
 
-	public static FileWriter fileWriter = null;
+	public static FileWriter FILEWRITER = null;
 	public static ITable DASHBOARD = NetworkTable.getTable("SmartDashboard");
 	protected List<Watchable> watchables;
 	protected Map<String, Watchable> flatWatchables;
@@ -33,7 +33,7 @@ public class Watcher{
 	
 	public Watcher() {
 		try{
-		fileWriter =new FileWriter("src\\.com.team1389.watch\\log.csv");
+		FILEWRITER =new FileWriter("log.csv");
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}

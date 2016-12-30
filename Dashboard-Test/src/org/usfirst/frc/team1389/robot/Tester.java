@@ -65,6 +65,7 @@ public class Tester {
 			scheduler.update();
 			manager.update();
 			dash.publish(Watcher.DASHBOARD);
+			dash.log(Watcher.FILEWRITER);
 			Thread.sleep(50);
 		}
 	}
