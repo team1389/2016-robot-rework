@@ -1,34 +1,75 @@
 package com.team1389.motion_profile;
 
 public class ProfileUtil {
-	public static MotionProfile generate(double dx, double Vo, double maxAccel, double maxDecel, double maxVel) {
-		if (dx == 0) {
-			maxAccel *= Math.signum(Vo);
-			maxDecel *= -Math.signum(Vo);
-			maxVel *= Math.signum(Vo);
-		} else {
-			maxAccel *= Math.signum(dx);
-			maxDecel *= -Math.signum(dx);
-			maxVel *= Math.signum(dx);
+
+	public static MotionProfile trapezoidal(double dx, double Vo, double maxAccel, double maxDecel, double maxSpeed) {
+		//Make sure these values are positive
+		maxDecel = Math.abs(maxDecel);
+		maxAccel = Math.abs(maxAccel);
+		maxSpeed = Math.abs(maxSpeed);
+
+		boolean inverted = false;
+		if (dx < 0) {
+			Vo *= -1;
+			dx *= -1;
+			inverted = true;
 		}
-		Kinematics accelSegment = new Kinematics(Vo, maxVel, Double.NaN, maxAccel, Double.NaN);
-		Kinematics decelSegment = new Kinematics(maxVel, 0, Double.NaN, maxDecel, Double.NaN);
+		//From here on out is is assumed dx is positive
+		
+		//If Vo is less than 0 (i.e. we are going in the opposite direction of our dx) immediately slow to 0 and then calculated 
+		//what to do next (recursivly)
+		if (Vo < 0) {
+			SimpleKinematics slowDown = new SimpleKinematics(Vo, 0, Double.NaN, maxDecel, Double.NaN);
+			return combine(new ConstantAccelProfile(slowDown, inverted),
+					trapezoidal((inverted ? -1 : 1) * (dx - slowDown.X), 0, maxAccel, maxDecel, maxSpeed));
+		}
+
+		// From here on out, it is assumed vo >= 0
+		SimpleKinematics accelSegment = new SimpleKinematics(Vo, maxSpeed, Double.NaN, maxAccel, Double.NaN);
+		SimpleKinematics decelSegment = new SimpleKinematics(maxSpeed, 0, Double.NaN, -maxDecel, Double.NaN);
+
 		double diff = dx - (accelSegment.X + decelSegment.X);
-		if (diff * Math.signum(dx) > 0) {
-			return combine(new ConstantAccelProfile(accelSegment), new ConstantAccelProfile(0, diff, maxVel),
-					new ConstantAccelProfile(decelSegment));
-		} else {
-			accelSegment = new Kinematics(Vo, 0, Double.NaN, maxDecel, Double.NaN);
-			if (dx - accelSegment.X < 0) {
-				return combine(new ConstantAccelProfile(accelSegment),
-						generate(-accelSegment.X, 0, Math.abs(maxAccel), Math.abs(maxDecel), maxVel));
+		if (diff < 0) {
+			SimpleKinematics testDecel = new SimpleKinematics(Vo, 0, Double.NaN, -maxAccel, Double.NaN);
+			if (testDecel.X > dx /*i.e. we cant stop in time and have to backtrack*/) {	
+				double vMax = -calculateTopSpeed(testDecel.X - dx, 0, maxAccel, maxDecel);
+				accelSegment = new SimpleKinematics(0, vMax, Double.NaN, -maxAccel, Double.NaN);
+				decelSegment = new SimpleKinematics(vMax, 0, Double.NaN, maxDecel, Double.NaN);
+				return combine(new ConstantAccelProfile(testDecel, inverted),
+						new ConstantAccelProfile(accelSegment, inverted),
+						new ConstantAccelProfile(decelSegment, inverted));
 			}
-			double xAcc = (-(Vo * Vo) - 2 * maxDecel * dx) / (2 * maxAccel - 2 * maxDecel);
-			double xDec = dx - xAcc;
-			accelSegment = new Kinematics(Vo, Double.NaN, Double.NaN, maxAccel, xAcc);
-			decelSegment = new Kinematics(Double.NaN, 0, Double.NaN, maxDecel, xDec);
-			return combine(new ConstantAccelProfile(accelSegment), new ConstantAccelProfile(decelSegment));
+
+			double vMax = calculateTopSpeed(dx, Vo, maxAccel, maxDecel);
+			accelSegment = new SimpleKinematics(Vo, vMax, Double.NaN, maxAccel, Double.NaN);
+			decelSegment = new SimpleKinematics(vMax, 0, Double.NaN, -maxDecel, Double.NaN);
+			return combine(new ConstantAccelProfile(accelSegment, inverted),
+					new ConstantAccelProfile(decelSegment, inverted));
+		} else {
+			return combine(new ConstantAccelProfile(accelSegment, inverted), 
+					/*I'm not 100% sure about this next argument, but apparently it works in all cases. "voodoo magic"*/
+					new ConstantAccelProfile(0, (inverted ? -1 : 1) * diff, (inverted ? -1 : 1) * maxSpeed, inverted),
+					new ConstantAccelProfile(decelSegment, inverted));
 		}
+	}
+	
+	/**
+	 * Returns the height of the triangular speed profile. In other words, how fast you can possibly go with constant acceleration 
+	 * and constant deceleration in the given x. It is interpreted as a speed, not a velocity, so it could be negative.
+	 * However, just assume everything is positive and convert later.  
+	 * @param dx The POSITIVE change in x
+	 * @param Vo The initial velocity, also positive by convention although its squared so it doesnt really matter
+	 * @param a The POSITIVE acceleration, the right side of the triangle
+	 * @param d The POSITIVE deceleration, the left side of the triangle
+	 * @return The speed, NOT THE VELOCITY
+	 */
+	private static double calculateTopSpeed(double dx, double Vo, double a, double d){
+		a = Math.abs(a);
+		d = Math.abs(d);
+		dx = Math.abs(dx);
+		//For the derivation of this equation, draw out a triangle and think it out.
+		//For a hint: use vf ^ 2 = vo^2 + 2ax twice.
+		return Math.sqrt((dx + Vo * Vo / 2.0 / a) / (1.0 / 2.0 / a + 1.0 / 2.0 / d));
 	}
 
 	public static MotionProfile combine(MotionProfile... motionProfiles) {
@@ -43,51 +84,4 @@ public class ProfileUtil {
 		return combined;
 	}
 
-	public static class CombinedProfile extends MotionProfile {
-		MotionProfile profile;
-		MotionProfile profile2;
-
-		public CombinedProfile(MotionProfile profile, MotionProfile profile2) {
-			this.profile = profile;
-			this.profile2 = profile2;
-		}
-
-		@Override
-		public double getDuration() {
-			return profile.getDuration() + profile2.getDuration();
-		}
-
-		@Override
-		protected double providePosition(double time) {
-			if (time < profile.getDuration()) {
-				return profile.providePosition(time);
-			} else {
-				return profile2.providePosition(time - profile.getDuration())
-						+ profile.getPosition(profile.getDuration());
-			}
-		}
-
-		@Override
-		protected double provideVelocity(double time) {
-			if (time < profile.getDuration()) {
-				return profile.provideVelocity(time);
-			} else {
-				return profile2.provideVelocity(time);
-			}
-		}
-
-		@Override
-		protected double provideAcceleration(double time) {
-			if (time < profile.getDuration()) {
-				return profile.provideAcceleration(time);
-			} else {
-				return profile2.provideAcceleration(time);
-			}
-		}
-
-		@Override
-		public String toString() {
-			return "[" + profile + "," + profile2 + "]";
-		}
-	}
 }

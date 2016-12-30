@@ -56,4 +56,5 @@ public class MotionProfileController extends SynchronousPID {
 			return exitCondition.get();
 		});
 	}
+
 }

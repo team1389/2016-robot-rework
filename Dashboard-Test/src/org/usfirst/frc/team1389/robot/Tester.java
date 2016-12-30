@@ -1,9 +1,14 @@
 package org.usfirst.frc.team1389.robot;
 
+import org.usfirst.frc.team1389.robot.SimMotor.Motor;
+
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.control.MotionProfileController;
-import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.registry.port_types.PWM;
+import com.team1389.control.SmoothSetController;
+import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.value_types.Position;
+import com.team1389.hardware.value_types.Speed;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -18,25 +23,24 @@ public class Tester {
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
-	static MotionProfileController cont;
-	double value;
-	static FakeHardware h;
-	static Registry r;
-
+	static SmoothSetController cont;
+	static DashboardScalarInput inp;
+	static RangeOut<Position> setter;
 	public static void init() {
-		
-		r = new Registry();
-		h = new FakeHardware(new PWM(0), r);
-		dash.watch(h);
+		SimMotor sim = new SimMotor(Motor.CIM, 7.5, 0.66, true);
+		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
+		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
+		dash.watch(pos.getWatchable("pos"), speed.getWatchable("speed"));
+		cont = new SmoothSetController(.03, 0, 2, 10, 10, 30, pos, speed, sim.getVoltageOutput());
+	//	cont = new SynchronousPIDController<>(.03, 0, 0, pos, sim.getVoltageOutput());
+		inp = new DashboardScalarInput("setpoint", Watcher.DASHBOARD, 0.0);
+		setter=cont.getSetpointSetter();
+		cont.setSetpoint(20);
 	}
 
-	static boolean flag = false;
 	public static void update() {
-		if (h.getTimer().get() > 5 && !flag) {
-			flag = true;
-			h = new FakeHardware(new PWM(0), r);
-			dash.watch(h);
-		}
+		cont.update();
+		setter.set(inp.get());
 	}
 
 	public static void main(String[] args) throws InterruptedException {

@@ -42,7 +42,6 @@ public class ArmSystem extends Subsystem {
 		elevator.set(inputAngle);
 		elevatorPID.update();
 	}
-
 	public enum ArmLocation {
 		DOWN(0), DEFENSE(45), LOW_GOAL(25), VERTICAL(90);
 

@@ -8,7 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/2016-Rewrite"/>
 	<classpathentry kind="lib" path="Jinput/jinput.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TankDriveSim/Jinput"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Dashboard-Test/Jinput"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

@@ -43,7 +43,6 @@ public class Watcher{
 
 	/**
 	 * used if individual watchables are passed in
-	 * 
 	 * @param watchables added to list
 	 * @return list of watchables
 	 */
@@ -130,7 +129,6 @@ public class Watcher{
 			}
 	}
 	
-
 	/**
 	 * 
 	 * @return printable values of watchables
@@ -143,9 +141,6 @@ public class Watcher{
 		return s;
 	}
 
-	/*
-	 * public Set<String> getInfoKeys() { Set<String> keys = new HashSet<>(); for (Watchable w : watchables) { for (Info info : w.getInfo()) { keys.add(info.getName()); } } return keys; }
-	 */
 	/**
 	 * reset list
 	 */
