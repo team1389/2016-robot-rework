@@ -194,7 +194,7 @@ public class SynchronousPID {
 		}
 		m_minimumInput = minimumInput;
 		m_maximumInput = maximumInput;
-		setSetpoint(m_setpoint);
+		setTarget(m_setpoint);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class SynchronousPID {
 	 * @param setpoint
 	 *            the desired setpoint
 	 */
-	public void setSetpoint(double setpoint) {
+	public void setTarget(double setpoint) {
 		if (m_maximumInput > m_minimumInput) {
 			if (setpoint > m_maximumInput) {
 				m_setpoint = m_maximumInput;

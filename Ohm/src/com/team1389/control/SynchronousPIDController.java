@@ -14,7 +14,6 @@ import com.team1389.watch.Watchable;
 public class SynchronousPIDController<O extends Value, I extends PIDTunableValue> extends SynchronousPID {
 	protected RangeOut<O> output;
 	protected RangeIn<I> source;
-	protected RangeOut<I> setpointSetter;
 
 	public SynchronousPIDController(double kP, double kI, double kD, RangeIn<I> source, RangeOut<O> output) {
 		super(kP, kI, kD);
@@ -22,9 +21,6 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 		this.output = output;
 		setInputRange(source.min(), source.max());
 		setOutputRange(output.min(), output.max());
-		this.setpointSetter = new RangeOut<I>((double setpoint) -> {
-			setSetpoint(setpoint);
-		}, source.min(), source.max());
 	}
 
 	public SynchronousPIDController(PIDConstants constants, RangeIn<I> source, RangeOut<O> output) {
@@ -36,7 +32,7 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 	}
 
 	public RangeOut<I> getSetpointSetter() {
-		return setpointSetter;
+		return new RangeOut<I>(this::setTarget, source.min(), source.max());
 	}
 
 	public RangeIn<I> getSource() {

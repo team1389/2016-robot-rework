@@ -2,11 +2,12 @@ package org.usfirst.frc.team1389.robot;
 
 import org.usfirst.frc.team1389.robot.SimMotor.Motor;
 
-import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.command_framework.CommandUtil;
-import com.team1389.control.MotionProfileController;
-import com.team1389.motion_profile.ProfileUtil;
+import com.team1389.control.SmoothSetController;
+import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
+import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.value_types.Position;
+import com.team1389.hardware.value_types.Speed;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
 
@@ -21,26 +22,22 @@ public class Tester {
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
-	static MotionProfileController cont;
+	static SmoothSetController cont;
+	static DashboardScalarInput inp;
 
 	public static void init() {
 		SimMotor sim = new SimMotor(Motor.CIM);
-		cont = new MotionProfileController(.03, 0, 0,
-				sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI),
-				sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI), sim.getVoltageOutput());
-		cont.followProfile(ProfileUtil.trapezoidal(-20, 0, .05, .05, 6));
-		dash.watch(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("pos"));
-		dash.watch(sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).getWatchable("speed"));
-		scheduler.schedule(CommandUtil.combineSequential(new WaitTimeCommand(10), CommandUtil.createCommand(() -> {
-			System.out.println(sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).get());
-			cont.followProfile(ProfileUtil.trapezoidal(-1,
-					sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI).get(), .05, .05, 8));
-			return true;
-		})));
+		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI);
+		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, .66 * Math.PI);
+		dash.watch(pos.getWatchable("pos"), speed.getWatchable("speed"));
+		cont = new SmoothSetController(.03, 0, 0, 3, 3, 8, pos, speed, sim.getVoltageOutput());
+		inp = new DashboardScalarInput("setpoint", Watcher.DASHBOARD, 0.0);
+		cont.setTarget(20);
 	}
 
 	public static void update() {
 		cont.update();
+		cont.setTarget(inp.get());
 	}
 
 	public static void main(String[] args) throws InterruptedException {
