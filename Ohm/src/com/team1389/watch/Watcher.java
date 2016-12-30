@@ -1,5 +1,6 @@
 package com.team1389.watch;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class Watcher {
 	public static ITable DASHBOARD = NetworkTable.getTable("SmartDashboard");
 	protected List<Watchable> watchables;
 	protected Map<String, Watchable> flatWatchables;
+	private static boolean check = false;
 
 	public Watcher() {
 		flatWatchables = new HashMap<>();
@@ -40,6 +42,8 @@ public class Watcher {
 		this.watchables.addAll(Arrays.asList(watchables));
 		return this;
 	}
+	
+	
 
 	/**
 	 * used if list of watchables is passed in
@@ -52,6 +56,23 @@ public class Watcher {
 		this.watchables.addAll(watchables);
 		return this;
 	}
+	public void log(HashMap<String, Watchable> flat, FileWriter f){
+		if(!check){
+		for(String s: flat.keySet()){
+			
+		try{		
+				f.append(s);
+				f.append("\t");
+		}
+			
+			catch(Exception e){
+			e.getMessage();	
+			}
+		}
+		
+		}
+	}
+	
 
 	public List<Watchable> getWatchables() {
 		return watchables;

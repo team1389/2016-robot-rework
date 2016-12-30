@@ -28,17 +28,15 @@ public interface CompositeWatchable extends Watchable {
 	}
 
 	public default void log(FileWriter f) {
-		try{
-			f.append("\n"); 
+	
 		for(Watchable w: getSubWatchables(stem)){
-		
+			try{
 			f.append((Double.toString(w.getLoggable())));
 			f.append(",");
 			
-			
+			}catch(Exception e){
+				System.out.println(e.getMessage());
 			}
-		}catch(Exception e){
-			System.out.println(e.getMessage());
 		}
 		}
 	
