@@ -67,8 +67,10 @@ public class Watcher{
 	}
 	public void log(FileWriter f) {
 		if(!check){
-				
-			watchables.forEach((w)->w.logKey(f));
+				//TODO Use the map instead of the list
+			for(Entry <String, Watchable> e :flatWatchables.entrySet()){
+				e.getValue().logKey(f);
+			}
 			try{
 				f.append("\n");
 				
@@ -79,17 +81,10 @@ public class Watcher{
 		check = true;
 		}
 		
-			for(Watchable w: watchables ){
-				w.log(f);
+		for(Entry <String, Watchable> en :flatWatchables.entrySet()){
+			en.getValue().log(f);
 		
-			try{
-				f.flush();
-				
-			}
-			catch(IOException e){
-				this.closeLog(f);
-				System.out.println(e.getMessage());
-			}
+			
 		}
 		try{
 			f.append("\n");
