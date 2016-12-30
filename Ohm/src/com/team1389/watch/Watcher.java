@@ -68,10 +68,7 @@ public class Watcher{
 	public void log(FileWriter f) {
 		if(!check){
 				
-			for(Watchable w: watchables){
-					
-					w.logKey(f);
-					}
+			watchables.forEach((w)->w.logKey(f));
 			try{
 				f.append("\n");
 				

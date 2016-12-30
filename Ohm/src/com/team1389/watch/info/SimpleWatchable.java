@@ -34,7 +34,7 @@ public abstract class SimpleWatchable implements Watchable {
 	public  void logKey(FileWriter f){
 		try{
 			f.append(this.getName());
-			f.append("t");
+			f.append("\t");
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 		}
