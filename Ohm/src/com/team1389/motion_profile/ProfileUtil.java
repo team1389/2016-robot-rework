@@ -48,7 +48,7 @@ public class ProfileUtil {
 					new ConstantAccelProfile(decelSegment, inverted));
 		} else {
 			return combine(new ConstantAccelProfile(accelSegment, inverted),
-					new ConstantAccelProfile(0, diff, maxSpeed, inverted),
+					new ConstantAccelProfile(0, (inverted ? -1 : 1) * diff, (inverted ? -1 : 1) * maxSpeed, inverted),
 					new ConstantAccelProfile(decelSegment, inverted));
 		}
 	}
