@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.team1389.util.Optional;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.tables.ITable;
 
@@ -66,21 +67,34 @@ public class Watcher{
 		return this;
 	}
 	public void log(FileWriter f) {
+		
 		if(!check){
+			try{
+				f.append("Time");
+				f.append("\t");
+			}catch(IOException e){
+				System.out.println(e.getMessage());
+			}
 				//TODO Use the map instead of the list
 			for(Entry <String, Watchable> e :flatWatchables.entrySet()){
 				e.getValue().logKey(f);
 			}
 			try{
+				
 				f.append("\n");
 				
 			}
 			catch(IOException e){
-				e.getMessage();
+				System.out.println(e.getMessage());
 			}
 		check = true;
 		}
-		
+		try{
+			f.append(Double.toString(Timer.getMatchTime()));
+			f.append("\t");
+			}catch(IOException e){
+				System.out.println(e.getMessage());
+			}
 		for(Entry <String, Watchable> en :flatWatchables.entrySet()){
 			en.getValue().log(f);
 		
