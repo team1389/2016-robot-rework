@@ -20,6 +20,9 @@ public abstract class SimpleWatchable implements Watchable {
 	public SimpleWatchable(String name) {
 		this.name = name;
 	}
+	public double getLoggable(){
+		return 0;
+	}
 	public void log(FileWriter f) {
 		try{
 		f.append(Double.toString(this.getLoggable()));

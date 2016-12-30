@@ -69,16 +69,9 @@ public class Watcher{
 		if(!check){
 				
 			for(Watchable w: watchables){
-				try{
 					
-					f.append(w.getName());
-					f.append("\t");
-			}
-		
-				catch(IOException e){
-					System.out.println(e.getMessage());	
-			}
-		}
+					w.logKey(f);
+					}
 			try{
 				f.append("\n");
 				
@@ -90,14 +83,14 @@ public class Watcher{
 		}
 		
 			for(Watchable w: watchables ){
+				w.log(f);
 		
 			try{
-				f.append(Double.toString(w.getLoggable()));
-				f.append("\t");
 				f.flush();
 				
 			}
 			catch(IOException e){
+				this.closeLog(f);
 				System.out.println(e.getMessage());
 			}
 		}

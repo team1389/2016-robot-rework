@@ -50,9 +50,6 @@ public interface Watchable {
 		return parent + "." + getName();
 	}
 	
-	public default double getLoggable(){
-		return 0;
-	}
 
 	void log(FileWriter f);
 	void logKey(FileWriter f);

@@ -1,6 +1,7 @@
 package com.team1389.watch;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
@@ -30,11 +31,12 @@ public interface CompositeWatchable extends Watchable {
 	public default void log(FileWriter f) {
 	
 		for(Watchable w: getSubWatchables(stem)){
-			try{
-			f.append((Double.toString(w.getLoggable())));
-			f.append(",");
 			
-			}catch(Exception e){
+			w.log(f);
+			try{
+			f.append("\t");
+			
+			}catch(IOException e){
 				System.out.println(e.getMessage());
 			}
 		}
@@ -44,7 +46,12 @@ public interface CompositeWatchable extends Watchable {
 		
 		for(Watchable w: getSubWatchables(stem)){
 			w.logKey(f);
-		}
+			try{
+			f.append("\t");
+			}catch(IOException e){
+				System.out.println(e.getMessage());
+			}
+			}
 		}
 	
 
