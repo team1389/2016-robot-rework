@@ -1,6 +1,7 @@
 package com.team1389.watch;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,13 +21,22 @@ import edu.wpi.first.wpilibj.tables.ITable;
  * @author Kenneth
  *
  */
-public class Watcher {
+public class Watcher{
+
+	public static FileWriter fileWriter = null;
 	public static ITable DASHBOARD = NetworkTable.getTable("SmartDashboard");
 	protected List<Watchable> watchables;
 	protected Map<String, Watchable> flatWatchables;
 	private static boolean check = false;
-
+	
+	
+	
 	public Watcher() {
+		try{
+		fileWriter =new FileWriter("src\\.com.team1389.watch\\log.csv");
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+		}
 		flatWatchables = new HashMap<>();
 		watchables = new ArrayList<>();
 	}
@@ -56,20 +66,52 @@ public class Watcher {
 		this.watchables.addAll(watchables);
 		return this;
 	}
-	public void log(HashMap<String, Watchable> flat, FileWriter f){
+	public void log(FileWriter f) {
 		if(!check){
-		for(String s: flat.keySet()){
-			
-		try{		
-				f.append(s);
-				f.append("\t");
-		}
-			
-			catch(Exception e){
-			e.getMessage();	
+				
+			for(Watchable w: watchables){
+				try{
+					
+					f.append(w.getName());
+					f.append("\t");
+			}
+		
+				catch(IOException e){
+					System.out.println(e.getMessage());	
 			}
 		}
+			try{
+				f.append("\n");
+				
+			}
+			catch(IOException e){
+				e.getMessage();
+			}
 		
+		}
+		for(Watchable w: watchables ){
+			try{
+				f.append(Double.toString(w.getLoggable()));
+				f.append("\t");
+				
+			}
+			catch(IOException e){
+				System.out.println(e.getMessage());
+			}
+		}
+		try{
+			f.append("\n");
+		}
+		catch(IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	public void closeLog(FileWriter f){
+		try{
+			f.close();
+		}
+		catch(IOException e){
+			System.out.println(e.getMessage());
 		}
 	}
 	

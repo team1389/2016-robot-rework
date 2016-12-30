@@ -62,11 +62,7 @@ public interface CompositeWatchable extends Watchable {
 				return subWatchables.apply(stem);
 			}
 
-			@Override
-			public double getLoggable() {
-				return 0;
-			}
-
+		
 			
 			
 
