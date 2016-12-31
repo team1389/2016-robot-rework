@@ -15,13 +15,13 @@ public class PIDInput implements CompositeWatchable {
 
 	public PIDInput(String name, PIDConstants old, Consumer<PIDConstants> fun) {
 		this.name = name;
-		this.p = new NumberInput("P", old.p, (Double newP) -> {
+		this.p = new NumberInput("p", old.p, (Double newP) -> {
 			fun.accept(new PIDConstants(newP, i.get(), d.get()));
 		});
-		this.i = new NumberInput("I", old.i, (Double newI) -> {
+		this.i = new NumberInput("i", old.i, (Double newI) -> {
 			fun.accept(new PIDConstants(p.get(), newI, d.get()));
 		});
-		this.d = new NumberInput("D", old.d, (Double newD) -> {
+		this.d = new NumberInput("d", old.d, (Double newD) -> {
 			fun.accept(new PIDConstants(p.get(), i.get(), newD));
 		});
 	}

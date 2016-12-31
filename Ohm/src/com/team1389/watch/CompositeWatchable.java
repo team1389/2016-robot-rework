@@ -2,8 +2,8 @@ package com.team1389.watch;
 
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.UnaryOperator;
 
 import com.team1389.util.AddList;
 import com.team1389.util.Optional;
@@ -49,7 +49,7 @@ public interface CompositeWatchable extends Watchable {
 		return map;
 	}
 
-	public static CompositeWatchable of(String name, UnaryOperator<AddList<Watchable>> subWatchables) {
+	public static CompositeWatchable of(String name, Watchable... subWatchables) {
 		return new CompositeWatchable() {
 
 			@Override
@@ -59,7 +59,7 @@ public interface CompositeWatchable extends Watchable {
 
 			@Override
 			public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-				return subWatchables.apply(stem);
+				return stem.put(subWatchables);
 			}
 
 		
@@ -69,5 +69,9 @@ public interface CompositeWatchable extends Watchable {
 			
 
 		};
+	}
+
+	public static CompositeWatchable of(String name, List<Watchable> watchables) {
+		return of(name, watchables.toArray(new Watchable[0]));
 	}
 }

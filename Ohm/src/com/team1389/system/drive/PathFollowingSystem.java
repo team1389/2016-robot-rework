@@ -2,7 +2,6 @@ package com.team1389.system.drive;
 
 import java.util.Set;
 
-import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.trajectory.AdaptivePurePursuitController;
 import com.team1389.trajectory.Kinematics;
@@ -12,13 +11,14 @@ import com.team1389.trajectory.RobotStateEstimator;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class PathFollowingSystem extends VelocityHeadingSystem {
+public class PathFollowingSystem {
 	public static double PATH_LOOKAHEAD = 24;// inches
 	public static double UPDATE_DT = 1 / 50;
 	private AdaptivePurePursuitController pathFollowingController_;
 	private Kinematics kinematics;
 	private double maxVel, maxAccel;
 	private RobotStateEstimator state;
+	private DriveOut<Speed> drive;
 
 	/**
 	 * 
@@ -30,9 +30,9 @@ public class PathFollowingSystem extends VelocityHeadingSystem {
 	 * @param trackLength in inches
 	 * @param scrub in inches
 	 */
-	public PathFollowingSystem(DriveOut<Speed> drive, AngleIn gyro, RobotStateEstimator state, double maxVel,
-			double maxAccel, double trackWidth, double trackLength, double scrub) {
-		super(drive, gyro);
+	public PathFollowingSystem(DriveOut<Speed> drive, RobotStateEstimator state, double maxVel, double maxAccel,
+			double trackWidth, double trackLength, double scrub) {
+		this.drive = drive;
 		this.state = state;
 		this.kinematics = new Kinematics(trackLength, trackWidth, scrub);
 	}
@@ -73,7 +73,7 @@ public class PathFollowingSystem extends VelocityHeadingSystem {
 			double scaling = maxVel / max_vel;
 			setpoint = new Kinematics.DriveVelocity(setpoint.left * scaling, setpoint.right * scaling);
 		}
-		super.drive.set(setpoint.left, setpoint.right);
+		drive.set(setpoint.left, setpoint.right);
 	}
 
 }

@@ -25,12 +25,13 @@ public class InputWatchable<T> extends SimpleWatchable {
 	public void publishUnderName(String name, ITable table) {
 		if (!table.containsKey(name)) {
 			table.putNumber(name, val);
-			table.addTableListener(name, (ITable t, String s, Object val, boolean changed) -> {
-				onChange.accept((T) val);
-			}, true);
+
 		} else {
 			val = table.getNumber(name, val);
 		}
+		table.addTableListener(name, (ITable t, String s, Object val, boolean changed) -> {
+			onChange.accept((T) val);
+		}, true);
 	}
 
 	@Override

@@ -24,7 +24,9 @@ public interface Watchable {
 	 * @param table where key+value is published to
 	 */
 	void publishUnderName(String name, ITable table);
-	Map<String,Watchable> getFlat(Optional<String> parent);
+
+	Map<String, Watchable> getFlat(Optional<String> parent);
+
 	/**
 	 * adds parent to the name, then uses <publishUnderName>
 	 * 

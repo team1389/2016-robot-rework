@@ -8,11 +8,9 @@ import com.team1389.hardware.value_types.Speed;
 
 public class SimMotor {
 	Motor motor;
-
+	Attachment attachment;
 	public final static double g = 9.8; // acceleration of gravity (m/s^2)
-	private double I, rCenterMass, m; // moment of inertia
-	private boolean hasWeight = true;
-	private double gearReduction = 200;
+	private double gearReduction;
 
 	private double theta = 0; // current angle
 	private double omega = 0; // current rate of rotation (rad/sec)
@@ -20,41 +18,19 @@ public class SimMotor {
 	private double currentTorque; // torque from motor
 	private Timer timer;
 
-	public SimMotor(Motor motor, double m, double r, double rCenterMass, double I, boolean hasWeight) {
+	public SimMotor(Motor motor, Attachment attachment, double gearing) {
 		timer = new Timer();
+		this.gearReduction = gearing;
+		this.attachment=attachment;
 		this.motor = motor;
-		this.m = m;
-		this.rCenterMass = rCenterMass;
-		this.I = I;
-		this.hasWeight = hasWeight;
-	}
-
-	/**
-	 * assumes arm is a uniform rod
-	 * 
-	 * @param motor
-	 * @param m
-	 * @param r
-	 * @param rCenterMass
-	 */
-	public SimMotor(Motor motor, double m, double r, double rCenterMass, boolean hasWeight) {
-		this(motor, m, r, rCenterMass, m * rCenterMass * rCenterMass + m * r * r / 12, // calculate moment of inertia of the arm
-				hasWeight);
-	}
-
-	public SimMotor(Motor motor, double m, double r, boolean hasWeight) {
-		this(motor, m, r, r / 2, m * r * r / 3, hasWeight);
 	}
 
 	public SimMotor(Motor motor) {
-		this.motor = motor;
-		timer = new Timer();
-		hasWeight = false;
-		I = .001;
+		this(motor, Attachment.FREE, 1);
 	}
 
 	public PercentOut getVoltageOutput() {
-		return new PercentOut(this::setVoltageGravity);
+		return new PercentOut(this::setVoltage);
 	}
 
 	public RangeIn<Position> getPositionInput() {
@@ -65,54 +41,13 @@ public class SimMotor {
 		return new RangeIn<Speed>(Speed.class, () -> omega / gearReduction, 0, 2 * Math.PI);
 	}
 
-	/**
-	 * if the weight constants were set, uses gravity, otherwise uses no gravity
-	 */
 	public void setVoltage(double voltage) {
-		if (hasWeight) {
-			setVoltageGravity(voltage);
-		} else {
-			setVoltageNoGravity(voltage);
-		}
-	}
-
-	/**
-	 * A simple arm with no gravity acting on it.
-	 * 
-	 * @param voltage
-	 * @return angle of the CIM motor shaft (not arm!)
-	 */
-	public void setVoltageNoGravity(double voltage) {
 		double dt = timer.get();
 		timer.zero();
-		currentTorque = motorTorque(voltage, omega) * gearReduction; // calculate torque from motor, which depends on the voltage and the current speed
-		alpha = currentTorque / I;
+		currentTorque = motor.getTorque(voltage, omega) * gearReduction; // calculate torque from motor, which depends on the voltage and the current speed
+		alpha = attachment.getResultantAlpha(currentTorque, theta);
 		omega += alpha * dt; // add to velocity
 		theta += omega * dt; // add to position
-	}
-
-	// arm with gravity
-	public void setVoltageGravity(double voltage) {
-		double dt = timer.get();
-		timer.zero();
-		currentTorque = motorTorque(voltage, omega)*gearReduction; // calculate torque from motor, which depends on the voltage and the current speed
-		// calculate the torque of gravity
-		double torqueGravity = g * m * Math.cos(theta) * rCenterMass;
-		System.out.println(torqueGravity + " " + currentTorque);
-		alpha = (currentTorque - torqueGravity) / I;
-		omega += alpha * dt; // add to velocity
-		theta += omega * dt; // add to position
-	}
-
-	/**
-	 * Calculate the torque contributed from the CIM motor.
-	 * 
-	 * @param voltage
-	 * @param omega
-	 * @return torque from motor
-	 */
-	public double motorTorque(double voltage, double omega) {
-		return motor.stallTorque * (voltage - (omega / motor.freeSpeed));
 	}
 
 	public static class Motor {
@@ -131,5 +66,49 @@ public class SimMotor {
 			this.freeSpeed = freeSpeedRPM * 2 * Math.PI / 60;
 			this.motorConstant = -freeSpeed / stallTorque;
 		}
+
+		/**
+		 * Calculate the torque contributed from the CIM motor.
+		 * 
+		 * @param voltage
+		 * @param omega
+		 * @return torque from motor
+		 */
+		public double getTorque(double voltage, double omega) {
+			return stallTorque * (voltage - (omega / freeSpeed));
+		}
+	}
+
+	public static class Attachment {
+		static final Attachment FREE = new Attachment(1, .05, .008, 1.6, false);
+
+		public final double I, rCenterMass, m; // moment of inertia
+		private final boolean hasWeight;
+
+		public Attachment(double m, double r, double rCenterMass, double I, boolean hasWeight) {
+			this.m = m;
+			this.rCenterMass = rCenterMass;
+			this.I = I;
+			this.hasWeight = hasWeight;
+		}
+
+		public Attachment(double m, double r, double rCenterMass, boolean hasWeight) {
+			this(m, r, rCenterMass, m * rCenterMass * rCenterMass + m * r * r / 12, // calculate moment of inertia of the arm
+					hasWeight);
+		}
+
+		public Attachment(double m, double r, boolean hasWeight) {
+			this(m, r, r / 2, hasWeight);
+		}
+
+		public double getResultantAlpha(double torqueApplied, double theta) {
+			if (hasWeight) {
+				double torqueGravity = g * m * Math.cos(theta) * rCenterMass;
+				return (torqueApplied - torqueGravity) / I;
+			} else {
+				return torqueApplied / I;
+			}
+		}
+
 	}
 }
