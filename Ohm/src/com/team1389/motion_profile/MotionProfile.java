@@ -40,7 +40,7 @@ public abstract class MotionProfile {
 	 * @param time Time to get position at, should be <= duration, however behavior is well defined if this is not the case
 	 * @return Position at the requested time, the position at the end if time > duration
 	 */
-	public double getPosition(double time) {
+	public final double getPosition(double time) {
 		if (time > getDuration()) {
 			System.out.println("warning: in MotionProfile, time is called greater than duration");
 			return providePosition(getDuration());
@@ -53,13 +53,12 @@ public abstract class MotionProfile {
 	 * @param time Time to get velocity at, should be <= duration, however behavior is well defined if this is not the case
 	 * @return Velocity at the requested time, 0 if time > duration
 	 */
-	public double getVelocity(double time) {
-		double velocity = provideVelocity(time);
+	public final double getVelocity(double time) {
 		if (time > getDuration()) {
 			System.out.println("warning: in MotionProfile, time is called greater than duration");
 			return 0;
 		} else {
-			return velocity;
+			return provideVelocity(time);
 		}
 	}
 
@@ -67,13 +66,12 @@ public abstract class MotionProfile {
 	 * @param time Time to get velocity at, should be <= duration, however behavior is well defined if this is not the case
 	 * @return Velocity at the requested time, 0 if time > duration
 	 */
-	public double getAcceleration(double time) {
-		double power = provideAcceleration(time);
+	public final double getAcceleration(double time) {
 		if (time > getDuration()) {
 			System.out.println("warning: in MotionProfile, time is called greater than duration");
 			return 0;
 		} else {
-			return power;
+			return provideAcceleration(time);
 		}
 	}
 
