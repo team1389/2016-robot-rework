@@ -1,9 +1,8 @@
 package com.team1389.watch;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
-
 
 import com.team1389.util.Optional;
 
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.tables.ITable;
 public interface Watchable {
 
 	public String getName();
-	
 
 	/**
 	 * @param name that the value will be stored under
@@ -51,14 +49,11 @@ public interface Watchable {
 	public default String getFullName(String parent) {
 		return parent + "." + getName();
 	}
-	
-	
-	void log(FileWriter f);
-	void logKey(FileWriter f);
-	
-	
+
+	void log(Writer f);
+
+	void logKey(Writer f) throws IOException;
 
 	public String getPrintString();
 
-	
 }

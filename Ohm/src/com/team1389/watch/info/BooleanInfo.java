@@ -1,7 +1,5 @@
 package com.team1389.watch.info;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.tables.ITable;

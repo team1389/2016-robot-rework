@@ -1,7 +1,7 @@
 package com.team1389.watch;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import java.util.Set;
 
 import com.team1389.util.Optional;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.tables.ITable;
 
@@ -22,28 +21,22 @@ import edu.wpi.first.wpilibj.tables.ITable;
  * @author Kenneth
  *
  */
-public class Watcher{
+public class Watcher {
 
-	public static FileWriter FILEWRITER = null;
+	public static LogFile FILEWRITER = LogFile.make();
 	public static ITable DASHBOARD = NetworkTable.getTable("SmartDashboard");
 	protected List<Watchable> watchables;
 	protected Map<String, Watchable> flatWatchables;
-	private static boolean check = false;
-	
-	
-	
+	private Optional<LogFile> log;
+
 	public Watcher() {
-		try{
-		FILEWRITER = new FileWriter("log.tsv");
-		}catch(IOException e){
-			System.out.println(e.getMessage());
-		}
 		flatWatchables = new HashMap<>();
 		watchables = new ArrayList<>();
 	}
 
 	/**
 	 * used if individual watchables are passed in
+	 * 
 	 * @param watchables added to list
 	 * @return list of watchables
 	 */
@@ -52,8 +45,6 @@ public class Watcher{
 		this.watchables.addAll(Arrays.asList(watchables));
 		return this;
 	}
-	
-	
 
 	/**
 	 * used if list of watchables is passed in
@@ -66,57 +57,41 @@ public class Watcher{
 		this.watchables.addAll(watchables);
 		return this;
 	}
-	public void log(FileWriter f) {
-		
-		if(!check){
-			try{
-				f.append("Time");
-				f.append("\t");
-			}catch(IOException e){
-				System.out.println(e.getMessage());
-			}
-				//TODO Use the map instead of the list
-			for(Entry <String, Watchable> e :flatWatchables.entrySet()){
-				e.getValue().logKey(f);
-			}
-			try{
-				
+
+	public void setLogLocation(LogFile logLocation) {
+		log = Optional.of(logLocation);
+	}
+
+	public void log() {
+		if(!log.isPresent()){
+			System.out.println("Warning: no log location set, log commands are ignored");
+		}
+		log.ifPresent(this::logTo);
+	}
+
+	public void logTo(LogFile file) {
+		try {
+			file.open();
+			Writer f = file.getWriter();
+			if (!file.isInited()) {
+				file.init();
+				f.append("Time\t");
+				for (Entry<String, Watchable> e : flatWatchables.entrySet()) {
+					e.getValue().logKey(f);
+				}
 				f.append("\n");
-				
 			}
-			catch(IOException e){
-				System.out.println(e.getMessage());
-			}
-		check = true;
-		}
-		try{
-			f.append(Double.toString(Timer.getMatchTime()));
+			f.append(Double.toString(file.getTimeStamp()));
 			f.append("\t");
-			}catch(IOException e){
-				System.out.println(e.getMessage());
+			for (Entry<String, Watchable> en : flatWatchables.entrySet()) {
+				en.getValue().log(f);
 			}
-		for(Entry <String, Watchable> en :flatWatchables.entrySet()){
-			en.getValue().log(f);
-		
-			
-		}
-		try{
 			f.append("\n");
-		}
-		catch(IOException e){
-			System.out.println(e.getMessage());
-		}
-		}
-	
-	public void closeLog(FileWriter f){
-		try{
-			f.close();
-		}
-		catch(IOException e){
-			System.out.println(e.getMessage());
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-	
 
 	public List<Watchable> getWatchables() {
 		return watchables;
@@ -129,9 +104,9 @@ public class Watcher{
 	public void publish(ITable table) {
 		for (Entry<String, Watchable> info : flatWatchables.entrySet()) {
 			info.getValue().publishUnderName(info.getKey(), table);
-			}
+		}
 	}
-	
+
 	/**
 	 * 
 	 * @return printable values of watchables
