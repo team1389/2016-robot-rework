@@ -1,6 +1,7 @@
 package com.team1389.control;
 
 import com.team1389.util.FIFO;
+import com.team1389.util.RangeUtil;
 
 import edu.wpi.first.wpilibj.util.BoundaryException;
 
@@ -197,17 +198,11 @@ public class SynchronousPID {
 	 * @param setpoint the desired setpoint
 	 */
 	public void setSetpoint(double setpoint) {
-		if (m_maximumInput > m_minimumInput) {
-			if (setpoint > m_maximumInput) {
-				m_setpoint = m_maximumInput;
-			} else if (setpoint < m_minimumInput) {
-				m_setpoint = m_minimumInput;
-			} else {
-				m_setpoint = setpoint;
-			}
-		} else {
-			m_setpoint = setpoint;
-		}
+		m_setpoint = clampSetpoint(setpoint);
+	}
+
+	protected double clampSetpoint(double setpoint) {
+		return RangeUtil.limit(setpoint, m_minimumInput, m_maximumInput);
 	}
 
 	/**

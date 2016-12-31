@@ -35,10 +35,11 @@ public class Tester {
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
 		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
 		dash.watch(pos.getWatchable("pos"), speed.getWatchable("speed"));
-		cont = new SmoothSetController(.07, 0, 5, 10, 10, 30, pos, speed, sim.getVoltageOutput());
+		cont = new SmoothSetController(.07, 0, 5, 2, 2, 30, pos, speed, sim.getVoltageOutput());
+		cont.setInputRange(-360, 360);
 		dash.watch(cont.getPIDTuner("tuner"));
 		setter = cont.getSetpointSetter();
-		cont.setSetpoint(20);
+		cont.setSetpoint(-20);
 	}
 
 	public static void update() {

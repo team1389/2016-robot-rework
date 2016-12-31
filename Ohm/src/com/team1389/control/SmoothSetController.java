@@ -22,11 +22,11 @@ public class SmoothSetController extends MotionProfileController {
 
 	@Override
 	public void setSetpoint(double target) {
+		target=clampSetpoint(target);
 		if (this.setpoint != target) {
 			this.setpoint = target;
 			double err = target - source.get();
 			followProfile(ProfileUtil.trapezoidal(err, vel.get(), maxAccel, maxDecel, maxVel));
-			System.out.println(err);
 		}
 	}
 
