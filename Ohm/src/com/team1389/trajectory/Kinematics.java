@@ -9,8 +9,13 @@ public class Kinematics {
 	private double kTrackLengthInches;
 	private double kTrackWidthInches;
 	private double kTrackEffectiveDiameter;
-	public double kTrackScrubFactor;
+	private double kTrackScrubFactor;
 
+	/**
+	 * @param trackLengthInches the distance from the front axle to the rear axle
+	 * @param trackWidthInches the width of the wheelbase
+	 * @param trackScrubFactor constant to deal with discrepancy between theoretical effectivDiam and actual effective diam
+	 */
 	public Kinematics(double trackLengthInches, double trackWidthInches, double trackScrubFactor) {
 		this.kTrackLengthInches = trackLengthInches;
 		this.kTrackWidthInches = trackWidthInches;
@@ -21,6 +26,10 @@ public class Kinematics {
 
 	/**
 	 * Forward kinematics using only encoders, rotation is implicit (less accurate than below, but useful for predicting motion)
+	 * 
+	 * @param left_wheel_delta the distance travelled by the left encoders
+	 * @param right_wheel_delta the distance travelled by the right encoders
+	 * @return the calculated velocity
 	 */
 	public RigidTransform2d.Delta forwardKinematics(double left_wheel_delta, double right_wheel_delta) {
 		double linear_velocity = (left_wheel_delta + right_wheel_delta) / 2;
@@ -31,13 +40,26 @@ public class Kinematics {
 
 	/**
 	 * Forward kinematics using encoders and explicitly measured rotation (ex. from gyro)
+	 * 
+	 * @param left_wheel_delta the distance travelled by the left encoders
+	 * @param right_wheel_delta the distance travelled by the right encoders
+	 * @param delta_rotation_rads the angle rotated by the robot (in radians)
+	 * @return the calculated velocity
 	 */
 	public RigidTransform2d.Delta forwardKinematics(double left_wheel_delta, double right_wheel_delta,
 			double delta_rotation_rads) {
 		return new RigidTransform2d.Delta((left_wheel_delta + right_wheel_delta) / 2, 0, delta_rotation_rads);
 	}
 
-	/** Append the result of forward kinematics to a previous pose. */
+	/**
+	 * Append the result of forward kinematics to a previous pose. TODO isn't current heading included in current_pose?
+	 * 
+	 * @param current_pose the last observed robot pose
+	 * @param left_wheel_delta the distance travelled by the left encoders
+	 * @param right_wheel_delta the distance travelled by the right encoders
+	 * @param current_heading the current rotation of the robot
+	 * @return the updated position
+	 */
 	public RigidTransform2d integrateForwardKinematics(RigidTransform2d current_pose, double left_wheel_delta,
 			double right_wheel_delta, Rotation2d current_heading) {
 		RigidTransform2d.Delta with_gyro = forwardKinematics(left_wheel_delta, right_wheel_delta,
@@ -45,16 +67,35 @@ public class Kinematics {
 		return current_pose.transformBy(RigidTransform2d.fromVelocity(with_gyro));
 	}
 
+	/**
+	 * this class stores a left and right wheel velocity
+	 */
 	public static class DriveVelocity {
+		/**
+		 * the left wheel velocity
+		 */
 		public final double left;
+		/**
+		 * the right wheel velocity
+		 */
 		public final double right;
 
+		/**
+		 * @param left the left wheel velocity
+		 * @param right the right wheel velocity
+		 */
 		public DriveVelocity(double left, double right) {
 			this.left = left;
 			this.right = right;
 		}
 	}
 
+	/**
+	 * calculate the wheel velocities based on robot velocity
+	 * 
+	 * @param velocity the robot's velocity
+	 * @return the left and right wheel velocities
+	 */
 	public DriveVelocity inverseKinematics(RigidTransform2d.Delta velocity) {
 		if (Math.abs(velocity.dtheta) < kEpsilon) {
 			return new DriveVelocity(velocity.dx, velocity.dx);

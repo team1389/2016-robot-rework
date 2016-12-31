@@ -9,6 +9,11 @@ import com.team1389.hardware.value_types.Speed;
 
 import edu.wpi.first.wpilibj.Timer;
 
+/**
+ * supplies a {@link RigidTransform2d} representing an estimate of the robot's pose based on sensor input
+ * 
+ * @author amind
+ */
 public class RobotStateEstimator implements Supplier<RigidTransform2d> {
 
 	private RangeIn<Position> left;
@@ -21,6 +26,11 @@ public class RobotStateEstimator implements Supplier<RigidTransform2d> {
 	double right_encoder_prev_distance_ = 0;
 	RobotState state;
 
+	/**
+	 * @param trackWidth the width of the wheelbase
+	 * @param trackLength the distance from the front axle to the rear axle
+	 * @param scrub constant to deal with discrepancy between theoretical effectivDiam and actual effective diam
+	 */
 	public RobotStateEstimator(double trackWidth, double trackLength, double scrub) {
 		this.kinematics = new Kinematics(trackLength, trackWidth, scrub);
 	}
@@ -40,6 +50,14 @@ public class RobotStateEstimator implements Supplier<RigidTransform2d> {
 		return state.getLatestFieldToVehicle().getValue();
 	}
 
+	/**
+	 * estimates the robot's current pose based on the most recent pose observation and the distance travelled since then
+	 * 
+	 * @param left_encoder_delta_distance the distance travelled by the left wheels since last state observation
+	 * @param right_encoder_delta_distance the distance travelled by the right wheels since last state observation
+	 * @param current_gyro_angle the angle rotated since last state observation
+	 * @return the current pose estimate
+	 */
 	public RigidTransform2d generateOdometryFromSensors(double left_encoder_delta_distance,
 			double right_encoder_delta_distance, Rotation2d current_gyro_angle) {
 		RigidTransform2d last_measurement = state.getLatestFieldToVehicle().getValue();
