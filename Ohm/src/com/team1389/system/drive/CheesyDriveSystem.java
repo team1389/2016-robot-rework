@@ -9,9 +9,8 @@ import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
 
 /**
- * hellow
- * 
- * @author amind
+ * drive system that can switch between curvature and tank drive
+ * @author Kenneth
  *
  */
 public class CheesyDriveSystem extends Subsystem {
@@ -24,7 +23,14 @@ public class CheesyDriveSystem extends Subsystem {
 
 	private double mQuickStopAccumulator;
 	private double kTurnSensitivity;
-
+	/**
+	 * 
+	 * @param drive percent of voltage going to left/right motors
+	 * @param throttle percent of desired speed(forward/back)
+	 * @param wheel percent used for turning(l/r)
+	 * @param quickTurnButton switching from curvature drive, to tank drive
+	 * @param turnSensitivity severity of turn
+	 */
 	public CheesyDriveSystem(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton,
 			double turnSensitivity) {
 		this.drive = drive;
@@ -33,37 +39,61 @@ public class CheesyDriveSystem extends Subsystem {
 		this.quickTurnButton = quickTurnButton;
 		this.kTurnSensitivity = turnSensitivity;
 	}
-
+	/**
+	 * 
+	 * @param drive percent of voltage going to left/right motors
+	 * @param throttle percent of desired speed(forward/back)
+	 * @param wheel percent used for turning(l/r)
+	 * @param quickTurnButton switching from curvature drive, to tank drive
+	 */
 	public CheesyDriveSystem(DriveOut<Percent> drive, PercentIn throttle, PercentIn wheel, DigitalIn quickTurnButton) {
 		this(drive, throttle, wheel, quickTurnButton, 1.0);
 	}
-
+	/**
+	 * if throttle or wheel is changed, all commands are cleared
+	 */
 	@Override
 	public void init() {
 		throttle.addChangeListener(COMMAND_CANCEL);
 		wheel.addChangeListener(COMMAND_CANCEL);
 	}
-
+	/**
+	 * expects to be called every tic, updates values of throttle, wheel, quickTurnButton, and brakemode
+	 */
 	@Override
 	public void update() {
 		mSignal = cheesyDrive(throttle.get(), wheel.get(), quickTurnButton.get());
 		drive.set(mSignal);
 	}
-
+	/**
+	 * return key
+	 */
 	@Override
 	public String getName() {
 		return "Drive System";
 	}
-
+	/**
+	 * add watchables for voltage being applied to the motors, and the quickturn button 
+	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return stem.put(drive, quickTurnButton.getWatchable("quickTurnButton"));
 	}
-
+	
+	/**
+	 * 
+	 * @param val that kTurnSensitivity is being passed to
+	 */
 	public void setTurnSensitivity(double val) {
 		this.kTurnSensitivity = val;
 	}
-
+	/**
+	 * 
+	 * @param throttle percent of desired speed(forward/back)
+	 * @param wheel percent used for turning(l/r)
+	 * @param isQuickTurn whether the drivemode is tank drive 
+	 * @return amount of voltage going to l/r motors, and the break mode
+	 */
 	public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
 
 		double overPower;

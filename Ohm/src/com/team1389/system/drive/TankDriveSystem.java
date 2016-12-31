@@ -6,35 +6,52 @@ import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
-
+/**
+ * drive system that can turn in place, and 
+ * @author Kenneth
+ *
+ */
 public class TankDriveSystem extends Subsystem {
 	private DriveOut<Percent> output;
 	private PercentIn throttle;
 	private PercentIn wheel;
-
+	/**
+	 * 
+	 * @param output percent of voltage going to left/right motors
+	 * @param throttle percent of desired speed (forward/back)
+	 * @param wheel percent of desired turning to (l/r)
+	 */
 	public TankDriveSystem(DriveOut<Percent> output, PercentIn throttle, PercentIn wheel) {
 		this.output = output;
 		this.throttle = throttle;
 		this.wheel = wheel;
 	}
-
+	/**
+	 * nothing occurs when initialized
+	 */
 	@Override
 	public void init() {
 
 	}
-
+	/**
+	 * update wheel and throttle values, then update output using those values
+	 */
 	@Override
 	public void update() {
 		double x = wheel.get();
 		double y = throttle.get();
 		output.set(new DriveSignal(-y + x, -y - x));
 	}
-
+	/**
+	 * return key
+	 */
 	@Override
 	public String getName() {
 		return "Tank Drive";
 	}
-
+	/**
+	 * add no watchables to stem
+	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return null;
