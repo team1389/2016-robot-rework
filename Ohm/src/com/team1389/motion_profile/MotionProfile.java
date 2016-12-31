@@ -3,7 +3,6 @@ package com.team1389.motion_profile;
 /**
  * This class represents the theoretical path of a particle (or robot). At every time, the position, velocity, and acceleration
  * are well defined. 
- * @author Josh
  *
  */
 public abstract class MotionProfile {
