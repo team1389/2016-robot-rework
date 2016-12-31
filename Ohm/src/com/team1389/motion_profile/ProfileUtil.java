@@ -68,8 +68,7 @@ public class ProfileUtil {
 					new ConstantAccelProfile(decelSegment, inverted));
 		} else {
 			return combine(new ConstantAccelProfile(accelSegment, inverted),
-					/* I'm not 100% sure about this next argument, but apparently it works in all cases. "voodoo magic" */
-					new ConstantAccelProfile(0, (inverted ? -1 : 1) * diff, (inverted ? -1 : 1) * maxSpeed, inverted),
+					new ConstantAccelProfile(0, diff, maxSpeed, inverted),
 					new ConstantAccelProfile(decelSegment, inverted));
 		}
 	}
