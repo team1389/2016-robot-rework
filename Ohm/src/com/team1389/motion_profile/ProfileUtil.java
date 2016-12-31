@@ -1,7 +1,28 @@
 package com.team1389.motion_profile;
 
+/**
+ * This class contains methods for creating and combining (and maybe sometime in the future manipulating) {@link MotionProfile}s
+ * @author Josh
+ *
+ */
 public class ProfileUtil {
 
+	/**
+	 * Creates a {@link MotionProfile} that is the fastest way to travel a certain distance. It is "trapezoidal" in nature
+	 * because the speed graph, in the simplest case, looks like a trapezoid: a positive slope (acceleration), 
+	 * a horizontal line at top (max speed), and a negative slope (deceleration). <br>
+	 * Some important edge cases: <br>
+	 * If the max speed cannot be reached the speed graph will be a triangle, not a trapezoid. <br>
+	 * If the robot cannot stop in time it will decelerate as fast as possible, accelerate backwards, and decelerate again. <bv>
+	 * If the initial velocity is in the opposite direction of the distance then the robot will decelerate as fast as possible and
+	 * then accelerate and decelerate towards the direction of the distance.
+	 * @param dx The distance to be traveled (area under the trapezoid), may be positive or negative
+	 * @param Vo The initial velocity, may be positive or negative
+	 * @param maxAccel The maximum acceleration of the robot, by convention positive
+	 * @param maxDecel The maximum deceleration of the robot, by convention positive
+	 * @param maxSpeed The maximum speed of the robot, by convention positive
+	 * @return The {@link MotionProfile} representing the path of the robot
+	 */
 	public static MotionProfile trapezoidal(double dx, double Vo, double maxAccel, double maxDecel, double maxSpeed) {
 		// Make sure these values are positive
 		maxDecel = Math.abs(maxDecel);
@@ -71,6 +92,11 @@ public class ProfileUtil {
 		return Math.sqrt((dx + Vo * Vo / 2.0 / a) / (1.0 / 2.0 / a + 1.0 / 2.0 / d));
 	}
 
+	/**
+	 * Makes use of the {@link CombinedProfile} class
+	 * @param motionProfiles The {@link MotionProfile}s to combine
+	 * @return The single, combined {@link MotionProfile}
+	 */
 	public static MotionProfile combine(MotionProfile... motionProfiles) {
 		MotionProfile combined = null;
 		for (MotionProfile motionProfile : motionProfiles) {
