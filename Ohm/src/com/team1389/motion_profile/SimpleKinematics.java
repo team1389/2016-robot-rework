@@ -1,145 +1,183 @@
 package com.team1389.motion_profile;
 
+/**
+ * This class represents a solved kinematics system with constant acceleration. It is final, in that once it is constructed
+ * each of the system's parameters will remain constant. To get any of the parameters one can access any of the final class
+ * variables.
+ *
+ */
 public class SimpleKinematics {
-	public double Vo, V, t, a, X;
+		
+	/**
+	 * The initial velocity of the system
+	 */
+	public final double vo;
+	
+	/**
+	 * The final velocity of the system
+	 */
+	public final double vf;
+	
+	/**
+	 * The time the motion takes
+	 */
+	public final double t;
+	
+	/**
+	 * The constant acceleration of the system
+	 */
+	public final double a;
+	
+	/**
+	 * The distance traveled in the system
+	 */
+	public final double x;
 
+	private double initialV, finalV, time, accel, dx;
+
+
+	/**
+	 * Creates and solves the kinematics system. At least three of the variable must be real, but the rest may be Double.NaN if they are unknown.
+	 * No check is made to see if the motion is possible as described, and so invalid input may result in negative time or other
+	 * unexpected results.
+	 * @param v0 The initial velocity of the system
+	 * @param vf The final velocity of the system
+	 * @param t The total time the motion takes
+	 * @param a The constant acceleration of the system
+	 * @param S The distance traveled in the system
+	 */
 	public SimpleKinematics(double v0, double vf, double t, double a, double S) {
-		this.a = a;
-		this.Vo = v0;
-		this.t = t;
-		this.V = vf;
-		this.X = S;
+		this.accel = a;
+		this.initialV = v0;
+		this.time = t;
+		this.finalV = vf;
+		this.dx = S;
 		solveSystem();
+		
+		this.vo = initialV;
+		this.vf = finalV;
+		this.t = time;
+		this.a = accel;
+		this.x = dx;
 	}
 
 	@Override
 	public String toString() {
-		return "Vo: " + Vo + " Vf: " + V + " a: " + a + " t: " + t + " S: " + X;
+		return "Vo: " + initialV + " Vf: " + finalV + " a: " + accel + " t: " + time + " S: " + dx;
 	}
 
-	public SimpleKinematics solveSystem() {
+	private void solveSystem() {
 		int code = 0;
-		code = Double.isNaN(X) ? code : code | 1;
+		code = Double.isNaN(dx) ? code : code | 1;
 		code = code << 1;
-		code = Double.isNaN(t) ? code : code | 1;
+		code = Double.isNaN(time) ? code : code | 1;
 		code = code << 1;
-		code = Double.isNaN(a) ? code : code | 1;
+		code = Double.isNaN(accel) ? code : code | 1;
 		code = code << 1;
-		code = Double.isNaN(V) ? code : code | 1;
+		code = Double.isNaN(finalV) ? code : code | 1;
 		code = code << 1;
-		code = Double.isNaN(Vo) ? code : code | 1;
-		return solveSystem(code);
+		code = Double.isNaN(initialV) ? code : code | 1;
+		solveSystem(code);
 	}
 
-	private SimpleKinematics solveSystem(int code) {
-		double tS = X;
-		double tVo = Vo;
-		double tV = V;
-		double ta = a;
-		double tt = t;
+	private void solveSystem(int code) {
+		double tS = dx;
+		double tVo = initialV;
+		double tV = finalV;
+		double ta = accel;
+		double tt = time;
 		// TODO check this one
 		if ((code & 19) == 19) {
 			if (tt == 0) {
-				t = 0;
-				a = 0;
+				time = 0;
+				accel = 0;
 			} else {
 				tt = 2 * tS / (tVo + tV);
-				t = tt;
-				a = (tV - tVo) / tt;
+				time = tt;
+				accel = (tV - tVo) / tt;
 			}
 		}
 		if ((code & 7) == 7) {
 			if (ta == 0) {
-				t = 0;
-				X = 0;
+				time = 0;
+				dx = 0;
 			} else {
 				tt = (tV - tVo) / ta;
 				//System.out.println((tV - tVo) + " ::: " + ta);
-				t = tt;
-				X = tVo * tt + ta * tt * tt / 2;
+				time = tt;
+				dx = tVo * tt + ta * tt * tt / 2;
 			}
 		}
 		if ((code & 11) == 11) {
 			if (tt == 0) {
-				a = 0;
-				X = 0;
+				accel = 0;
+				dx = 0;
 			} else {
 				ta = (tV - tVo) / tt;
-				a = ta;
-				X = tVo * tt + ta * tt * tt / 2;
+				accel = ta;
+				dx = tVo * tt + ta * tt * tt / 2;
 			}
 		}
 		if ((code & 14) == 14) {
 			tVo = tV - ta * tt;
-			Vo = tVo;
-			X = tVo * tt + ta * tt * tt / 2;
+			initialV = tVo;
+			dx = tVo * tt + ta * tt * tt / 2;
 		}
 		if ((code & 26) == 26) {
 			if (tt == 0) {
-				Vo = tV;
-				a = 0;
+				initialV = tV;
+				accel = 0;
 			} else {
 				tVo = 2 * tS / tt - tV;
-				Vo = tVo;
-				a = (tV - tVo) / tt;
+				initialV = tVo;
+				accel = (tV - tVo) / tt;
 			}
 		}
 		if ((code & 22) == 22) {
 			if (ta == 0) {
-				Vo = tV;
-				t = X / Vo;
+				initialV = tV;
+				time = dx / initialV;
 			} else {
-				tt = -tV + Math.signum(tS)*Math.sqrt(tV * tV - 2 * ta * tS) / -a;
-				Vo = tV - ta * tt;
-				t = tt;
+				tt = -tV + Math.signum(tS)*Math.sqrt(tV * tV - 2 * ta * tS) / -accel;
+				initialV = tV - ta * tt;
+				time = tt;
 			}
 		}
 		if ((code & 28) == 28) {
 			if (tt == 0) {
-				Vo = 0;
-				V = 0;
+				initialV = 0;
+				finalV = 0;
 			} else {
 				tVo = (tS - ta * tt * tt / 2) / tt;
-				Vo = tVo;
-				V = tVo + ta * tt;
+				initialV = tVo;
+				finalV = tVo + ta * tt;
 			}
 		}
 		if ((code & 13) == 13) {
 			tV = tVo + ta * tt;
-			V = tV;
-			X = tVo * tt + ta * tt * tt / 2;
+			finalV = tV;
+			dx = tVo * tt + ta * tt * tt / 2;
 		}
 		if ((code & 25) == 25) {
 			if (tt == 0) {
-				a = 0;
-				V = tVo;
+				accel = 0;
+				finalV = tVo;
 			} else {
 				ta = 2 * (tS - tVo * tt) / (tt * tt);
-				a = ta;
-				V = tVo + ta * tt;
+				accel = ta;
+				finalV = tVo + ta * tt;
 			}
 		}
 		if ((code & 21) == 21) {
 			if (ta == 0) {
-				V = tVo;
-				t = X / V;
+				finalV = tVo;
+				time = dx / finalV;
 			} else {
-				tV = Math.signum(a) * Math.sqrt(tVo * tVo + 2 * ta * tS);
-				V = tV;
-				t = (tV - tVo) / ta;
+				tV = Math.signum(accel) * Math.sqrt(tVo * tVo + 2 * ta * tS);
+				finalV = tV;
+				time = (tV - tVo) / ta;
 			}
 		}
-		/*if(tV != Double.NaN && tVo != Double.NaN){
-			if(Math.signum(ta) != Math.signum(tV - tVo)){
-				a *= -1;
-			}
-			if(Math.signum(tS) != Math.signum(tV + tVo)){
-				tS *= -1;
-			}
-		}*/
-		
-		
-		return this;
 	}
 	
 

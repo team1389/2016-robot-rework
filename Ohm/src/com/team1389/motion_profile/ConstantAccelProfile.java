@@ -57,12 +57,12 @@ public class ConstantAccelProfile extends MotionProfile {
 
 	@Override
 	public double providePosition(double time) {
-		return getCurrentKinematics(time).X * inverted;
+		return getCurrentKinematics(time).x * inverted;
 	}
 
 	@Override
 	public double provideVelocity(double time) {
-		return getCurrentKinematics(time).V * inverted;
+		return getCurrentKinematics(time).vf * inverted;
 	}
 
 	@Override
@@ -76,6 +76,6 @@ public class ConstantAccelProfile extends MotionProfile {
 	}
 
 	private SimpleKinematics getCurrentKinematics(double time) {
-		return new SimpleKinematics(full.Vo, Double.NaN, time, full.a, Double.NaN);
+		return new SimpleKinematics(full.vo, Double.NaN, time, full.a, Double.NaN);
 	}
 }

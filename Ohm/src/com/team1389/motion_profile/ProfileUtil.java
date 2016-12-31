@@ -42,18 +42,18 @@ public class ProfileUtil {
 		if (Vo < 0) {
 			SimpleKinematics slowDown = new SimpleKinematics(Vo, 0, Double.NaN, maxDecel, Double.NaN);
 			return combine(new ConstantAccelProfile(slowDown, inverted),
-					trapezoidal((inverted ? -1 : 1) * (dx - slowDown.X), 0, maxAccel, maxDecel, maxSpeed));
+					trapezoidal((inverted ? -1 : 1) * (dx - slowDown.x), 0, maxAccel, maxDecel, maxSpeed));
 		}
 
 		// From here on out, it is assumed vo >= 0
 		SimpleKinematics accelSegment = new SimpleKinematics(Vo, maxSpeed, Double.NaN, maxAccel, Double.NaN);
 		SimpleKinematics decelSegment = new SimpleKinematics(maxSpeed, 0, Double.NaN, -maxDecel, Double.NaN);
 
-		double diff = dx - (accelSegment.X + decelSegment.X);
+		double diff = dx - (accelSegment.x + decelSegment.x);
 		if (diff < 0) {
 			SimpleKinematics testDecel = new SimpleKinematics(Vo, 0, Double.NaN, -maxAccel, Double.NaN);
-			if (testDecel.X > dx /* i.e. we cant stop in time and have to backtrack */) {
-				double vMax = -calculateTopSpeed(testDecel.X - dx, 0, maxAccel, maxDecel);
+			if (testDecel.x > dx /* i.e. we cant stop in time and have to backtrack */) {
+				double vMax = -calculateTopSpeed(testDecel.x - dx, 0, maxAccel, maxDecel);
 				accelSegment = new SimpleKinematics(0, vMax, Double.NaN, -maxAccel, Double.NaN);
 				decelSegment = new SimpleKinematics(vMax, 0, Double.NaN, maxDecel, Double.NaN);
 				return combine(new ConstantAccelProfile(testDecel, inverted),
