@@ -21,7 +21,7 @@ public class SimMotor {
 	public SimMotor(Motor motor, Attachment attachment, double gearing) {
 		timer = new Timer();
 		this.gearReduction = gearing;
-		this.attachment=attachment;
+		this.attachment = attachment;
 		this.motor = motor;
 	}
 

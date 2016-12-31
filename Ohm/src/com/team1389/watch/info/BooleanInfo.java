@@ -1,5 +1,7 @@
 package com.team1389.watch.info;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.tables.ITable;
@@ -32,5 +34,9 @@ public class BooleanInfo extends SimpleWatchable {
 	public double getLoggable() {
 		return in.getAsBoolean() ? 1 : 0;
 	}
+
+	
+
+	
 
 }
