@@ -7,7 +7,7 @@ import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
 /**
- * drive system that can turn in place, and 
+ * drive system that can turn in place
  * @author Kenneth
  *
  */
