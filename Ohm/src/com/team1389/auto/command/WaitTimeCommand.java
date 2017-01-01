@@ -9,7 +9,7 @@ import com.team1389.hardware.inputs.hardware.TimedBoolean;
 public class WaitTimeCommand extends WaitForBooleanCommand{
 	TimedBoolean timer;
 	/**
-	 * @param amount of time to wait
+	 * @param time amount of time to wait
 	 */
 	public WaitTimeCommand(double time){
 		super(null);
