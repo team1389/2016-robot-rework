@@ -1,21 +1,26 @@
 package com.team1389.watch;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
 import com.team1389.util.Optional;
+import com.team1389.watch.info.SimpleWatchable;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
- * represents a stream of values that can be added to ITable
+ * represents a value or set of values that can be displayed in a variety of ways when passed to a {@link Watcher}
  * 
+ * @see Watcher
  * @author Kenneth
  *
  */
 public interface Watchable {
 
+	/**
+	 * @return the specific name of this watchable <br>
+	 *         <em>NOTE</em>: this does not take watchable hierarchy into account
+	 */
 	public String getName();
 
 	/**
@@ -24,7 +29,13 @@ public interface Watchable {
 	 */
 	void publishUnderName(String name, ITable table);
 
-	Map<String, Watchable> getFlat(Optional<String> parent);
+	/**
+	 * returns a flat hashmap of simple watchables with hierarchical naming
+	 * 
+	 * @param parent a name to concat at the top of the hierarchy
+	 * @return a map of simple watchables in t
+	 */
+	Map<String, SimpleWatchable> getFlat(Optional<String> parent);
 
 	/**
 	 * adds parent to the name, then uses <publishUnderName>
@@ -33,7 +44,7 @@ public interface Watchable {
 	 * @param table where key+value is published to
 	 */
 	public default void publish(String parent, ITable table) {
-		publishUnderName(parent + "." + getName(), table);
+		publishUnderName(getFullName(parent), table);
 	}
 
 	/**
@@ -46,14 +57,33 @@ public interface Watchable {
 		publishUnderName(getName(), table);
 	}
 
+	/**
+	 * determines the full name of this watchable based on its position in the hierarchy
+	 * 
+	 * @param parent the full name of the parent watchable
+	 * @return the full string name of this watchable in context
+	 */
 	public default String getFullName(String parent) {
 		return parent + "." + getName();
 	}
 
+	/**
+	 * write this watchable to a file
+	 * 
+	 * @param f the fileWriter to use
+	 */
 	void log(Writer f);
 
-	void logKey(Writer f) throws IOException;
+	/**
+	 * write the name of this watchable to a file
+	 * 
+	 * @param f the fileWriter to use
+	 */
+	void logKey(Writer f);
 
+	/**
+	 * @return a String representation of this watchable
+	 */
 	public String getPrintString();
 
 }

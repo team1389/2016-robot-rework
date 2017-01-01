@@ -8,12 +8,33 @@ import java.util.Map;
 
 import com.team1389.util.AddList;
 import com.team1389.util.Optional;
+import com.team1389.watch.info.SimpleWatchable;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
+/**
+ * implements the <em>Composite Pattern</em>: <br>
+ * represents a group of {@link Watchable} objects, but also implements {@link Watchable} itself
+ * 
+ * @author amind
+ * @see <a href="https://www.javacodegeeks.com/2015/09/composite-design-pattern.html">Composite pattern</a>
+ * @see SimpleWatchable
+ * @see Watchable
+ */
 public interface CompositeWatchable extends Watchable {
+
+	/**
+	 * a blank list used to simplify the process of building a subWatchables list
+	 * 
+	 * @see CompositeWatchable#getSubWatchables(AddList stem)
+	 */
 	static AddList<Watchable> stem = new AddList<Watchable>();
 
+	/**
+	 * @param stem a supplied empty list to build the subWatchables list from
+	 * @return a list of watchables tracked by this composite
+	 * @see CompositeWatchable#stem
+	 */
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem);
 
 	@Override
@@ -44,22 +65,32 @@ public interface CompositeWatchable extends Watchable {
 	}
 
 	@Override
-	public default void logKey(Writer f) throws IOException {
+	public default void logKey(Writer f) {
 		for (Watchable w : getSubWatchables(stem)) {
-			System.out.println(true);
 			w.logKey(f);
-			f.append("\t");
+			try {
+				f.append("\t");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
-	public default Map<String, Watchable> getFlat(Optional<String> parent) {
-		Map<String, Watchable> map = new HashMap<>();
+	public default Map<String, SimpleWatchable> getFlat(Optional<String> parent) {
+		Map<String, SimpleWatchable> map = new HashMap<>();
 		getSubWatchables(stem)
 				.forEach(w -> map.putAll(w.getFlat(Optional.of(parent.ifPresent(getName(), this::getFullName).get()))));
 		return map;
 	}
 
+	/**
+	 * generates a composite watchable
+	 * 
+	 * @param name the name of the composite watchable
+	 * @param subWatchables the watchables to combine
+	 * @return a composite watchable containing the given subWatchables
+	 */
 	public static CompositeWatchable of(String name, Watchable... subWatchables) {
 		return new CompositeWatchable() {
 
@@ -76,7 +107,14 @@ public interface CompositeWatchable extends Watchable {
 		};
 	}
 
-	public static CompositeWatchable of(String name, List<Watchable> watchables) {
-		return of(name, watchables.toArray(new Watchable[0]));
+	/**
+	 * generates a composite watchable
+	 * 
+	 * @param name the name of the composite watchable
+	 * @param subWatchables the list of watchables to combine
+	 * @return a composite watchable containing the given subWatchables
+	 */
+	public static CompositeWatchable of(String name, List<Watchable> subWatchables) {
+		return of(name, subWatchables.toArray(new Watchable[0]));
 	}
 }

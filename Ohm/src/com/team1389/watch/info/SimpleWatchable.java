@@ -49,8 +49,8 @@ public abstract class SimpleWatchable implements Watchable {
 	}
 
 	@Override
-	public Map<String, Watchable> getFlat(Optional<String> parent) {
-		Map<String, Watchable> map = new HashMap<>();
+	public Map<String, SimpleWatchable> getFlat(Optional<String> parent) {
+		Map<String, SimpleWatchable> map = new HashMap<>();
 		map.put(parent.ifPresent(getName(), this::getFullName).get(), this);
 		return map;
 	}
