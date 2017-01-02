@@ -26,7 +26,7 @@ public class Attachment {
 
 	public double getAddedTorque(double theta) {
 		if (hasWeight) {
-			double torqueGravity = GRAVITY_ACCEL * mass * Math.cos(theta) * rCenterMass;
+			double torqueGravity = -GRAVITY_ACCEL * mass * Math.cos(theta) * rCenterMass;
 			return torqueGravity;
 		} else {
 			return 0;

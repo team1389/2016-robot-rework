@@ -13,6 +13,7 @@ import com.team1389.system.SystemManager;
 import com.team1389.watch.LogFile;
 import com.team1389.watch.LogFile.LogType;
 import com.team1389.watch.Watcher;
+import com.team1389.watch.input.NumberInput;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
@@ -36,17 +37,16 @@ public class Tester {
 	public static void init() {
 		dash2 = new Watcher();
 		sim = new SimulatedActuator(Motor.MINI_CIM, new Attachment(7.5, 0.66, true), 200);
+		dash2.watch(sim);
 		sim.setRangeOfMotion(0, 90);
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
 		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
-		dash.watch(pos.getWatchable("pos"));
 		cont = new SmoothSetController(.07, 0, 5, 10, 10, 30, pos, speed, sim.getVoltageOutput());
-		dash2.watch(cont.getPIDTuner("tuner"));
-		cont.setSetpoint(-20);
+		dash2.watch(new NumberInput("voltage", 0.0, sim::setVoltage));
 	}
 
 	public static void update() {
-		cont.update();
+		//cont.update();
 		dash2.publish(Watcher.DASHBOARD);
 		sim.update();
 	}

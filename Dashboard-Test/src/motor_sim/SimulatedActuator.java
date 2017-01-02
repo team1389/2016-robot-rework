@@ -8,8 +8,13 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.util.AddList;
+import com.team1389.util.RangeUtil;
+import com.team1389.watch.CompositeWatchable;
+import com.team1389.watch.Watchable;
+import com.team1389.watch.info.NumberInfo;
 
-public class SimulatedActuator {
+public class SimulatedActuator implements CompositeWatchable {
 	Set<Motor> motors;
 	private double gearReduction;
 	private Set<Attachment> attachments;
@@ -44,24 +49,28 @@ public class SimulatedActuator {
 	}
 
 	public RangeIn<Position> getPositionInput() {
-		return new RangeIn<Position>(Position.class, this::getPosition, 0, 2 * Math.PI);
+		return new RangeIn<Position>(Position.class, this::getPositionDegrees, 0, 360);
 	}
 
 	public RangeIn<Speed> getSpeedInput() {
-		return new RangeIn<Speed>(Speed.class, () -> omega / gearReduction, 0, 2 * Math.PI);
+		return new RangeIn<Speed>(Speed.class, this::getOmegaDegrees, 0, 360);
 	}
 
 	public void setVoltage(double voltage) {
-		motors.forEach(m -> m.setVoltage(voltage));
+		double limVoltage = RangeUtil.limit(voltage, -1, 1);
+		motors.forEach(m -> m.setVoltage(limVoltage));
 	}
 
 	public void update() {
 		double dt = timer.get();
 		alpha = calculateAlpha();
 		omega += alpha * dt; // add to velocity
-		if ((omega > 0 && getPosition() < rangeMax) || (omega < 0 && getPosition() > rangeMin)) {
+		if ((omega > 0 && getPosition() <= rangeMax) || (omega < 0 && getPosition() >= rangeMin)) {
 			theta += omega * dt; // add to position
 		} else {
+			System.out.println(theta+" "+rangeMin+" "+rangeMax);
+			theta = RangeUtil.limit(theta, rangeMin, rangeMax);
+			System.out.println(theta);
 			omega = 0;
 		}
 		timer.zero();
@@ -69,6 +78,18 @@ public class SimulatedActuator {
 
 	private double getPosition() {
 		return theta / gearReduction;
+	}
+
+	private double getPositionDegrees() {
+		return Math.toDegrees(getPosition());
+	}
+
+	private double getOmega() {
+		return omega / gearReduction;
+	}
+
+	private double getOmegaDegrees() {
+		return Math.toDegrees(getOmega());
 	}
 
 	private double calculateAlpha() {
@@ -81,15 +102,33 @@ public class SimulatedActuator {
 	}
 
 	private double getAttachmentTorque() {
-		return attachments.stream().mapToDouble(a -> a.getAddedTorque(theta)).sum();
+		return attachments.stream().mapToDouble(a -> a.getAddedTorque(getPosition())).sum();
 	}
 
 	private double getAttachmentMoment() {
 		return attachments.stream().mapToDouble(a -> a.moment).sum();
 	}
 
+	/**
+	 * limits the actuator to the given range of motion
+	 * 
+	 * @param min the minimum angle of the actuator (degrees)
+	 * @param max the maximum angle of the actuator (degrees)
+	 */
 	public void setRangeOfMotion(double min, double max) {
 		this.rangeMax = Math.toRadians(max);
 		this.rangeMin = Math.toRadians(min);
+	}
+
+	@Override
+	public String getName() {
+		return "Simulated Actuator";
+	}
+
+	@Override
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(new NumberInfo("attachment torque", this::getAttachmentTorque),
+				new NumberInfo("motor torque", this::getMotorTorque),
+				new NumberInfo("position", this::getPositionDegrees), new NumberInfo("speed", this::getOmegaDegrees));
 	}
 }
