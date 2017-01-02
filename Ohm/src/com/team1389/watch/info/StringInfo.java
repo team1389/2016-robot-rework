@@ -1,23 +1,26 @@
 package com.team1389.watch.info;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.tables.ITable;
 
+/**
+ * an info type that tracks the value of a string
+ * 
+ * @author amind
+ *
+ */
 public class StringInfo extends SimpleWatchable {
+
+	Supplier<String> source;
+
 	/**
-	 * Sets information (StringSource, Name) to class variables or super class
-	 * 
-	 * @param name the name of the hardware the source is from
-	 * @param source2 the input stream used to read from
+	 * @param name the name of this info
+	 * @param source the string source to track
 	 */
-	StringSource source;
-
-	public StringInfo(String name, StringSource source2) {
+	public StringInfo(String name, Supplier<String> source) {
 		super(name);
-		this.source = source2;
-	}
-
-	public interface StringSource {
-		public String get();
+		this.source = source;
 	}
 
 	@Override

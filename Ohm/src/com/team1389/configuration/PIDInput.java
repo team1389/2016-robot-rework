@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import com.team1389.util.AddList;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.NumberInput;
+import com.team1389.watch.input.NumberInput;
 
 public class PIDInput implements CompositeWatchable {
 	NumberInput p;

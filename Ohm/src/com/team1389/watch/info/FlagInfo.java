@@ -4,7 +4,17 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
+/**
+ * a special boolean info that only displays if the boolean is true
+ * 
+ * @author amind
+ *
+ */
 public class FlagInfo extends BooleanInfo {
+	/**
+	 * @param name the name of the info
+	 * @param isFlag the boolean source to track
+	 */
 	public FlagInfo(String name, BooleanSupplier isFlag) {
 		super(name, isFlag);
 	}
@@ -16,11 +26,6 @@ public class FlagInfo extends BooleanInfo {
 		} else {
 			table.delete(name);
 		}
-	}
-
-	@Override
-	public String getPrintString() {
-		return in.getAsBoolean() ? super.getPrintString() : "";
 	}
 
 }

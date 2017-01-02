@@ -1,7 +1,5 @@
 package com.team1389.watch.info;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,31 +15,17 @@ import com.team1389.watch.Watchable;
 public abstract class SimpleWatchable implements Watchable {
 	protected String name;
 
+	/**
+	 * @param name the name of this info
+	 */
 	public SimpleWatchable(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return a number representation of this info for spreadsheet logs
+	 */
 	public abstract double getLoggable();
-
-	@Override
-	public void log(Writer f) {
-		try {
-			f.append(Double.toString(this.getLoggable()));
-			f.append("\t");
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	@Override
-	public void logKey(Writer f) {
-		try {
-			f.append(this.getName());
-			f.append("\t");
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-	}
 
 	@Override
 	public String getName() {

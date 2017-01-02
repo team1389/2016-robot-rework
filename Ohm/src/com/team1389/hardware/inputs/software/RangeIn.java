@@ -1,5 +1,6 @@
 package com.team1389.hardware.inputs.software;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
@@ -12,25 +13,23 @@ public class RangeIn<T extends Value> {
 	public Class<T> type;
 	protected ScalarInput<T> input;// interface that represents a single method that returns a double
 	protected double max, min;
+	private Supplier<String> operations;
 
 	public RangeIn(Class<T> type, ScalarInput<T> val, double min, double max) {
 		this.input = val;
 		this.min = min;
 		this.max = max;
 		this.type = type;
+		ScalarInput<T> in = input;
+		this.operations = () -> "[read values] = " + in.get();
 	}
 
 	public RangeIn(Class<T> type, Supplier<Double> val, double min, double max) {
-		this.input = val::get;
-		this.min = min;
-		this.max = max;
-		this.type = type;
+		this(type, val::get, min, max);
 	}
 
 	public RangeIn(Class<T> type, double min, double max) {
-		this(type, () -> {
-			return 0.0;
-		}, min, max);
+		this(type, () -> 0.0, min, max);
 	}
 
 	public double get() {
@@ -73,6 +72,7 @@ public class RangeIn<T extends Value> {
 	}
 
 	public <R extends RangeIn<T>> R setRange(double min, double max) {
+		addOperation(d -> " -> setRange[" + min + "," + max + "] = " + d);
 		this.min = min;
 		this.max = max;
 		return cast();
@@ -80,6 +80,9 @@ public class RangeIn<T extends Value> {
 
 	public <R extends RangeIn<T>> R mapToRange(double min, double max) {
 		input = ScalarInput.mapToRange(input, this.min, this.max, min, max);
+		double oldMin=this.min;
+		double oldMax=this.max;
+		addOperation(d -> "-> map from [" + oldMin + "," + oldMax + "] to [" + min + "," + max + "] = " + d);
 		this.min = min;
 		this.max = max;
 		return cast();
@@ -92,16 +95,20 @@ public class RangeIn<T extends Value> {
 
 	public <R extends RangeIn<T>> R applyDeadband(double deadband) {
 		input = ScalarInput.applyDeadband(input, deadband);
+		addOperation(d -> " -> deadband[" + deadband + "] = " + d);
 		return cast();
 	}
 
 	public <R extends RangeIn<T>> R invert() {
 		input = ScalarInput.invert(input);
+		addOperation(d -> " -> invert = " + d);
 		return cast();
 	}
 
 	public <R extends RangeIn<T>> R scale(double factor) {
+		ScalarInput<T> in = input;
 		input = ScalarInput.scale(input, factor);
+		addOperation(d -> " -> scale[" + in.get() + "*" + factor + "] = " + d);
 		max *= factor;
 		min *= factor;
 		return cast();
@@ -109,15 +116,19 @@ public class RangeIn<T extends Value> {
 
 	public <R extends RangeIn<T>> R getWrapped() {
 		input = ScalarInput.getWrapped(input, min(), max());
+		addOperation(d -> " -> wrap[" + min + "," + max + "] = " + d);
 		return cast();
 	}
 
 	public <R extends RangeIn<T>> R sumInputs(RangeIn<T> rngIn) {
+		ScalarInput<T> in = input;
 		input = ScalarInput.sum(input, rngIn.input);
+		addOperation(d -> " -> sum[" + in.get() + "+" + rngIn.get() + "] = " + d);
 		return cast();
 	}
 
 	public <R extends RangeIn<T>> R limit() {
+		addOperation(d -> " -> limit[" + min + "," + max + "] = " + d);
 		input = ScalarInput.limitRange(input, this.min, this.max);
 		return cast();
 	}
@@ -136,4 +147,14 @@ public class RangeIn<T extends Value> {
 		};
 	}
 
+	@Override
+	public String toString() {
+		return operations.get() + " -> [result]";
+	}
+
+	private void addOperation(Function<Double, String> operation) {
+		ScalarInput<T> in = input;
+		Supplier<String> oldOperations = operations;
+		operations = () -> oldOperations.get().concat(operation.apply(in.get()));
+	}
 }

@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.team1389.hardware.inputs.hardware.Timer;
@@ -23,14 +24,26 @@ public class LogFile {
 	private Writer writer;
 	private boolean inited;
 	private Timer timer;
+	private LogType type;
 
 	/**
+	 * @param type the log file type
+	 * @param filename the file to write to
+	 */
+	public LogFile(String filename, LogType type) {
+		timer = new Timer();
+		inited = false;
+		this.type = type;
+		this.filename = filename + getFileEnding();
+	}
+
+	/**
+	 * uses the default log format, CSV
+	 * 
 	 * @param filename the file to write to
 	 */
 	public LogFile(String filename) {
-		timer = new Timer();
-		inited = false;
-		this.filename = filename;
+		this(filename, LogType.CSV);
 	}
 
 	/**
@@ -86,6 +99,37 @@ public class LogFile {
 	}
 
 	/**
+	 * writes the given list of column headings to the file <br>
+	 * assumes the file is blank
+	 * 
+	 * @param values the list of headings to fill the row with
+	 * @throws IOException if the writer fails to append
+	 */
+	public void writeHeadings(List<String> values) throws IOException {
+		writer.append("Time" + type.seperator);
+		for (String heading : values) {
+			writer.append(heading + type.seperator);
+		}
+		writer.flush();
+	}
+
+	/**
+	 * writes the given list of double values as a row in the log file <br>
+	 * assumes writer is still on the previous lines
+	 * 
+	 * @param values the list of values to fill the row with
+	 * @throws IOException if writer fails to append
+	 */
+	public void writeRow(List<Double> values) throws IOException {
+		writer.append("\n");
+		writer.append(getTimeStamp() + type.seperator);
+		for (Double val : values) {
+			writer.append(val + type.seperator);
+		}
+		writer.flush();
+	}
+
+	/**
 	 * deletes all existing text in the file
 	 * 
 	 * @param filename the file to clear
@@ -108,13 +152,15 @@ public class LogFile {
 	 * 
 	 * @param format the naming convention, a String supplier
 	 * @param path the string path to the log folder - should end with a '/'
+	 * @param type the format of the log file
 	 * @see FileNameSupplier
 	 * @return a fresh LogFile
 	 * @see LogFile#dateTimeFormatter
 	 * @see LogFile#getFormatter(DateTimeFormatter)
 	 */
-	public static LogFile make(FileNameSupplier format, String path) {
-		return new LogFile(path + format.get());
+	public static LogFile make(FileNameSupplier format, String path, LogType type) {
+		new File(path).mkdirs();
+		return new LogFile(path + format.get(), type);
 	}
 
 	/**
@@ -122,12 +168,13 @@ public class LogFile {
 	 * uses the default folder path
 	 * 
 	 * @param format the naming convetion, a String supplier
+	 * @param type the format of the logfile
 	 * @return a fresh LogFile
 	 * @see LogFile#dateTimeFormatter
 	 * @see LogFile#getFormatter(DateTimeFormatter)
 	 */
-	public static LogFile make(FileNameSupplier format) {
-		return make(format, "");
+	public static LogFile make(FileNameSupplier format, LogType type) {
+		return make(format, "", type);
 	}
 
 	/**
@@ -136,7 +183,7 @@ public class LogFile {
 	 * @return a fresh LogFile
 	 */
 	public static LogFile make() {
-		return make(LogFile::dateTime);
+		return make(LogFile::dateTime, LogType.CSV);
 	}
 
 	/**
@@ -186,6 +233,48 @@ public class LogFile {
 			return () -> {
 				return add + get();
 			};
+		}
+	}
+
+	/**
+	 * sets the log format of this file
+	 * 
+	 * @param type the log format to use
+	 * @throws IOException if the file has already been initialized
+	 */
+	public void setLogType(LogType type) throws IOException {
+		if (inited) {
+			throw new IOException("Too late to set LogType, file already initialized");
+		} else {
+			this.type = type;
+		}
+	}
+
+	private String getFileEnding() {
+		return type.fileEnding;
+	}
+
+	/**
+	 * represents a log format
+	 * 
+	 * @author amind
+	 *
+	 */
+	public enum LogType {
+		/**
+		 * the TSV (Tab seperated values) file format
+		 */
+		TSV(".tsv", "\t"),
+		/**
+		 * the CSV (Comma seperated values) file format
+		 */
+		CSV(".csv", ",");
+		private final String fileEnding;
+		private final String seperator;
+
+		LogType(String fileEnding, String seperator) {
+			this.fileEnding = fileEnding;
+			this.seperator = seperator;
 		}
 	}
 }

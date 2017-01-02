@@ -16,14 +16,15 @@ public class RangeUtil {
 	}
 
 	/**
-	 * Constrains a value to be between {@code limit} and {@code -limit}
+	 * Constrains a value to be between [{@code min} and {@code max}]
 	 * 
 	 * @param v the original value
-	 * @param limit the maximum magnitude of {@code v }; if {@code |v|} is greater, it will be truncated.
+	 * @param max the maximum value of {@code v }; 
+	 * @param min the minimum value of {@code v };
 	 * @return the constrained version of {@code v}
 	 */
 	public static double limit(double v, double min, double max) {
-		return (Math.abs(v) > max) ? max : v < min ? min : v;
+		return v > max ? max : v < min ? min : v;
 	}
 
 	/**

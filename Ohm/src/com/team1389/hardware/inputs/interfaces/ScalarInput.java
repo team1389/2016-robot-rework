@@ -50,7 +50,6 @@ public interface ScalarInput<T extends Value> extends Input<Double>, Supplier<Do
 		return () -> {
 			return RangeUtil.map(in.get(), inMin, inMax, 0, 360);
 		};
-
 	}
 
 	/**

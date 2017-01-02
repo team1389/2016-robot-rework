@@ -7,7 +7,7 @@ import com.team1389.util.AddList;
 import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
 /**
- * drive system that can turn in place, and 
+ * drive system that can turn in place
  * @author Kenneth
  *
  */
@@ -17,7 +17,7 @@ public class TankDriveSystem extends Subsystem {
 	private PercentIn wheel;
 	/**
 	 * 
-	 * @param output percent of voltage going to left/right motors
+	 * @param output a percent controlled driveStream (can be speed or voltage)
 	 * @param throttle percent of desired speed (forward/back)
 	 * @param wheel percent of desired turning to (l/r)
 	 */
@@ -26,8 +26,9 @@ public class TankDriveSystem extends Subsystem {
 		this.throttle = throttle;
 		this.wheel = wheel;
 	}
+	
 	/**
-	 * nothing occurs when initialized
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void init() {

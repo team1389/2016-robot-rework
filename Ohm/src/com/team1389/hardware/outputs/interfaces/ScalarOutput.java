@@ -95,7 +95,7 @@ public interface ScalarOutput<T extends Value> extends Consumer<Double> {
 	 */
 	public static <T extends Value> ScalarOutput<T> scale(ScalarOutput<T> out, double scale) {
 		return (double val) -> {
-			out.set(val / scale);
+			out.set(val * scale);
 		};
 
 	}

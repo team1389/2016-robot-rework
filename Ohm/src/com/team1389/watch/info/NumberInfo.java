@@ -4,9 +4,19 @@ import com.team1389.hardware.inputs.interfaces.ScalarInput;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
+/**
+ * an info type that tracks a double
+ * 
+ * @author amind
+ *
+ */
 public class NumberInfo extends SimpleWatchable {
 	ScalarInput<?> source;
-
+	
+	/**
+	 * @param name the name of the info
+	 * @param source the double source to track
+	 */
 	public NumberInfo(String name, ScalarInput<?> source) {
 		super(name);
 		this.source = source;

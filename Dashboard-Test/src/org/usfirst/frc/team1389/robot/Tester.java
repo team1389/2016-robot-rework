@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1389.robot;
 
-import org.usfirst.frc.team1389.robot.SimMotor.Attachment;
-import org.usfirst.frc.team1389.robot.SimMotor.Motor;
-
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.control.SmoothSetController;
 import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
@@ -14,12 +11,18 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.LogFile;
+import com.team1389.watch.LogFile.LogType;
 import com.team1389.watch.Watcher;
+import com.team1389.watch.input.NumberInput;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import layout.TesterDefaultHardware;
+import motor_sim.LinearAttachment;
+import motor_sim.Motor;
+import motor_sim.SimulatedActuator;
+import motor_sim.element.PrismElement;
 
 public class Tester {
 	static TesterDefaultHardware robot;
@@ -29,21 +32,24 @@ public class Tester {
 	static SmoothSetController cont;
 	static DashboardScalarInput inp;
 	static RangeOut<Position> setter;
+	static SimulatedActuator sim;
+	static Watcher dash2;
 
 	public static void init() {
-		SimMotor sim = new SimMotor(Motor.MINI_CIM, new Attachment(7.5, 0.66, true), 200);
+		dash2 = new Watcher();
+		sim = new SimulatedActuator(Motor.MINI_CIM, new LinearAttachment(new PrismElement(20, .4, .05, .66), true), 200);
+		dash2.watch(sim);
+		sim.setRangeOfMotion(0, 89);
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
 		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
-		dash.watch(pos.getWatchable("pos"), speed.getWatchable("speed"));
-		cont = new SmoothSetController(.07, 0, 5, 2, 2, 30, pos, speed, sim.getVoltageOutput());
-		cont.setInputRange(-360, 360);
-		dash.watch(cont.getPIDTuner("tuner"));
-		setter = cont.getSetpointSetter();
-		cont.setSetpoint(-20);
+		cont = new SmoothSetController(.07, 0, 5, 10, 10, 30, pos, speed, sim.getVoltageOutput());
+		dash2.watch(new NumberInput("voltage", 0.0, sim::setVoltage));
 	}
 
 	public static void update() {
-		cont.update();
+		// cont.update();
+		dash2.publish(Watcher.DASHBOARD);
+		sim.update();
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -70,8 +76,8 @@ public class Tester {
 		timer = new Timer();
 		RangeOut<Value> out = new RangeOut<Value>(k -> {
 		}, 0, 1);
-		dash.watch(out.getWatchable("updateTime"));
-		dash.setLogLocation(LogFile.make(LogFile.dateTimeFormatter().concat("Dashboard_")));
+		dash.setLogLocation(LogFile.make(LogFile.dateTimeFormatter().concat("Dashboard_"), "logs/", LogType.CSV));
+
 		while (true) {
 			timer.zero();
 			update();
