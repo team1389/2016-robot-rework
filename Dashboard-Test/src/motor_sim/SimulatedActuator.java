@@ -57,7 +57,6 @@ public class SimulatedActuator {
 
 	public void update() {
 		double dt = timer.get();
-		System.out.println(getMotorTorque() + " " + getAttachmentTorque());
 		alpha = calculateAlpha();
 		omega += alpha * dt; // add to velocity
 		if ((omega > 0 && getPosition() < rangeMax) || (omega < 0 && getPosition() > rangeMin)) {

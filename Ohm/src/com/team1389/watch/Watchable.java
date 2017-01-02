@@ -1,6 +1,5 @@
 package com.team1389.watch;
 
-import java.io.Writer;
 import java.util.Map;
 
 import com.team1389.util.Optional;
@@ -66,21 +65,6 @@ public interface Watchable {
 	public default String getFullName(String parent) {
 		return parent + "." + getName();
 	}
-
-	/**
-	 * write this watchable to a file
-	 * 
-	 * @param f the fileWriter to use
-	 */
-	void log(Writer f);
-
-	/**
-	 * write the name of this watchable to a file
-	 * 
-	 * @param f the fileWriter to use
-	 */
-	void logKey(Writer f);
-
 	/**
 	 * @return a String representation of this watchable
 	 */

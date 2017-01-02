@@ -1,7 +1,6 @@
 package com.team1389.watch;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.team1389.util.Optional;
+import com.team1389.watch.info.SimpleWatchable;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.tables.ITable;
@@ -32,7 +33,7 @@ public class Watcher {
 	 */
 	public static ITable DASHBOARD = NetworkTable.getTable("SmartDashboard");
 	protected List<Watchable> watchables;
-	protected Map<String, Watchable> flatWatchables;
+	protected Map<String, SimpleWatchable> flatWatchables;
 	private Optional<LogFile> log;
 
 	/**
@@ -50,9 +51,7 @@ public class Watcher {
 	 * @return list of watchables
 	 */
 	public Watcher watch(Watchable... watchables) {
-		Arrays.asList(watchables).forEach(w -> this.flatWatchables.putAll(w.getFlat(Optional.empty())));
-		this.watchables.addAll(Arrays.asList(watchables));
-		return this;
+		return this.watch(Arrays.asList(watchables));
 	}
 
 	/**
@@ -91,24 +90,12 @@ public class Watcher {
 
 	private void logTo(LogFile file) {
 		try {
-			Writer f;
 			if (!file.isInited()) {
 				file.init();
-				f = file.getWriter();
-				f.append("Time\t");
-				for (Entry<String, Watchable> e : flatWatchables.entrySet()) {
-					e.getValue().logKey(f);
-				}
-				f.append("\n");
+				file.writeHeadings(new ArrayList<String>(flatWatchables.keySet()));
 			}
-			f = file.getWriter();
-			f.append(Double.toString(file.getTimeStamp()));
-			f.append("\t");
-			for (Entry<String, Watchable> en : flatWatchables.entrySet()) {
-				en.getValue().log(f);
-			}
-			f.append("\n");
-			f.flush();
+			file.writeRow(flatWatchables.values().stream().mapToDouble(w -> w.getLoggable()).boxed()
+					.collect(Collectors.toList()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -127,7 +114,7 @@ public class Watcher {
 	 * @param table to publish to
 	 */
 	public void publish(ITable table) {
-		for (Entry<String, Watchable> info : flatWatchables.entrySet()) {
+		for (Entry<String, SimpleWatchable> info : flatWatchables.entrySet()) {
 			info.getValue().publishUnderName(info.getKey(), table);
 		}
 	}
@@ -137,7 +124,7 @@ public class Watcher {
 	 */
 	public String getPrintString() {
 		String s = "";
-		for (Entry<String, Watchable> info : flatWatchables.entrySet()) {
+		for (Entry<String, SimpleWatchable> info : flatWatchables.entrySet()) {
 			s = String.join(s, info.getKey() + ":" + info.getValue().getPrintString() + "\n");
 		}
 		return s;
