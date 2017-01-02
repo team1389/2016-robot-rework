@@ -15,7 +15,6 @@ public class DoubleToStringFixedWidth {
 		System.out.println(get(-0.000000000000000000000000000000000023525235, 7));
 		System.out.println(get(10000000, 7));
 
-
 	}
 
 	/**
@@ -31,7 +30,7 @@ public class DoubleToStringFixedWidth {
 		if(d == 0){
 			return String.format(("%." + (length-1) + "f"), 0.0);
 		}
-		
+
 		int numDecimalPlaces = length - (int)(Math.log10(Math.abs(d)) + 1);
 		if(d < 0) numDecimalPlaces--;
 		if(numDecimalPlaces > 0){
@@ -60,7 +59,9 @@ public class DoubleToStringFixedWidth {
 	}
 
 	private static String addZeros(String s, int goalLength) {
-		s = s.substring(0, s.indexOf('E')) + ".0" + s.substring(s.indexOf('E'));
+		if(!s.contains(".")){
+			s = s.substring(0, s.indexOf('E')) + ".0" + s.substring(s.indexOf('E'));
+		}
 		StringBuilder result = new StringBuilder(s);
 		while(result.length() < goalLength + 1){
 			int i = result.lastIndexOf("E");
