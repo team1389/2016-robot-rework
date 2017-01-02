@@ -20,7 +20,8 @@ public class RangeIn<T extends Value> {
 		this.min = min;
 		this.max = max;
 		this.type = type;
-		this.operations = () -> "" + input.get();
+		ScalarInput<T> in = input;
+		this.operations = () -> "[read values] = " + in.get();
 	}
 
 	public RangeIn(Class<T> type, Supplier<Double> val, double min, double max) {
@@ -79,7 +80,9 @@ public class RangeIn<T extends Value> {
 
 	public <R extends RangeIn<T>> R mapToRange(double min, double max) {
 		input = ScalarInput.mapToRange(input, this.min, this.max, min, max);
-		addOperation(d -> "-> mapTo[" + min + "," + max + "] = " + d);
+		double oldMin=this.min;
+		double oldMax=this.max;
+		addOperation(d -> "-> map from [" + oldMin + "," + oldMax + "] to [" + min + "," + max + "] = " + d);
 		this.min = min;
 		this.max = max;
 		return cast();
@@ -146,7 +149,7 @@ public class RangeIn<T extends Value> {
 
 	@Override
 	public String toString() {
-		return operations.get();
+		return operations.get() + " -> [result]";
 	}
 
 	private void addOperation(Function<Double, String> operation) {

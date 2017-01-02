@@ -268,5 +268,9 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		this.max = max;
 		return this;
 	}
+/*	private void addOperation(Function<Double, String> operation) {
+		Supplier<String> oldOperations = operations;
+		operations = () -> oldOperations.get().concat(operation.apply(in.get()));
+	}*/
 
 }
