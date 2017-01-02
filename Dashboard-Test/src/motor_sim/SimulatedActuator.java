@@ -1,5 +1,6 @@
 package motor_sim;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import com.team1389.watch.info.NumberInfo;
 public class SimulatedActuator implements CompositeWatchable {
 	Set<Motor> motors;
 	private double gearReduction;
-	private Set<Attachment> attachments;
+	private Attachment attachment;
 	private double rangeMin, rangeMax;
 
 	private double theta = 0; // current angle
@@ -25,23 +26,26 @@ public class SimulatedActuator implements CompositeWatchable {
 	private double alpha = 0; // current acceleration of rotation (rad^2/sec)
 	private Timer timer;
 
-	public SimulatedActuator(Set<Motor> motors, Set<Attachment> attachments, double gearing) {
+	public SimulatedActuator(Set<Motor> motors, Attachment attachment, double gearing) {
 		timer = new Timer();
 		this.gearReduction = gearing;
-		this.attachments = attachments;
+		this.attachment = attachment;
 		this.motors = motors;
 		this.rangeMax = Double.MAX_VALUE;
 		this.rangeMin = Double.MIN_VALUE;
 	}
 
+	public SimulatedActuator(Attachment attachment, double gearing, Motor... motors) {
+		this(new HashSet<Motor>(Arrays.asList(motors)), attachment, gearing);
+	}
+
 	public SimulatedActuator(Motor motor, Attachment attachment, double gearing) {
-		this(new HashSet<>(), new HashSet<>(), gearing);
+		this(new HashSet<>(), attachment, gearing);
 		motors.add(motor);
-		attachments.add(attachment);
 	}
 
 	public SimulatedActuator(Motor motor) {
-		this(motor, Attachment.FREE, 1);
+		this(motor, new Attachment(Attachment.FREE, false), 1);
 	}
 
 	public PercentOut getVoltageOutput() {
@@ -68,9 +72,7 @@ public class SimulatedActuator implements CompositeWatchable {
 		if ((omega > 0 && getPosition() <= rangeMax) || (omega < 0 && getPosition() >= rangeMin)) {
 			theta += omega * dt; // add to position
 		} else {
-			System.out.println(theta+" "+rangeMin+" "+rangeMax);
-			theta = RangeUtil.limit(theta, rangeMin, rangeMax);
-			System.out.println(theta);
+			theta = RangeUtil.limit(getPosition(), rangeMin, rangeMax) * gearReduction;
 			omega = 0;
 		}
 		timer.zero();
@@ -94,7 +96,7 @@ public class SimulatedActuator implements CompositeWatchable {
 
 	private double calculateAlpha() {
 		double totalTorque = getMotorTorque() * gearReduction + getAttachmentTorque();
-		return totalTorque / getAttachmentMoment();
+		return totalTorque / attachment.getMoment();
 	}
 
 	private double getMotorTorque() {
@@ -102,11 +104,7 @@ public class SimulatedActuator implements CompositeWatchable {
 	}
 
 	private double getAttachmentTorque() {
-		return attachments.stream().mapToDouble(a -> a.getAddedTorque(getPosition())).sum();
-	}
-
-	private double getAttachmentMoment() {
-		return attachments.stream().mapToDouble(a -> a.moment).sum();
+		return attachment.getAddedTorque(getPosition());
 	}
 
 	/**

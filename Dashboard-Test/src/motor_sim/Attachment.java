@@ -1,36 +1,33 @@
 package motor_sim;
 
+import motor_sim.element.CylinderElement;
+import motor_sim.element.Element;
+import motor_sim.element.Element.Material;
+
 public class Attachment {
 	public final static double GRAVITY_ACCEL = 9.8; // acceleration of gravity (m/s^2)
 
-	static final Attachment FREE = new Attachment(1, .05, .008, 1.6, false);
+	static final Element FREE = new CylinderElement(Material.ALUMINUM, .008, .032);
 
-	public final double moment, rCenterMass, mass;
-	private final boolean hasWeight;
+	final boolean hasWeight;
+	Element element;
 
-	public Attachment(double m, double r, double rCenterMass, double I, boolean hasWeight) {
-		this.mass = m;
-		this.rCenterMass = rCenterMass;
-		this.moment = I;
+	public Attachment(Element e, boolean hasWeight) {
+		this.element = e;
 		this.hasWeight = hasWeight;
-	}
-
-	public Attachment(double m, double r, double rCenterMass, boolean hasWeight) {
-		this(m, r, rCenterMass, m * rCenterMass * rCenterMass + m * r * r / 12, // calculate moment of inertia of the arm
-				hasWeight);
-	}
-
-	public Attachment(double m, double r, boolean hasWeight) {
-		this(m, r, r / 2, hasWeight);
 	}
 
 	public double getAddedTorque(double theta) {
 		if (hasWeight) {
-			double torqueGravity = -GRAVITY_ACCEL * mass * Math.cos(theta) * rCenterMass;
+			double torqueGravity = -GRAVITY_ACCEL * element.mass * Math.cos(theta) * element.centerOfMass;
 			return torqueGravity;
 		} else {
 			return 0;
 		}
+	}
+
+	public double getMoment() {
+		return element.moment;
 	}
 
 }
