@@ -6,10 +6,20 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.PIDTunableValue;
 import com.team1389.hardware.value_types.Value;
 
+/**
+ * This class applies PID control to a set of input/output streams<br>
+ * Does all computation asynchronously, it updates without any prompting from the user
+ * <br> 
+ * @author amind
+ *
+ * @param <O> the value type of the output stream
+ * @param <I> the value type of the input stream
+ */
 public class PIDController<O extends Value, I extends PIDTunableValue> extends edu.wpi.first.wpilibj.PIDController {
 	private RangeOut<O> output;
 	private RangeIn<I> source;
 	private RangeOut<I> setpointSetter;
+
 	public PIDController(double kP, double kI, double kD, RangeIn<I> source, RangeOut<O> output) {
 		super(kP, kI, kD, PIDRangeIn.get(source), PIDRangeOut.get(output));
 		this.source = source;
@@ -33,10 +43,9 @@ public class PIDController<O extends Value, I extends PIDTunableValue> extends e
 	public RangeIn<I> getSource() {
 		return source;
 	}
-	public RangeOut<O> getOutput(){
+
+	public RangeOut<O> getOutput() {
 		return output;
 	}
 
-
-	
 }

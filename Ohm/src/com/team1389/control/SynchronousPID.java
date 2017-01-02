@@ -37,6 +37,9 @@ public class SynchronousPID {
 										// term as 0
 	private FIFO<Double> m_avgError;
 
+	/**
+	 * initializes the PID controller
+	 */
 	public SynchronousPID() {
 		m_avgError = new FIFO<>(DEFAULT_ERROR_QUE_SIZE);
 	}
@@ -59,6 +62,7 @@ public class SynchronousPID {
 	 * Read the input, calculate the output accordingly, and write to the output. This should be called at a constant rate by the user (ex. in a timed thread)
 	 *
 	 * @param input the input
+	 * @return the controller output
 	 */
 	public double calculate(double input) {
 		m_last_input = input;
@@ -80,7 +84,7 @@ public class SynchronousPID {
 		}
 
 		// Don't blow away m_error so as to not break derivative
-		double proportionalError = Math.abs(m_error) < m_deadband ? 0 : m_error;
+		double proportionalError = RangeUtil.applyDeadband(m_error, m_deadband);
 
 		m_result = (m_P * proportionalError + m_I * m_totalError + m_D * (m_error - m_prevError));
 		m_prevError = m_error;
@@ -152,6 +156,9 @@ public class SynchronousPID {
 		m_continuous = continuous;
 	}
 
+	/**
+	 * @param deadband the deadband on for calculating proportional error
+	 */
 	public void setDeadband(double deadband) {
 		m_deadband = deadband;
 	}
@@ -243,20 +250,22 @@ public class SynchronousPID {
 
 	/**
 	 * Return true if the error is within the tolerance
-	 *
+	 * 
+	 * @param tolerance the tolerance
 	 * @return true if the error is less than the tolerance
 	 */
 	public boolean onTarget(double tolerance) {
-		return m_last_input != Double.NaN && Math.abs(m_last_input - m_setpoint) < tolerance;
+		return m_last_input != Double.NaN && Math.abs(m_last_input - m_setpoint) < Math.abs(tolerance);
 	}
 
 	/**
 	 * Return true if the average error is within the tolerance
 	 * 
+	 * @param tolerance the tolerance
 	 * @return true if the average error is less than the tolerance
 	 */
 	public boolean onTargetStable(double tolerance) {
-		return m_last_input != Double.NaN && getAvgError() < tolerance;
+		return m_last_input != Double.NaN && getAvgError() < Math.abs(tolerance);
 	}
 
 	/**
@@ -270,21 +279,10 @@ public class SynchronousPID {
 		m_setpoint = 0;
 	}
 
+	/**
+	 * resets the total error counter
+	 */
 	public void resetIntegrator() {
 		m_totalError = 0;
-	}
-
-	public String getState() {
-		String lState = "";
-
-		lState += "Kp: " + m_P + "\n";
-		lState += "Ki: " + m_I + "\n";
-		lState += "Kd: " + m_D + "\n";
-
-		return lState;
-	}
-
-	public String getType() {
-		return "PIDController";
 	}
 }
