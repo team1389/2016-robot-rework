@@ -15,10 +15,16 @@ import com.team1389.watch.Watchable;
 public abstract class SimpleWatchable implements Watchable {
 	protected String name;
 
+	/**
+	 * @param name the name of this info
+	 */
 	public SimpleWatchable(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return a number representation of this info for spreadsheet logs
+	 */
 	public abstract double getLoggable();
 
 	@Override

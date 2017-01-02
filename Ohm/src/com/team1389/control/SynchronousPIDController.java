@@ -10,7 +10,7 @@ import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.PIDTunableValue;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.watch.CompositeWatchable;
-import com.team1389.watch.info.NumberInput;
+import com.team1389.watch.input.NumberInput;
 
 /**
  * This class applies PID control to a set of input/output streams <br>

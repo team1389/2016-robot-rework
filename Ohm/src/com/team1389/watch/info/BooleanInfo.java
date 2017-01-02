@@ -3,16 +3,18 @@ package com.team1389.watch.info;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.tables.ITable;
-
+/**
+ * an info type that tracks the value of a boolean
+ * @author amind
+ */
 public class BooleanInfo extends SimpleWatchable {
-	/**
-	 * Sets BooleanInfo method in variable to class variable Calls superclass to handle name in {@link #Info(String name)}
-	 * 
-	 * @param name the name of hardware producing info
-	 * @param in where (method) to get information
-	 */
-	BooleanSupplier in;
 
+	protected BooleanSupplier in;
+
+	/**
+	 * @param name the name of the info
+	 * @param in the boolean source to track
+	 */
 	public BooleanInfo(String name, BooleanSupplier in) {
 		super(name);
 		this.in = in;
@@ -32,9 +34,5 @@ public class BooleanInfo extends SimpleWatchable {
 	public double getLoggable() {
 		return in.getAsBoolean() ? 1 : 0;
 	}
-
-	
-
-	
 
 }
