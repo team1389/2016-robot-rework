@@ -1,7 +1,6 @@
 package com.team1389.hardware.outputs.software;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
@@ -9,17 +8,23 @@ import com.team1389.hardware.value_types.Value;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 
+/**
+ * a stream of doubles with a range, and methods to deal with conversion and range of the stream
+ * 
+ * @author Kenneth
+ *
+ * @param <T> The type that the doubles in the stream are representing
+ */
 public class RangeOut<T extends Value> implements ScalarInput<T> {
 	private double lastVal;
-	private Supplier<String> operations;
 	protected ScalarOutput<T> output;
 	protected double min, max;
 
 	/**
 	 * 
 	 * @param out the stream that is operated upon
-	 * @param min value
-	 * @param max value
+	 * @param min the min value
+	 * @param max the max value
 	 */
 	public RangeOut(ScalarOutput<T> out, double min, double max) {
 		this.output = out;
@@ -30,8 +35,8 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	/**
 	 * 
 	 * @param out consumer converted to output stream to be operated on
-	 * @param min value
-	 * @param max value
+	 * @param min the min value
+	 * @param max the max value
 	 */
 	public RangeOut(Consumer<Double> out, double min, double max) {
 		this.min = min;
@@ -40,7 +45,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
-	 * @return value of stream
+	 * @return value the value of the stream
 	 */
 	@Override
 	public Double get() {
@@ -58,7 +63,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 
 	/**
 	 * 
-	 * @return min value
+	 * @return min the min value
 	 */
 	public double min() {
 		return min;
@@ -66,7 +71,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 
 	/**
 	 * 
-	 * @return max value
+	 * @return max the max value
 	 */
 	public double max() {
 		return max;
@@ -74,7 +79,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 
 	/**
 	 * 
-	 * @return range for min/max
+	 * @return range the value of the range
 	 */
 	public double range() {
 		return min() - max();
@@ -83,7 +88,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	/**
 	 * preserve type of stream
 	 * 
-	 * @return this stream as the class it is called from
+	 * @return this stream with the type it was called from
 	 */
 	@SuppressWarnings("unchecked")
 	private <R extends RangeOut<T>> R cast() {
@@ -91,16 +96,18 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
+	 * map this stream from percent to a range of {@code min} to {@code max}
 	 * 
-	 * @return PercentOut that maps to min and max of this class
+	 * @return PercentOut the new stream that is this stream mapped to the aforementioned range
 	 */
 	public PercentOut mapToPercentOut() {
 		return new PercentOut(this);
 	}
 
 	/**
+	 * maps this stream from angle to a range of {@code min} to {@code max}
 	 * 
-	 * @return AngleOut that maps to min/max of this class
+	 * @return AngleOut the new stream that is this stream mapped to the aforementioned range
 	 */
 	public AngleOut mapToAngle() {
 		return new AngleOut(this);
@@ -130,11 +137,11 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
-	 * set output to a ProfiledRangeOut
+	 * apply a {@link ProfiledRangeOut} to the output stream
 	 * 
-	 * @param maxChange in position
-	 * @param initialPos Current position
-	 * @return new stream that is a <ProfiledRangeOut>
+	 * @param maxChange the max change in position
+	 * @param initialPos the current position
+	 * @return new stream of type {@link ProfiledRangeOut}
 	 */
 	public <R extends RangeOut<T>> R getProfiledOut(double maxChange, double initialPos) {
 		output = new ProfiledRangeOut<T>(output, min, max, maxChange, initialPos);
@@ -177,40 +184,72 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
-	 * causes the stream to set the value of any value in the deadzone to 0.0
+	 * causes the stream to replace the value of anything in the deadzone with 0.0
 	 * 
-	 * @param deadband max distance
-	 * @return
+	 * @param deadband the max distance from 0 (deadzone)
+	 * @return stream with Deadband of {@code deadband}
 	 */
 	public <R extends RangeOut<T>> R applyDeadband(double deadband) {
 		output = ScalarOutput.applyDeadband(output, deadband);
 		return cast();
 	}
 
+	/**
+	 * constrains values in the stream to be between min and max of this stream
+	 * 
+	 * @return new stream that is limited to a range
+	 */
 	public <R extends RangeOut<T>> R capRange() {
 		return limit(min, max);
 	}
 
+	/**
+	 * 
+	 * @param abs the absolute value of min/max of range
+	 * @return new stream that is limited to a range
+	 */
 	public <R extends RangeOut<T>> R limit(double abs) {
 		return limit(-abs, abs);
 	}
 
+	/**
+	 * constrains values in the stream to be between min and max arguments
+	 * 
+	 * @param min the min value of desired capped range
+	 * @param max the max value of desired capped range
+	 * @return new stream that is limited to a range
+	 */
 	public <R extends RangeOut<T>> R limit(double min, double max) {
 		output = ScalarOutput.limit(output, min, max);
 		return cast();
 	}
 
+	/**
+	 * 
+	 * @param offsetAmt the stream that holds the values which this stream is offset by
+	 * @return this stream but with all the values offset by the value in the input stream
+	 */
 	public <R extends RangeOut<T>> R offset(ScalarInput<?> offsetAmt) {
 		output = ScalarOutput.offset(output, offsetAmt);
 		return cast();
 	}
 
+	/**
+	 * 
+	 * @param amt the value that is added to every value in this stream
+	 * @return this stream but with {@code amt} added to every value
+	 */
 	public <R extends RangeOut<T>> R offset(double amt) {
 		return offset(() -> {
 			return amt;
 		});
 	}
 
+	/**
+	 * 
+	 * @param factor value to scale by
+	 * @return this stream but with min, max, and val multiplied by {@code factor}
+	 */
 	public RangeOut<T> scale(double factor) {
 		output = ScalarOutput.scale(output, factor);
 		max *= factor;
@@ -218,6 +257,12 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param min value to set as min
+	 * @param max value to set as max
+	 * @return this stream but with a new min and max
+	 */
 	public RangeOut<T> setRange(int min, int max) {
 		this.min = min;
 		this.max = max;
