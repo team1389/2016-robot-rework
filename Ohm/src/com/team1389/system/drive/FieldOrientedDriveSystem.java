@@ -26,8 +26,6 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	private DigitalIn nonGyro;
 
 	/**
-	 * Constructor to set the variables
-	 * 
 	 * @param drive dirveOut function -- not entirely sure if needed
 	 * @param throttleX x value of joystick
 	 * @param throttleY y value of joystick
@@ -35,14 +33,14 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 * @param override to override some fieldOriented() functions
 	 * @param nonGyro to override all fielOriented() functions
 	 */
-	public FieldOrientedDriveSystem(/* DriveOut<Percent> drive, */ PercentIn throttleX, PercentIn throttleY, AngleIn gyro,
+	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn gyro,
 			DigitalIn override, DigitalIn nonGyro) {
 		this.throttleX = throttleX;
 		this.throttleY = throttleY;
 		this.gyro = gyro;
 		this.override = override;
 		this.nonGyro = nonGyro;
-		// this.drive = drive; //may not be necessary
+		this.drive = drive;
 	}
 
 	@Override

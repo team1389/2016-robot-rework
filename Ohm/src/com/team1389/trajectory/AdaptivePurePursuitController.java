@@ -57,7 +57,7 @@ public class AdaptivePurePursuitController {
 	 * @param now the current time in millis
 	 * @return the desired robot velocity
 	 */
-	public RigidTransform2d.Delta update(RigidTransform2d robot_pose, double now) {
+	public RigidTransform2d.Delta calculate(RigidTransform2d robot_pose, double now) {
 		RigidTransform2d pose = robot_pose;
 		if (mReversed) {
 			pose = new RigidTransform2d(robot_pose.getTranslation(),
