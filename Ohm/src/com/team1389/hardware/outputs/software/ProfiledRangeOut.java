@@ -34,9 +34,6 @@ public class ProfiledRangeOut<T extends Value> implements ScalarOutput<T> {
 	
 	
 	@Override
-	/**
-	 * @param goalpoint the point that should be reached
-	 */
 	public void set(double goalPoint) {
 		setpoint = getNextSetpoint(goalPoint, timer.get());
 		controller.set(setpoint);
