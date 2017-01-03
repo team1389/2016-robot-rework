@@ -2,7 +2,7 @@ package com.team1389.hardware.outputs.interfaces;
 
 import com.team1389.hardware.value_types.Value;
 /**
- * stream of doubles with a ChangeListener
+ * stream of doubles that executes a runnable if a change to the value occurs. It only checks when set is called
  * @author Kenneth
  *
  * @param <T> type of value that the double is representing

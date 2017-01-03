@@ -32,7 +32,7 @@ public interface BinaryInput extends Input<Boolean>, Supplier<Boolean>{
 	/**
 	 * 
 	 * @param in the stream to be operated on
-	 * @return 
+	 * @return a 
 	 */
 	public static ToggledBinaryInput getToggled(BinaryInput in) {
 		LatchedBinaryInput input;
