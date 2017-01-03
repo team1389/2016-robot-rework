@@ -9,8 +9,8 @@ import com.team1389.hardware.value_types.Angle;
  */
 public class AngleOut extends RangeOut<Angle> {
 	/**
-	 * 
-	 * @param out 
+	 * allows this stream to map angle values from angle range to a different range
+	 * @param out stream to be operated on
 	 */
 	public AngleOut(ScalarOutput<Angle> out) {
 		super(out, 0, 360); 
