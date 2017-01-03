@@ -1,5 +1,9 @@
 package com.team1389.util;
-
+/**
+ * returns the same value repeatedly until the boolean value being passed in changes, which inverts the value being returned repeatedly
+ * @author Kenneth
+ *
+ */
 public class ToggleBoolean extends LatchedBoolean{
 	boolean toggle;
 	@Override protected boolean update(boolean newVal){

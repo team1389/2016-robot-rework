@@ -11,17 +11,29 @@ import java.util.function.Supplier;
 public interface BinaryInput extends Input<Boolean>, Supplier<Boolean>{
 	@Override
 	public Boolean get();
-
+	/**
+	 * 
+	 * @param in the stream to be operated on
+	 * @return this stream but with values reversed
+	 */
 	public static BinaryInput invert(BinaryInput in) {
 		return () -> {
 			return !in.get();
 		};
 	}
-
+	/**
+	 * 
+	 * @param in the stream to be operated on
+	 * @return a new stream that only returns true if the current val is different from the last val
+	 */
 	public static LatchedBinaryInput getLatched(BinaryInput in) {
 		return new LatchedBinaryInput(in);
 	}
-
+	/**
+	 * 
+	 * @param in the stream to be operated on
+	 * @return a 
+	 */
 	public static ToggledBinaryInput getToggled(BinaryInput in) {
 		LatchedBinaryInput input;
 		if (in instanceof LatchedBinaryInput) {
