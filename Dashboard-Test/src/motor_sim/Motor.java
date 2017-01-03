@@ -25,7 +25,7 @@ public class Motor {
 		return stallTorque * (voltage - (omega / freeSpeed));
 	}
 
-	public void setVoltage(double voltage) {
-		this.voltage = 12*voltage;
+	public void setPercentVoltage(double voltage) {
+		this.voltage = voltage;
 	}
 }

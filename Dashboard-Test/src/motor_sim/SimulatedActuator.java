@@ -62,19 +62,19 @@ public class SimulatedActuator implements CompositeWatchable {
 
 	public void setVoltage(double voltage) {
 		double limVoltage = RangeUtil.limit(voltage, -1, 1);
-		motors.forEach(m -> m.setVoltage(limVoltage));
+		motors.forEach(m -> m.setPercentVoltage(limVoltage));
 	}
 
 	public void update() {
 		double dt = timer.get();
 		alpha = calculateAlpha();
 		omega += alpha * dt; // add to velocity
-		// if ((omega > 0 && getPosition() <= rangeMax) || (omega < 0 && getPosition() >= rangeMin)) {
-		theta += omega * dt; // add to position
-		// } else {
-		// theta = RangeUtil.limit(getPosition(), rangeMin, rangeMax);
-		// omega = 0;
-		// }
+		if ((omega > 0 && getPosition() <= rangeMax) || (omega < 0 && getPosition() >= rangeMin)) {
+			theta += omega * dt; // add to position
+		} else {
+			theta = RangeUtil.limit(theta, rangeMin, rangeMax);
+			omega = 0;
+		}
 		timer.zero();
 	}
 
@@ -87,7 +87,7 @@ public class SimulatedActuator implements CompositeWatchable {
 	}
 
 	private double getOmega() {
-		return omega / 200;
+		return omega;
 	}
 
 	private double getOmegaDegrees() {
@@ -100,7 +100,7 @@ public class SimulatedActuator implements CompositeWatchable {
 	}
 
 	private double getMotorTorque() {
-		return motors.stream().mapToDouble(m -> m.getTorque(getOmega())).sum();
+		return motors.stream().mapToDouble(m -> m.getTorque(getOmega() / gearReduction)).sum();
 	}
 
 	private double getAttachmentTorque() {
