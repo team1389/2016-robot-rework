@@ -8,17 +8,15 @@ public class Motor {
 
 	public final double stallTorque;
 	public final double freeSpeed;
-	public final double motorConstant;
 	private double voltage;
 
 	public Motor(double stallTorque, double freeSpeedRPM) {
 		this.stallTorque = stallTorque;
 		this.freeSpeed = freeSpeedRPM * 2 * Math.PI / 60;
-		this.motorConstant = -freeSpeed / stallTorque;
 	}
 
 	/**
-	 * Calculate the torque contributed from the CIM motor.
+	 * Calculate the torque contributed from the motor.
 	 * 
 	 * @param omega current angular velocity
 	 * @return torque from motor
@@ -28,6 +26,6 @@ public class Motor {
 	}
 
 	public void setVoltage(double voltage) {
-		this.voltage = voltage;
+		this.voltage = 12*voltage;
 	}
 }

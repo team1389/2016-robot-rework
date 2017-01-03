@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import layout.TesterDefaultHardware;
-import motor_sim.LinearAttachment;
+import motor_sim.Attachment;
 import motor_sim.Motor;
 import motor_sim.SimulatedActuator;
 import motor_sim.element.PrismElement;
@@ -37,7 +37,7 @@ public class Tester {
 
 	public static void init() {
 		dash2 = new Watcher();
-		sim = new SimulatedActuator(Motor.MINI_CIM, new LinearAttachment(new PrismElement(20, .4, .05, .66), true), 200);
+		sim = new SimulatedActuator(new Attachment(new PrismElement(20, .4, .05, .66), true), 200, Motor.MINI_CIM);
 		dash2.watch(sim);
 		sim.setRangeOfMotion(0, 89);
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
