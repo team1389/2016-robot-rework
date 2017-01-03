@@ -1,5 +1,7 @@
 package com.team1389.hardware.outputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -9,7 +11,6 @@ import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -27,7 +28,7 @@ public class ServoHardware extends Hardware<PWM> {
 	Optional<Servo> wpiServo;
 
 	public RangeOut<Position> getPositionOutput() {
-		return new RangeOut<Position>(wpiServo.ifPresent((s, pos) -> s.set(pos)), 0, 1);
+		return new RangeOut<Position>(pos -> wpiServo.ifPresent(s -> s.set(pos)), 0, 1);
 	}
 
 	@Override
@@ -36,9 +37,7 @@ public class ServoHardware extends Hardware<PWM> {
 	}
 
 	public RangeIn<Position> getPositionInput() {
-		return new RangeIn<Position>(Position.class, wpiServo.ifPresent(0.0, (Servo s) -> {
-			return s.get();
-		}), 0, 1);
+		return new RangeIn<Position>(Position.class, () -> wpiServo.map(servo -> servo.get()).orElse(0.0), 0, 1);
 	}
 
 	public AngleIn getAngleInput() {

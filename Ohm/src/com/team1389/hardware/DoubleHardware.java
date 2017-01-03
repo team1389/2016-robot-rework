@@ -1,8 +1,9 @@
 package com.team1389.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PortInstance;
-import com.team1389.util.Optional;
 import com.team1389.watch.CompositeWatchable;
 
 public abstract class DoubleHardware<T extends PortInstance> implements CompositeWatchable {
@@ -33,11 +34,11 @@ public abstract class DoubleHardware<T extends PortInstance> implements Composit
 	}
 
 	public int getPortA() {
-		return port1.ifPresent(-1, PortInstance::index).get();
+		return port1.map(PortInstance::index).orElse(-1);
 	}
 
 	public int getPortB() {
-		return port2.ifPresent(-1, PortInstance::index).get();
+		return port2.map(PortInstance::index).orElse(-1);
 	}
 
 	protected abstract String getHardwareIdentifier();

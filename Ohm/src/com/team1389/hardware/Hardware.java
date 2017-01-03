@@ -1,9 +1,10 @@
 package com.team1389.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PortInstance;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.FlagInfo;
@@ -32,7 +33,7 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 	public abstract void failInit();
 
 	public int getPort() {
-		return port.ifPresent(-1, PortInstance::index).get();
+		return port.map(PortInstance::index).orElse(-1);
 	}
 
 	protected abstract String getHardwareIdentifier();

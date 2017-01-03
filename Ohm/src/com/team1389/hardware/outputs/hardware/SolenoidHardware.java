@@ -1,11 +1,12 @@
 package com.team1389.hardware.outputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PCM;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -18,7 +19,7 @@ public class SolenoidHardware extends Hardware<PCM> {
 	private Optional<Solenoid> wpiSolenoid;
 
 	public DigitalOut getDigitalOut() {
-		return new DigitalOut(wpiSolenoid.ifPresent((s, pos) -> s.set(pos)));
+		return new DigitalOut(val -> wpiSolenoid.ifPresent(w -> w.set(val)));
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package com.team1389.watch;
 
 import java.util.Map;
+import java.util.Optional;
 
-import com.team1389.util.Optional;
 import com.team1389.watch.info.SimpleWatchable;
 
 import edu.wpi.first.wpilibj.tables.ITable;

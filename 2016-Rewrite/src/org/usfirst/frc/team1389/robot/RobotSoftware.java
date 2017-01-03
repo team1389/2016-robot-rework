@@ -14,7 +14,7 @@ public class RobotSoftware extends RobotHardware {
 
 	public AngleIn turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
 	
-	public DigitalIn IRsensors = IRsensor1.getRawSwitch().combineOR(IRsensor2.getRawSwitch());
+	public DigitalIn IRsensors = IRsensor1.getSwitchInput().combineOR(IRsensor2.getSwitchInput());
 	
 	public DriveOut<Percent> drive = new DriveOut<Percent>(leftDrive.getVoltageOutput(), rightDrive.getVoltageOutput());
 	

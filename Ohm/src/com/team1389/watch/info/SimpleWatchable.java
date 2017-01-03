@@ -2,8 +2,8 @@ package com.team1389.watch.info;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 /**
@@ -35,7 +35,7 @@ public abstract class SimpleWatchable implements Watchable {
 	@Override
 	public Map<String, SimpleWatchable> getFlat(Optional<String> parent) {
 		Map<String, SimpleWatchable> map = new HashMap<>();
-		map.put(parent.ifPresent(getName(), this::getFullName).get(), this);
+		map.put(parent.map(this::getFullName).orElse(getName()), this);
 		return map;
 	}
 }

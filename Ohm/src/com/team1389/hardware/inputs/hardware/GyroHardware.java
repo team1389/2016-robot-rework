@@ -1,11 +1,12 @@
 package com.team1389.hardware.inputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -19,9 +20,7 @@ public class GyroHardware extends Hardware<Analog> {
 	private Optional<Gyro> wpiGyro;
 
 	public AngleIn getAngleInput() {
-		return new AngleIn(wpiGyro.ifPresent(0.0, gyr -> {
-			return gyr.getAngle();
-		}));
+		return new AngleIn(() -> wpiGyro.map(gyr -> gyr.getAngle()).orElse(0.0));
 	}
 
 	@Override

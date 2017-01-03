@@ -3,9 +3,9 @@ package com.team1389.watch;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.info.SimpleWatchable;
 
 import edu.wpi.first.wpilibj.tables.ITable;
@@ -51,7 +51,7 @@ public interface CompositeWatchable extends Watchable {
 	public default Map<String, SimpleWatchable> getFlat(Optional<String> parent) {
 		Map<String, SimpleWatchable> map = new HashMap<>();
 		getSubWatchables(stem)
-				.forEach(w -> map.putAll(w.getFlat(Optional.of(parent.ifPresent(getName(), this::getFullName).get()))));
+				.forEach(w -> map.putAll(w.getFlat(Optional.of(parent.map(this::getFullName).orElse(getName())))));
 		return map;
 	}
 

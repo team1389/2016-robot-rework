@@ -1,6 +1,6 @@
 package com.team1389.hardware.inputs.hardware;
 
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -10,7 +10,6 @@ import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -29,12 +28,7 @@ public class PDPHardware extends Hardware<CAN> {
 	}
 
 	public RangeIn<Value> getCurrentIn(int port) {
-		get(PDPHardware::new);
-		return new RangeIn<Value>(Value.class, wpiPDP.ifPresent(0.0, pdp -> pdp.getTotalCurrent()), 0, 1);
-	}
-
-	public void get(Consumer<Registry> hardware) {
-
+		return new RangeIn<Value>(Value.class, () -> wpiPDP.map(pdp -> pdp.getTotalCurrent()).orElse(0.0), 0, 1);
 	}
 
 	@Override
@@ -45,8 +39,9 @@ public class PDPHardware extends Hardware<CAN> {
 		return stem;
 	}
 
+	// TODO max current of PDP?
 	public RangeIn<Value> getCurrent(int port) {
-		return new RangeIn<Value>(Value.class, wpiPDP.ifPresent(0.0, pdp -> pdp.getCurrent(port)), 0, 100);
+		return new RangeIn<Value>(Value.class, () -> wpiPDP.map(pdp -> pdp.getCurrent(port)).orElse(0.0), 0, 100);
 	}
 
 	@Override
@@ -56,13 +51,9 @@ public class PDPHardware extends Hardware<CAN> {
 
 	@Override
 	public void init(CAN port) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void failInit() {
-		// TODO Auto-generated method stub
-
 	}
 }

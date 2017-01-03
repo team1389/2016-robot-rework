@@ -1,11 +1,12 @@
 package com.team1389.hardware.inputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.DIO;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -24,15 +25,17 @@ public class SwitchHardware extends Hardware<DIO> {
 
 	Optional<DigitalInput> wpiSwitch;
 
-	public DigitalIn getRawSwitch() {
-		return new DigitalIn(wpiSwitch.ifPresent(false, inp -> {
-			return inverted ? !inp.get() : inp.get();
-		}));
+	public DigitalIn getSwitchInput() {
+		return new DigitalIn(() -> wpiSwitch.map(this::getRawSwitch).orElse(false));
+	}
+
+	private boolean getRawSwitch(DigitalInput switchVal) {
+		return inverted ^ switchVal.get();
 	}
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(getRawSwitch().getWatchable("val"));
+		return stem.put(getSwitchInput().getWatchable("val"));
 	}
 
 	@Override
