@@ -5,7 +5,6 @@ import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
-import com.team1389.util.DriveSignal;
 import com.team1389.watch.Watchable;
 
 /**

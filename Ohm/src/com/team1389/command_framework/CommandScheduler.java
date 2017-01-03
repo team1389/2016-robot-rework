@@ -20,13 +20,16 @@ public class CommandScheduler implements CompositeWatchable {
 	List<Command> executing;
 	String name;
 
+	/**
+	 * initializes the scheduler
+	 */
 	public CommandScheduler() {
 		this("Scheduler");
 	}
 
 	/**
 	 * 
-	 * @param used for key in ITable related activities
+	 * @param name the string identifier of this scheduler
 	 */
 	public CommandScheduler(String name) {
 		this.name = name;

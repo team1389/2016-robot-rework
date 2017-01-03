@@ -25,10 +25,21 @@ public interface ScalarOutput<T extends Value> extends Consumer<Double> {
 	 */
 	public void set(double val);
 
+	/**
+	 * @param consumer the consumer to convert
+	 * @return a scalar output that passes its stream down to the consumer
+	 */
 	public static <T extends Value> ScalarOutput<T> convert(Consumer<Double> consumer) {
 		return consumer::accept;
 	}
 
+	/**
+	 * offsets the stream values by the current value of the given input stream
+	 * 
+	 * @param out the stream to operate on
+	 * @param in the stream to get offset values from
+	 * @return the offset stream
+	 */
 	public static <T extends Value> ScalarOutput<T> offset(ScalarOutput<T> out, ScalarInput<?> in) {
 		return (double val) -> {
 			out.set(val + in.get());
@@ -134,21 +145,18 @@ public interface ScalarOutput<T extends Value> extends Consumer<Double> {
 	 * @return the limited stream (does not change the value type)
 	 */
 	public static <T extends Value> ScalarOutput<T> limit(ScalarOutput<T> out, double min, double max) {
-		return (double val) -> {
-			out.set(RangeUtil.limit(val, min, max));
-		};
+		return val -> out.set(RangeUtil.limit(val, min, max));
 	}
 
 	/**
-	 * converts the stream to a {@link ListeningScalarOutput} which runs the given runnable when the stream's value changes
+	 * converts the stream to a {@link ListeningOutput} which runs the given runnable when the stream's value changes
 	 * 
 	 * @param output the stream to listen to
 	 * @param onChange the runnable to call on value change
 	 * @return the stream with listener attached
 	 */
-	public static <T extends Value> ListeningScalarOutput<T> getListeningOutput(ScalarOutput<T> output,
-			Runnable onChange) {
-		return new ListeningScalarOutput<T>(output, onChange);
+	public static <T extends Value> ScalarOutput<T> getListeningOutput(ScalarOutput<T> output, Runnable onChange) {
+		return new ListeningOutput<Double>(output, onChange)::accept;
 	}
 
 }

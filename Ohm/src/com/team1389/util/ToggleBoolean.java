@@ -1,5 +1,7 @@
 package com.team1389.util;
 
+import java.util.function.Supplier;
+
 /**
  * tracks a raw boolean value and generates a new boolean value that toggles every time the original switches from false to true
  * 
@@ -8,6 +10,10 @@ package com.team1389.util;
  */
 public class ToggleBoolean extends LatchedBoolean {
 	boolean toggle;
+
+	private ToggleBoolean(Supplier<Boolean> raw) {
+		super(raw);
+	}
 
 	@Override
 	protected boolean update(boolean newVal) {
@@ -18,10 +24,12 @@ public class ToggleBoolean extends LatchedBoolean {
 	}
 
 	/**
-	 * @return the state of the toggle
+	 * @param raw a supplier of raw boolean values
+	 * @return the toggled version of the input supplier
 	 */
-	@Override
-	public boolean get(boolean newVal) {
-		return update(newVal);
+	public static Supplier<Boolean> toggle(Supplier<Boolean> raw) {
+		ToggleBoolean toggled = new ToggleBoolean(raw);
+		return toggled::get;
 	}
+
 }

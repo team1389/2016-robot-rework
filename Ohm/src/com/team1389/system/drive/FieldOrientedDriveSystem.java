@@ -6,10 +6,9 @@ import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
-import com.team1389.util.DriveSignal;
 import com.team1389.util.RangeUtil;
+import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.NumberInfo;
 
 /**
  * 
@@ -67,8 +66,7 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(new NumberInfo("Left wheels", () -> signal.leftMotor),
-				new NumberInfo("Right wheels", () -> signal.rightMotor), gyro.getWatchable("Gyro"));
+		return stem.put(gyro.getWatchable("Gyro")).put(drive.getSubWatchables(CompositeWatchable.stem));
 	}
 
 	/**

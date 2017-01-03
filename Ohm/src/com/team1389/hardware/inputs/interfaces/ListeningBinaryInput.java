@@ -1,5 +1,10 @@
 package com.team1389.hardware.inputs.interfaces;
 
+/**
+ * a boolean stream that tracks changes and notifies a listener
+ * @author amind
+ *
+ */
 public class ListeningBinaryInput implements BinaryInput {
 	private BinaryInput in;
 	private Runnable onChange;

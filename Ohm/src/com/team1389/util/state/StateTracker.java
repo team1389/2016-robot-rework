@@ -1,5 +1,9 @@
 package com.team1389.util.state;
-
+/**
+ * tracks the state of a system, allowing you to call methods on state change and 
+ * @author amind
+ *
+ */
 public class StateTracker {
 	StateSetup lastState;
 	
