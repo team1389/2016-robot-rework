@@ -14,7 +14,7 @@ import com.team1389.util.RangeUtil;
  *
  * @param <T> Used to make sure of the type of a stream in certain spots in the code
  */
-public interface ScalarInput<T extends Value> extends Input<Double>, Supplier<Double> {
+public interface ScalarInput<T extends Value> extends Supplier<Double> {
 	/**
 	 * @return The current value of this stream.
 	 */

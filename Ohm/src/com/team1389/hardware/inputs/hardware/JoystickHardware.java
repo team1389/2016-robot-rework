@@ -1,7 +1,8 @@
 package com.team1389.hardware.inputs.hardware;
 
+import java.util.function.Supplier;
+
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
-import com.team1389.hardware.inputs.interfaces.POVInput;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.DigitalIn.InputType;
 import com.team1389.hardware.inputs.software.PercentIn;
@@ -36,7 +37,7 @@ public class JoystickHardware {
 		});
 	}
 
-	public POVInput getPov() {
+	public Supplier<Integer> getPov() {
 		return () -> {
 			return wpiJoystick.getPOV();
 		};

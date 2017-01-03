@@ -8,7 +8,7 @@ import java.util.function.Supplier;
  *
  */
 
-public interface BinaryInput extends Input<Boolean>, Supplier<Boolean>{
+public interface BinaryInput extends Supplier<Boolean>{
 	@Override
 	public Boolean get();
 	/**

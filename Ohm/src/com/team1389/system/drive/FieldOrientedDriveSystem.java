@@ -67,11 +67,8 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(new NumberInfo("Left wheels", () -> {
-			return signal.leftMotor;
-		}), new NumberInfo("Right wheels", () -> {
-			return signal.rightMotor;
-		}), gyro.getWatchable("Gyro"));
+		return stem.put(new NumberInfo("Left wheels", () -> signal.leftMotor),
+				new NumberInfo("Right wheels", () -> signal.rightMotor), gyro.getWatchable("Gyro"));
 	}
 
 	/**

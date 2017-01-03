@@ -1,10 +1,10 @@
 package com.team1389.hardware.inputs.hardware;
 
-import com.team1389.hardware.inputs.interfaces.Input;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.tables.ITable;
 
-public class DashboardInput<T> implements Input<T> {
+public class DashboardInput<T> implements Supplier<T> {
 	protected T value;
 
 	@SuppressWarnings("unchecked")
