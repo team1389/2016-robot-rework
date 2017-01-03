@@ -1,7 +1,7 @@
 package com.team1389.util.interpolable;
 
-import java.util.TreeMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Interpolating Tree Maps are used to get values at points that are not defined
@@ -18,11 +18,16 @@ public class InterpolatingTreeMap<K extends InverseInterpolable<K> & Comparable<
     private static final long serialVersionUID = 8347275262778054124L;
 
     int max_;
-
+    /**
+     * @param maximumSize the maximum number of entries in the tree map
+     */
     public InterpolatingTreeMap(int maximumSize) {
         max_ = maximumSize;
     }
 
+    /**
+     * initializes the tree map with a limit of 0 entries
+     */
     public InterpolatingTreeMap() {
         this(0);
     }
