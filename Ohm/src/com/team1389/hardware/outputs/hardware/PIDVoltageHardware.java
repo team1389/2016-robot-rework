@@ -23,11 +23,19 @@ public class PIDVoltageHardware {
 	final StateTracker stateTracker;
 	final PercentOut voltageOutput;
 
+	/**
+	 * @param voltageOutput a voltage controller to use as the PID output
+	 */
 	public PIDVoltageHardware(PercentOut voltageOutput) {
 		this.voltageOutput = voltageOutput;
 		stateTracker = new StateTracker();
 	}
 
+	/**
+	 * @param speedSensor the speed input stream
+	 * @param config the speed controller PIDConstants
+	 * @return a speed output stream
+	 */
 	public RangeOut<Speed> getSpeedOutput(RangeIn<Speed> speedSensor, PIDConstants config) {
 		PIDController<Percent, Speed> controller = new PIDController<Percent, Speed>(config, speedSensor,
 				voltageOutput);
@@ -49,6 +57,11 @@ public class PIDVoltageHardware {
 		});
 	}
 
+	/**
+	 * @param positionSensor the position input stream
+	 * @param config the position controller PIDConstants
+	 * @return a position output stream
+	 */
 	public RangeOut<Position> getPositionOutput(RangeIn<Position> positionSensor, PIDConstants config) {
 		PIDController<Percent, Position> controller = new PIDController<Percent, Position>(config, positionSensor,
 				voltageOutput);

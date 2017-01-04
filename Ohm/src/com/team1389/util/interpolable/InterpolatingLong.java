@@ -7,8 +7,10 @@ package com.team1389.util.interpolable;
  */
 public class InterpolatingLong implements Interpolable<InterpolatingLong>, InverseInterpolable<InterpolatingLong>,
         Comparable<InterpolatingLong> {
-    public Long value = 0L;
-
+    protected Long value = 0L;
+    /**
+     * @param val the interpolable value
+     */
     public InterpolatingLong(Long val) {
         value = val;
     }

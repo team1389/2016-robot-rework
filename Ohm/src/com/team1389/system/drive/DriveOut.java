@@ -3,7 +3,6 @@ package com.team1389.system.drive;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.util.AddList;
-import com.team1389.util.DriveSignal;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 

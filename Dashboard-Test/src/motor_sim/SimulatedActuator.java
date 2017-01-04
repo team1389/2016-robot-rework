@@ -62,7 +62,7 @@ public class SimulatedActuator implements CompositeWatchable {
 
 	public void setVoltage(double voltage) {
 		double limVoltage = RangeUtil.limit(voltage, -1, 1);
-		motors.forEach(m -> m.setVoltage(limVoltage));
+		motors.forEach(m -> m.setPercentVoltage(limVoltage));
 	}
 
 	public void update() {
@@ -72,14 +72,14 @@ public class SimulatedActuator implements CompositeWatchable {
 		if ((omega > 0 && getPosition() <= rangeMax) || (omega < 0 && getPosition() >= rangeMin)) {
 			theta += omega * dt; // add to position
 		} else {
-			theta = RangeUtil.limit(getPosition(), rangeMin, rangeMax) * gearReduction;
+			theta = RangeUtil.limit(theta, rangeMin, rangeMax);
 			omega = 0;
 		}
 		timer.zero();
 	}
 
 	private double getPosition() {
-		return theta / gearReduction;
+		return theta;
 	}
 
 	private double getPositionDegrees() {
@@ -87,7 +87,7 @@ public class SimulatedActuator implements CompositeWatchable {
 	}
 
 	private double getOmega() {
-		return omega / gearReduction;
+		return omega;
 	}
 
 	private double getOmegaDegrees() {
@@ -100,7 +100,7 @@ public class SimulatedActuator implements CompositeWatchable {
 	}
 
 	private double getMotorTorque() {
-		return motors.stream().mapToDouble(m -> m.getTorque(omega)).sum();
+		return motors.stream().mapToDouble(m -> m.getTorque(getOmega() / gearReduction)).sum();
 	}
 
 	private double getAttachmentTorque() {
@@ -127,6 +127,7 @@ public class SimulatedActuator implements CompositeWatchable {
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return stem.put(new NumberInfo("attachment torque", this::getAttachmentTorque),
 				new NumberInfo("motor torque", this::getMotorTorque),
-				new NumberInfo("position", this::getPositionDegrees), new NumberInfo("speed", this::getOmegaDegrees));
+				new NumberInfo("position", this::getPositionDegrees), new NumberInfo("speed", this::getOmegaDegrees),
+				new NumberInfo("accel", this::calculateAlpha));
 	}
 }

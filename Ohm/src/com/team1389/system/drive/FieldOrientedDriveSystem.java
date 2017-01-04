@@ -4,12 +4,12 @@ import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
-import com.team1389.util.DriveSignal;
 import com.team1389.util.RangeUtil;
+import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.NumberInfo;
 
 /**
  * 
@@ -18,7 +18,7 @@ import com.team1389.watch.info.NumberInfo;
  */
 public class FieldOrientedDriveSystem extends Subsystem {
 	DriveOut<Percent> drive;
-	private AngleIn gyro;
+	private AngleIn<Position> gyro;
 	private DriveSignal signal = DriveSignal.NEUTRAL;
 	private PercentIn throttleX;
 	private PercentIn throttleY;
@@ -33,7 +33,7 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 * @param override to override some fieldOriented() functions
 	 * @param nonGyro to override all fielOriented() functions
 	 */
-	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn gyro,
+	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn<Position> gyro,
 			DigitalIn override, DigitalIn nonGyro) {
 		this.throttleX = throttleX;
 		this.throttleY = throttleY;
@@ -67,11 +67,7 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(new NumberInfo("Left wheels", () -> {
-			return signal.leftMotor;
-		}), new NumberInfo("Right wheels", () -> {
-			return signal.rightMotor;
-		}), gyro.getWatchable("Gyro"));
+		return stem.put(gyro.getWatchable("Gyro")).put(drive.getSubWatchables(CompositeWatchable.stem));
 	}
 
 	/**

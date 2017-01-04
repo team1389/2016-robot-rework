@@ -1,17 +1,27 @@
 package com.team1389.hardware.outputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Victor;
-
+/**
+ * A victor 888 motor controller
+ * 
+ * @author Ari Mindell
+ */
 public class Victor888Hardware extends Hardware<PWM> {
-
+	/**
+	 * 
+	 * @param inverted whether to invert the direction of the speed controller
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 */
 	public Victor888Hardware(boolean inverted, PWM requestedPort, Registry registry) {
 		super(requestedPort, registry);
 		this.inverted = inverted;
@@ -24,9 +34,11 @@ public class Victor888Hardware extends Hardware<PWM> {
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return super.getSubWatchables(stem).put(getVoltageOutput().getWatchable("voltage"));
 	}
-
+	/**
+	 * @return a voltage output stream for this victor
+	 */
 	public PercentOut getVoltageOutput() {
-		return new PercentOut(wpiVictor.ifPresent((s, pos) -> s.set(pos)));
+		return new PercentOut(pos -> wpiVictor.ifPresent(s -> s.set(pos)));
 	}
 
 	@Override

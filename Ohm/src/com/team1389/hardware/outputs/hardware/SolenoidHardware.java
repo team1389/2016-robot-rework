@@ -1,24 +1,38 @@
 package com.team1389.hardware.outputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.PCM;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
+/**
+ * a single solenoid attached to the PCM
+ * 
+ * @author amind
+ *
+ */
 public class SolenoidHardware extends Hardware<PCM> {
+	/**
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 */
 	public SolenoidHardware(PCM requestedPort, Registry registry) {
 		super(requestedPort, registry);
 	}
 
 	private Optional<Solenoid> wpiSolenoid;
-
+	/**
+	 * 
+	 * @return a boolean output stream that controls the position of the solenoid
+	 */
 	public DigitalOut getDigitalOut() {
-		return new DigitalOut(wpiSolenoid.ifPresent((s, pos) -> s.set(pos)));
+		return new DigitalOut(val -> wpiSolenoid.ifPresent(w -> w.set(val)));
 	}
 
 	@Override

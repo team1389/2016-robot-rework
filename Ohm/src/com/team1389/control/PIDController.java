@@ -1,10 +1,13 @@
 package com.team1389.control;
 
 import com.team1389.configuration.PIDConstants;
+import com.team1389.configuration.PIDInput;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.PIDTunableValue;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.watch.CompositeWatchable;
+import com.team1389.watch.input.listener.NumberInput;
 
 /**
  * This class applies PID control to a set of input/output streams<br>
@@ -67,6 +70,24 @@ public class PIDController<O extends Value, I extends PIDTunableValue> extends e
 	 */
 	public RangeOut<O> getOutput() {
 		return output;
+	}
+
+	/**
+	 * @param name the name of the tuner watchable
+	 * @return a watchable object that can accept input to adjust the gains of the PID controller
+	 */
+	public CompositeWatchable getPIDTuner(String name) {
+		return CompositeWatchable.of(name,
+				new PIDInput(name, getPID(), this::setPID).getSubWatchables(CompositeWatchable.stem)
+						.put(new NumberInput("setpoint", getSetpoint(), this::setSetpoint)));
+	}
+
+	private void setPID(PIDConstants constants) {
+		super.setPID(constants.p, constants.i, constants.d);
+	}
+
+	private PIDConstants getPID() {
+		return new PIDConstants(getP(), getI(), getD());
 	}
 
 }

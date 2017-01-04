@@ -1,8 +1,8 @@
-package com.team1389.watch.input;
+package com.team1389.watch.input.listener;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-import com.team1389.hardware.inputs.interfaces.Input;
 import com.team1389.watch.info.SimpleWatchable;
 
 import edu.wpi.first.wpilibj.tables.ITable;
@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.tables.ITable;
  *
  * @param <T> the type of value to watch in the table
  */
-public abstract class InputWatchable<T> extends SimpleWatchable implements Input<T> {
+public abstract class InputWatchable<T> extends SimpleWatchable implements Supplier<T> {
 	boolean init;
 	Consumer<T> onChange;
 

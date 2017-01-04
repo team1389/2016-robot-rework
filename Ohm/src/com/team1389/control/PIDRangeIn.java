@@ -34,7 +34,7 @@ public class PIDRangeIn<T extends PIDTunableValue> implements PIDSource {
 	@Override
 	public PIDSourceType getPIDSourceType() {
 		try {
-			return input.type.newInstance().getValueType();
+			return input.getType().newInstance().getValueType();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

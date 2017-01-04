@@ -1,6 +1,7 @@
 package com.team1389.hardware.registry;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.hardware.registry.port_types.CAN;
@@ -9,7 +10,6 @@ import com.team1389.hardware.registry.port_types.PCM;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.registry.port_types.PortInstance;
 import com.team1389.hardware.registry.port_types.USB;
-import com.team1389.util.Optional;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.Watcher;
 
@@ -21,24 +21,35 @@ import com.team1389.watch.Watcher;
  */
 public class Registry {
 	private Watcher watcher;
-	private ResourceManager<Analog> analogPorts;
-	private ResourceManager<PCM> pcmPorts;
-	private ResourceManager<PWM> pwmPorts;
-	private ResourceManager<CAN> canPorts;
-	private ResourceManager<DIO> dioPorts;
-	private ResourceManager<USB> usbPorts;
+	private PortTracker<Analog> analogPorts;
+	private PortTracker<PCM> pcmPorts;
+	private PortTracker<PWM> pwmPorts;
+	private PortTracker<CAN> canPorts;
+	private PortTracker<DIO> dioPorts;
+	private PortTracker<USB> usbPorts;
+	boolean throwExceptions;
 
 	/**
 	 * initialize this registry instance
 	 */
 	public Registry() {
 		watcher = new Watcher();
-		pcmPorts = new ResourceManager<>();
-		analogPorts = new ResourceManager<>();
-		pwmPorts = new ResourceManager<>();
-		canPorts = new ResourceManager<>();
-		dioPorts = new ResourceManager<>();
-		usbPorts = new ResourceManager<>();
+		pcmPorts = new PortTracker<>();
+		analogPorts = new PortTracker<>();
+		pwmPorts = new PortTracker<>();
+		canPorts = new PortTracker<>();
+		dioPorts = new PortTracker<>();
+		usbPorts = new PortTracker<>();
+		throwExceptions = false;
+	}
+
+	/**
+	 * 
+	 * @param portExceptions whether to throw exceptions when a used port is requested
+	 */
+	public Registry(boolean portExceptions) {
+		this();
+		this.throwExceptions = portExceptions;
 	}
 
 	/**
@@ -51,17 +62,38 @@ public class Registry {
 		watcher.watch(watchable);
 	}
 
+	/**
+	 * @param r the port to check
+	 * @return whether the given port is in use
+	 */
 	public <R extends PortInstance> boolean isUsed(R r) {
 		return getRegister(r).isUsed(r);
 	}
 
+	/**
+	 * @param r the port to claim
+	 * @return whether the port was successfully claimed
+	 * @throws PortTakenException if claiming failed and this registry throws port exceptions
+	 */
 	public <R extends PortInstance> boolean claim(R r) {
-		return getRegister(r).claim(r);
+		boolean claim = getRegister(r).claim(r);
+		if (throwExceptions && !claim) {
+			throw new PortTakenException(r + " is taken!");
+		}
+		return claim;
 	}
 
+	/**
+	 * @param r the port to get
+	 * @return empty optional if the port is taken, otherwise an optional containing the port
+	 * @throws PortTakenException if port was taken and this registry throws port exceptions
+	 */
 	public <R extends PortInstance> Optional<R> getPort(R r) {
 		Optional<R> port;
 		if (isUsed(r)) {
+			if (throwExceptions) {
+				throw new PortTakenException(r + " is taken!");
+			}
 			port = Optional.empty();
 		} else {
 			port = Optional.of(r);
@@ -70,21 +102,26 @@ public class Registry {
 		return port;
 	}
 
+	/**
+	 * 
+	 * @param r the port type
+	 * @return the specific register for ports of type
+	 */
 	@SuppressWarnings("unchecked")
-	public <T extends PortInstance> ResourceManager<T> getRegister(T r) {
+	public <T extends PortInstance> PortTracker<T> getRegister(T r) {
 		switch (r.getPortType()) {
 		case PWM:
-			return (ResourceManager<T>) pwmPorts;
+			return (PortTracker<T>) pwmPorts;
 		case ANALOG:
-			return (ResourceManager<T>) analogPorts;
+			return (PortTracker<T>) analogPorts;
 		case CAN:
-			return (ResourceManager<T>) canPorts;
+			return (PortTracker<T>) canPorts;
 		case DIO:
-			return (ResourceManager<T>) dioPorts;
+			return (PortTracker<T>) dioPorts;
 		case PCM:
-			return (ResourceManager<T>) pcmPorts;
+			return (PortTracker<T>) pcmPorts;
 		case USB:
-			return (ResourceManager<T>) usbPorts;
+			return (PortTracker<T>) usbPorts;
 		default:
 			return null;
 		}
@@ -96,11 +133,5 @@ public class Registry {
 	public List<Watchable> getHardwareInfo() {
 		return watcher.getWatchables();
 	}
-
-	public static Registry getInstance() {
-		return instance;
-	}
-
-	static Registry instance = new Registry();
 
 }

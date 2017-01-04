@@ -1,4 +1,4 @@
-package com.team1389.hardware.inputs.hardware;
+package com.team1389.watch.input.stream;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.value_types.Value;

@@ -8,7 +8,18 @@ import java.util.function.Supplier;
 
 import com.team1389.command_framework.command_base.Command;
 
+/**
+ * contains useful static operations for commands
+ * 
+ * @author amind
+ *
+ */
 public class CommandUtil {
+	/**
+	 * combines the given array of commands into a single command that runs the array of commands simultaneously
+	 * @param commands the array of commands to combine
+	 * @return the simultaneous combined command
+	 */
 	public static Command combineSequential(Command... commands) {
 		return new Command() {
 			int currentIndex = 0;
@@ -29,7 +40,11 @@ public class CommandUtil {
 
 		};
 	}
-
+	/**
+	 * combines the given array of commands into a single command that runs the array of commands simultaneously
+	 * @param commands the array of commands to combine
+	 * @return the combined command
+	 */
 	public static Command combineSimultaneous(Command... commands) {
 
 		return new Command() {
@@ -57,7 +72,11 @@ public class CommandUtil {
 
 		};
 	}
-
+	/**
+	 * creates a command out of the given supplier, which will be called as the command's execute method
+	 * @param execute the supplier to execute each command tick
+	 * @return a new command
+	 */
 	public static Command createCommand(Supplier<Boolean> execute) {
 		return new Command() {
 			@Override
@@ -70,7 +89,7 @@ public class CommandUtil {
 	/**
 	 * runs a command and hangs the thread until the command finishes
 	 * 
-	 * @param command
+	 * @param command the command to execute
 	 */
 	public static void executeCommand(Command command) {
 		boolean isFinished = false;

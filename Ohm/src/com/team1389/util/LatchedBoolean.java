@@ -1,32 +1,45 @@
 package com.team1389.util;
 
+import java.util.function.Supplier;
+
 /**
- * An iterative boolean latch.
- * 
- * Returns true once if and only if the value of newValue changes from false to
- * true.
+ * An iterative boolean latch. Returns true once if and only if the value of the tracked raw boolean changes from false to true.
  */
 public class LatchedBoolean {
-    private boolean mLast = false;
-    boolean val;
+	private boolean mLast = false;
+	protected Supplier<Boolean> raw;
+	boolean val;
 
-    public LatchedBoolean(boolean initialVal){
-    	this.val=initialVal;
-    }
-    public LatchedBoolean(){
-    	this.val=false;
-    }
-    protected boolean update(boolean newValue) {
-        boolean ret = false;
-        if (newValue && !mLast) {
-            ret = true;
-        }
-        mLast = newValue;
-        val=ret;
-        return ret;
-    }
-    public boolean get(boolean newVal){
-    	return update(newVal);
-    }
+	/**
+	 * the
+	 * 
+	 * @param initialVal
+	 */
+	protected LatchedBoolean(Supplier<Boolean> raw) {
+		this.raw = raw;
+		this.val = raw.get();
+	}
+
+	protected boolean update(boolean newValue) {
+		boolean ret = false;
+		if (newValue && !mLast) {
+			ret = true;
+		}
+		mLast = newValue;
+		val = ret;
+		return ret;
+	}
+
+	protected boolean get() {
+		return update(raw.get());
+	}
+	/**
+	 * @param raw a supplier of raw boolean values
+	 * @return the latched version of the input supplier
+	 */
+	public static Supplier<Boolean> latch(Supplier<Boolean> raw) {
+		LatchedBoolean latched = new LatchedBoolean(raw);
+		return latched::get;
+	}
 
 }

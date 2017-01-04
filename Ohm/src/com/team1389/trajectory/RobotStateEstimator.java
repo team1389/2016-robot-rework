@@ -20,7 +20,7 @@ public class RobotStateEstimator implements Supplier<RigidTransform2d> {
 	private RangeIn<Position> right;
 	private RangeIn<Speed> leftVel;
 	private RangeIn<Speed> rightVel;
-	private AngleIn gyro;
+	private AngleIn<Position> gyro;
 	Kinematics kinematics;
 	double left_encoder_prev_distance_ = 0;
 	double right_encoder_prev_distance_ = 0;

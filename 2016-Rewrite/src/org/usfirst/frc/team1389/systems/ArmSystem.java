@@ -4,27 +4,39 @@ import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.SynchronousPIDController;
 import com.team1389.hardware.inputs.software.AngleIn;
-import com.team1389.hardware.inputs.software.ButtonEnumMap;
-import com.team1389.hardware.outputs.software.RangeOut;
-import com.team1389.hardware.value_types.Angle;
+import com.team1389.hardware.outputs.software.AngleOut;
+import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Percent;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
+import com.team1389.util.ButtonEnumMap;
 import com.team1389.watch.Watchable;
 
+/**
+ * a system to control the arm on Maelstrom using buttons
+ * 
+ * @author amind
+ *
+ */
 public class ArmSystem extends Subsystem {
 
-	public RangeOut<Angle> elevator;
-	SynchronousPIDController<Percent, Angle> elevatorPID;
+	AngleOut<Position> elevator;
+	SynchronousPIDController<Percent, Position> elevatorPID;
 	ButtonEnumMap<ArmLocation> buttons;
-	AngleIn armVal;
+	AngleIn<Position> armVal;
 	Command profileMover;
 	double inputAngle;
 
-	public ArmSystem(RangeOut<Percent> elevator, ButtonEnumMap<ArmLocation> map, AngleIn armVal) {
+	/**
+	 * @param elevator a voltage stream for the elevator motors
+	 * @param map the button map for controlling the arm
+	 * @param armPosition an angle stream for the arm
+	 */
+	public ArmSystem(PercentOut elevator, ButtonEnumMap<ArmLocation> map, AngleIn<Position> armPosition) {
 		this.buttons = map;
-		this.armVal = armVal;
-		elevatorPID = new SynchronousPIDController<Percent, Angle>(new PIDConstants(.03, 0, 0), armVal,
+		this.armVal = armPosition;
+		elevatorPID = new SynchronousPIDController<Percent, Position>(new PIDConstants(.03, 0, 0), armPosition,
 				elevator.offset(.147));
 		this.elevator = elevatorPID.getSetpointSetter().getProfiledOut(30, 0);
 		this.inputAngle = 0;
@@ -42,6 +54,7 @@ public class ArmSystem extends Subsystem {
 		elevator.set(inputAngle);
 		elevatorPID.update();
 	}
+	
 	public enum ArmLocation {
 		DOWN(0), DEFENSE(45), LOW_GOAL(25), VERTICAL(90);
 
@@ -76,4 +89,5 @@ public class ArmSystem extends Subsystem {
 		return stem.put(buttons.getWatchable("target location"), armVal.getWatchable("arm position"),
 				elevatorPID.getSetpointSetter().getWatchable("arm setpoint"),
 				elevatorPID.getOutput().getWatchable("arm vOut"), elevatorPID.getPIDTuner("arm controller"));
-}}
+	}
+}

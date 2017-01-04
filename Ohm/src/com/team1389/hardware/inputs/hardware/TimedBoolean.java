@@ -2,18 +2,35 @@ package com.team1389.hardware.inputs.hardware;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 
-public class TimedBoolean implements BinaryInput{
+/**
+ * a boolean stream that becomes true after a fixed wait time
+ * @author amind
+ *
+ */
+public class TimedBoolean implements BinaryInput {
 	Timer timer;
 	double time;
-	public TimedBoolean(double time){
-		timer=new Timer();
-		this.time=time;
+	
+	/**
+	 * @param time the time to wait
+	 */
+	public TimedBoolean(double time) {
+		timer = new Timer();
+		this.time = time;
 	}
-	public void start(){
+
+	/**
+	 * starts the timer
+	 */
+	public void start() {
 		timer.zero();
 	}
+	
+	/**
+	 * true if the time since {@link TimedBoolean#start() start()} was called is greater than wait time
+	 */
 	@Override
 	public Boolean get() {
-		return timer.get()>time;
+		return timer.get() > time;
 	}
 }

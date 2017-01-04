@@ -1,5 +1,7 @@
 package com.team1389.hardware.outputs.hardware;
 
+import java.util.Optional;
+
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -10,7 +12,6 @@ import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.util.AddList;
-import com.team1389.util.Optional;
 import com.team1389.util.state.State;
 import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Watchable;
@@ -20,6 +21,15 @@ import com.team1389.watch.info.StringInfo;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
+/**
+ * This class offers input/output stream sources for a Talon SRX.
+ * <p>
+ * Furthermore, this class will ensure that the Talon has been given all required configuration before it enters any control mode. <br>
+ * TODO add limit switch support
+ * 
+ * @author amind
+ *
+ */
 public class CANTalonHardware extends Hardware<CAN> {
 
 	private final StateTracker stateTracker;
@@ -28,6 +38,14 @@ public class CANTalonHardware extends Hardware<CAN> {
 	private boolean inputInverted;
 	private State voltageState, speedState, positionState, followingState;
 
+	/**
+	 * @param outInverted whether the motor output should be inverted (used for both voltage and position control modes)
+	 * @param inpInverted whether the sensor input should be inverted
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 * @see <a href="https://www.ctr-electronics.com/Talon%20SRX%20Software%20Reference%20Manual.pdf">Talon SRX user manual</a> for more information on output/input inversion
+	 */
+	@SuppressWarnings("javadoc")
 	public CANTalonHardware(boolean outInverted, boolean inpInverted, CAN requestedPort, Registry registry) {
 		super(requestedPort, registry);
 		this.outputInverted = outInverted;
@@ -35,10 +53,23 @@ public class CANTalonHardware extends Hardware<CAN> {
 		stateTracker = new StateTracker();
 	}
 
+	/**
+	 * assumes input is not inverted
+	 * 
+	 * @param outInverted whether the motor output should be inverted (used for both voltage and position control modes)
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 * @see <a href="https://www.ctr-electronics.com/Talon%20SRX%20Software%20Reference%20Manual.pdf">Talon SRX user manual</a> for more information on output/input inversion
+	 */
+	@SuppressWarnings("javadoc")
 	public CANTalonHardware(boolean outInverted, CAN requestedPort, Registry registry) {
 		this(outInverted, false, requestedPort, registry);
 	}
 
+	/**
+	 * @return a speed input stream indicating the current speed of the motor based on the talon's preferred speed sensor <br>
+	 *         uses a default range of [0,1023] specified by the talon manual, but may vary depending on the speed sensor
+	 */
 	public RangeIn<Speed> getSpeedInput() {
 		return new RangeIn<Speed>(Speed.class, () -> {
 			return getSpeed();
@@ -46,12 +77,19 @@ public class CANTalonHardware extends Hardware<CAN> {
 
 	}
 
+	/**
+	 * @return a position input stream indicating the current speed of the motor based on the talon's preferred position sensor <br>
+	 *         uses a default range of [0,8192] specified by the Vex versaplanetary encoder, but may vary depending on the sensor
+	 */
 	public RangeIn<Position> getPositionInput() {
 		return new RangeIn<Position>(Position.class, () -> {
 			return getPosition();
 		}, 0, 8912);
 	}
 
+	/**
+	 * @return a percent output stream that sets the voltage of the talon in PercentVBus mode
+	 */
 	public PercentOut getVoltageOutput() {
 		return new PercentOut(voltage -> {
 			voltageState.init();
@@ -59,27 +97,45 @@ public class CANTalonHardware extends Hardware<CAN> {
 		});
 	}
 
+	/**
+	 * @param config the speed PIDConstants
+	 * @return a speed output stream
+	 */
 	public RangeOut<Speed> getSpeedOutput(PIDConstants config) {
-		setupSpeedState(config);
+		return getSpeedOutput(config, 0.0);
+	}
+
+	/**
+	 * @param config the P,I, and D gains
+	 * @param feedForward the F gain
+	 * @return a speed output stream
+	 */
+	public RangeOut<Speed> getSpeedOutput(PIDConstants config, double feedForward) {
+		setupSpeedState(config, feedForward);
 		return new RangeOut<Speed>(speed -> {
 			speedState.init();
-			wpiTalon.ifPresent((CANTalon talon) -> {
-				talon.set(speed);
-			});
+			wpiTalon.ifPresent(talon -> talon.set(speed));
 		}, 0, 8192);
 	}
 
+	/**
+	 * 
+	 * @param config the P, I, and D gains
+	 * @return a position output stream that controls the position of the talon
+	 */
 	public RangeOut<Position> getPositionOutput(PIDConstants config) {
 		setupPositionState(config);
 		return new RangeOut<Position>(position -> {
 			positionState.init();
-			wpiTalon.ifPresent((CANTalon talon) -> {
-				talon.set(position);
-			});
+			wpiTalon.ifPresent(talon -> talon.set(position));
 		}, 0, 8192);
 
 	}
 
+	/**
+	 * @param toFollow the master Talon to follow
+	 * @return a follower object
+	 */
 	public CANTalonFollower getFollower(CANTalonHardware toFollow) {
 		setupFollowingState(toFollow);
 		return new CANTalonFollower() {
@@ -104,20 +160,16 @@ public class CANTalonHardware extends Hardware<CAN> {
 		case MotionProfile:
 			break;
 		case PercentVbus:
-			stem.put(new NumberInfo("voltage", this::getVoltage), 
-					getPositionInput().getWatchable("position"));
+			stem.put(new NumberInfo("voltage", this::getVoltage), getPositionInput().getWatchable("position"));
 			break;
 		case Position:
-			stem.put(getPositionInput().getWatchable("position"), 
-					new NumberInfo("setpoint", this::getSetpoint));
+			stem.put(getPositionInput().getWatchable("position"), new NumberInfo("setpoint", this::getSetpoint));
 			break;
 		case Speed:
-			stem.put(getSpeedInput().getWatchable("speed"), 
-					new NumberInfo("setpoint", this::getSetpoint));
+			stem.put(getSpeedInput().getWatchable("speed"), new NumberInfo("setpoint", this::getSetpoint));
 			break;
 		case Voltage:
-			stem.put(new NumberInfo("voltage", this::getVoltage), 
-					getPositionInput().getWatchable("position"));
+			stem.put(new NumberInfo("voltage", this::getVoltage), getPositionInput().getWatchable("position"));
 			break;
 		default:
 			break;
@@ -131,7 +183,16 @@ public class CANTalonHardware extends Hardware<CAN> {
 		return "Talon";
 	}
 
+	/**
+	 * represents a slave talon in a {@link CANTalonGroup}
+	 * 
+	 * @author amind
+	 *
+	 */
 	public interface CANTalonFollower {
+		/**
+		 * 
+		 */
 		public void follow();
 	}
 
@@ -158,7 +219,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 		});
 	}
 
-	private void setupSpeedState(PIDConstants config) {
+	private void setupSpeedState(PIDConstants config, double feedForward) {
 		speedState = stateTracker.newState(() -> {
 			if (wpiTalon.isPresent()) {
 				CANTalon talon = getWrappedTalon();
@@ -166,6 +227,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 				talon.reverseSensor(inputInverted);
 				talon.changeControlMode(TalonControlMode.Speed);
 				setPID(config);
+				talon.setF(feedForward);
 			}
 		});
 	}
@@ -187,36 +249,39 @@ public class CANTalonHardware extends Hardware<CAN> {
 		});
 	}
 
+	/**
+	 * 
+	 * @return the setpoint of the talon
+	 */
 	public double getSetpoint() {
-		return wpiTalon.ifPresent(0.0, talon -> {
-			return talon.getSetpoint();
-		}).get();
+		return wpiTalon.map(talon -> talon.getSetpoint()).orElse(0.0);
+
 	}
 
+	/**
+	 * 
+	 * @return the current control mode of the talon
+	 */
 	public TalonControlMode getControlMode() {
-		return wpiTalon.ifPresent(TalonControlMode.Disabled, talon -> {
-			return talon.getControlMode();
-		}).get();
+		return wpiTalon.map(talon -> talon.getControlMode()).orElse(TalonControlMode.Disabled);
 	}
 
 	private double getPosition() {
-		return wpiTalon.ifPresent(0.0, talon -> {
-			return talon.getPosition();
-		}).get();
+		return wpiTalon.map(talon -> talon.getPosition()).orElse(0.0);
 	}
 
 	private double getSpeed() {
-		return wpiTalon.ifPresent(0.0, talon -> {
-			return talon.getSpeed();
-		}).get();
+		return wpiTalon.map(talon -> talon.getSpeed()).orElse(0.0);
 	}
 
 	private double getVoltage() {
-		return wpiTalon.ifPresent(0.0, talon -> {
-			return talon.getOutputVoltage();
-		}).get();
+		return wpiTalon.map(talon -> talon.getOutputVoltage()).orElse(0.0);
 	}
 
+	/**
+	 * @return the WPILib talon object
+	 * @throws NullPointerException if the talon failed to initialize due to port claiming failure
+	 */
 	public CANTalon getWrappedTalon() {
 		return wpiTalon.get();
 	}
