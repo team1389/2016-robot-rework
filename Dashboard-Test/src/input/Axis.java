@@ -24,6 +24,6 @@ public class Axis {
 				val -= kChangeRate * timer.get();
 			timer.zero();
 			return val;
-		}).limit();
+		}).clamp();
 	}
 }
