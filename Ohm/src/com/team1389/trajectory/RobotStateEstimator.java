@@ -30,9 +30,13 @@ public class RobotStateEstimator implements Supplier<RigidTransform2d> {
 	 * @param trackWidth the width of the wheelbase
 	 * @param trackLength the distance from the front axle to the rear axle
 	 * @param scrub constant to deal with discrepancy between theoretical effectivDiam and actual effective diam
+	 * @param left The position of the left wheel
+	 * @param right The position of the right wheel
 	 */
-	public RobotStateEstimator(double trackWidth, double trackLength, double scrub) {
+	public RobotStateEstimator(double trackWidth, double trackLength, double scrub, RangeIn<Position> left, RangeIn<Position> right) {
 		this.kinematics = new Kinematics(trackLength, trackWidth, scrub);
+		this.left = left;
+		this.right = right;
 	}
 
 	@Override
