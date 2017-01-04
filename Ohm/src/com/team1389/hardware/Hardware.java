@@ -12,6 +12,7 @@ import com.team1389.watch.info.FlagInfo;
 /**
  * wraps a WPI lib hardware object, adding watchable support and port tracking via {@link com.team1389.hardware.registry.Registry Registry}
  * 
+ * <p>Subclasses are intended to handle the case where the hardware fails to claim a port on construction
  * @author amind
  *
  * @param <T> the hardware port type
