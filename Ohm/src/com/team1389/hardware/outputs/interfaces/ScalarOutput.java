@@ -14,6 +14,8 @@ import com.team1389.util.RangeUtil;
  * @author amind
  * @param <T> the value type that the double represents
  */
+
+@SuppressWarnings("unused") // This interface is extremely related to ScalarInput. I guess that justifies a warning suppression
 public interface ScalarOutput<T extends Value> extends Consumer<Double> {
 	@Override
 	public default void accept(Double val) {

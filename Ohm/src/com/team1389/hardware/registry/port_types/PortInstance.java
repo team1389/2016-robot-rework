@@ -80,4 +80,9 @@ public abstract class PortInstance {
 		}
 		return false;
 	}
+
+	@Override
+	public int hashCode(){
+		return index*151750009; // hashCodes of PortInstances whose indexes are only slightly different will be different by magnitudes
+	}
 }

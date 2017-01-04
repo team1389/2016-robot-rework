@@ -50,6 +50,8 @@ public class PathFollowingSystem {
 		this.drive = drive;
 		this.state = state;
 		this.kinematics = new Kinematics(trackLength, trackWidth, scrub);
+		this.maxVel = maxVel;
+		this.maxAccel = maxAccel;
 	}
 
 	/**

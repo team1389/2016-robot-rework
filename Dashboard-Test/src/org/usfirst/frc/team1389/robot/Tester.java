@@ -8,7 +8,7 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
-import com.team1389.hardware.value_types.Speed;
+//import com.team1389.hardware.value_types.Speed; // Unused
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
@@ -41,7 +41,7 @@ public class Tester {
 		dash2.watch(sim);
 		//sim.setRangeOfMotion(0, 89);
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
-		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
+//		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360); // Unused
 		cont = new PIDController<Percent, Position>(.03, 0, 0, pos, sim.getVoltageOutput());
 		cont.setInputRange(-360, 360);
 		dash2.watch(cont.getPIDTuner("tuner"));
