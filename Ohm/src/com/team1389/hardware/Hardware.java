@@ -9,6 +9,7 @@ import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.FlagInfo;
 
+
 public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	Optional<String> specificHardwareName;
 	final protected Optional<T> port;
