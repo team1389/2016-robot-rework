@@ -43,7 +43,7 @@ public class SimpleKinematics {
 	 * @param vf The final velocity of the system
 	 * @param t The total t the motion takes
 	 * @param a The constant aeration of the system
-	 * @param S The distance traveled in the system
+	 * @param dx The distance traveled in the system
 	 */
 	public SimpleKinematics(double v0, double vf, double t, double a, double dx) {
 		
