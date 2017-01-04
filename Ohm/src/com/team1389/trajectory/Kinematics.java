@@ -52,7 +52,7 @@ public class Kinematics {
 	}
 
 	/**
-	 * Append the result of forward kinematics to a previous pose. TODO isn't current heading included in current_pose?
+	 * Append the result of forward kinematics to a previous pose.
 	 * 
 	 * @param current_pose the last observed robot pose
 	 * @param left_wheel_delta the distance travelled by the left encoders

@@ -86,7 +86,6 @@ public class SimpleKinematics {
 		double tV = finalV;
 		double ta = accel;
 		double tt = time;
-		// TODO check this one
 		if ((code & 19) == 19) {
 			if (tt == 0) {
 				time = 0;
@@ -103,7 +102,6 @@ public class SimpleKinematics {
 				dx = 0;
 			} else {
 				tt = (tV - tVo) / ta;
-				//System.out.println((tV - tVo) + " ::: " + ta);
 				time = tt;
 				dx = tVo * tt + ta * tt * tt / 2;
 			}
