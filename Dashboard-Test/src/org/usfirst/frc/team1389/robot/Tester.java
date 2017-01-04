@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.command_framework.CommandScheduler;
-import com.team1389.control.SynchronousPIDController;
+import com.team1389.control.PIDController;
 import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
 import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -12,7 +12,7 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.SystemManager;
 import com.team1389.watch.Watcher;
-import com.team1389.watch.input.NumberInput;
+import com.team1389.watch.input.listener.NumberInput;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;
 import edu.wpi.first.wpilibj.HLUsageReporting.Interface;
@@ -28,7 +28,7 @@ public class Tester {
 	static CommandScheduler scheduler;
 	static Watcher dash;
 	static SystemManager manager;
-	static SynchronousPIDController<Percent, Position> cont;
+	static PIDController<Percent, Position> cont;
 	static DashboardScalarInput inp;
 	static RangeOut<Position> setter;
 	static SimulatedActuator sim;
@@ -39,16 +39,16 @@ public class Tester {
 		sim = new SimulatedActuator(new Attachment(new PrismElement(7.9, .4, .05, .66), true), 200, Motor.MINI_CIM,
 				Motor.MINI_CIM);
 		dash2.watch(sim);
-		sim.setRangeOfMotion(0, 89);
+		//sim.setRangeOfMotion(0, 89);
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 1).mapToRange(0, 360);
 		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).mapToRange(0, 360);
-		cont = new SynchronousPIDController<Percent, Position>(.3, 0, 0, pos, sim.getVoltageOutput());
+		cont = new PIDController<Percent, Position>(.03, 0, 0, pos, sim.getVoltageOutput());
+		cont.setInputRange(-360, 360);
 		dash2.watch(cont.getPIDTuner("tuner"));
 		dash2.watch(new NumberInput("voltage", 0.0, sim::setVoltage));
 	}
 
 	public static void update() {
-		// cont.update();
 		dash2.publish(Watcher.DASHBOARD);
 		sim.update();
 	}
@@ -87,7 +87,6 @@ public class Tester {
 			dash.publish(Watcher.DASHBOARD);
 			// dash2.log();
 			out.set(timer.get());
-			System.out.println(timer.get());
 			if (timer.get() < .05) {
 				Thread.sleep((long) (50 - 1000 * timer.get()));
 			}

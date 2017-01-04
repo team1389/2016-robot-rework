@@ -1,4 +1,4 @@
-package com.team1389.watch.input;
+package com.team1389.watch.input.listener;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

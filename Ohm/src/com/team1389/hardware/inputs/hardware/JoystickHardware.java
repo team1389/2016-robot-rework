@@ -10,33 +10,63 @@ import com.team1389.hardware.inputs.software.PercentIn;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;
 
+/**
+ * offers stream sources for all values available from the WPILib joystick
+ * 
+ * @author amind
+ *
+ */
 public class JoystickHardware {
 	final Joystick wpiJoystick;
 
+	/**
+	 * @param port the port of the joystick (can be set from the driver station program)
+	 */
 	public JoystickHardware(int port) {
 		wpiJoystick = new Joystick(port);
 	}
 
+	/**
+	 * @param button the button port to check
+	 * @return a boolean stream that tracks the current state of the button
+	 */
 	public DigitalIn getButton(int button) {
 		return new DigitalIn(getRawButton(button));
 	}
 
-	public DigitalIn getButton(int button, InputFilter type) {
-		return new DigitalIn(getRawButton(button), type);
+	/**
+	 * @param button the button port to check
+	 * @param filter a boolean filter to apply to the button stream
+	 * @return a boolean stream that tracks the current state of the button
+	 */
+	public DigitalIn getButton(int button, InputFilter filter) {
+		return new DigitalIn(getRawButton(button), filter);
 	}
 
+	/**
+	 * @param button the button port to check
+	 * @return a boolean stream of the button data
+	 */
 	public BinaryInput getRawButton(int button) {
 		return () -> {
 			return wpiJoystick.getRawButton(button);
 		};
 	}
 
+	/**
+	 * 
+	 * @param axis the axis to track
+	 * @return a percent stream that tracks the value of the axis
+	 */
 	public PercentIn getAxis(int axis) {
 		return new PercentIn(() -> {
 			return wpiJoystick.getRawAxis(axis);
 		});
 	}
 
+	/**
+	 * @return an Integer supplier that tracks the value of the joystick POV hat switch
+	 */
 	public Supplier<Integer> getPov() {
 		return () -> {
 			return wpiJoystick.getPOV();
