@@ -11,13 +11,27 @@ import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
+/**
+ * a digital flashlight controller for a light attached to the PCM
+ * 
+ * @author amind
+ *
+ */
 public class FlashlightHardware extends Hardware<PCM> {
+	/**
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 */
 	public FlashlightHardware(PCM requestedPort, Registry registry) {
 		super(requestedPort, registry);
 	}
 
 	private Optional<Solenoid> wpiSolenoid;
 
+	/**
+	 * 
+	 * @return a boolean output stream that controls the state of the light (on or off)
+	 */
 	public DigitalOut getDigitalOut() {
 		return new DigitalOut(pos -> wpiSolenoid.ifPresent(s -> s.set(pos)));
 	}

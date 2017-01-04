@@ -2,6 +2,7 @@ package com.team1389.system.drive;
 
 import com.team1389.control.SynchronousPID;
 import com.team1389.hardware.inputs.software.AngleIn;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.trajectory.Rotation2d;
 
@@ -13,7 +14,7 @@ import com.team1389.trajectory.Rotation2d;
 public class VelocityHeadingSystem {
 	// TODO figure out how to use this drive algorithm
 	protected DriveOut<Speed> drive;
-	private AngleIn gyro;
+	private AngleIn<Position> gyro;
 
 	private double mLastHeadingErrorDegrees;
 	private VelocityHeadingSetpoint velocityHeadingSetpoint_;
@@ -23,7 +24,7 @@ public class VelocityHeadingSystem {
 	 * @param drive a speed controlled drive stream
 	 * @param gyro a stream of robot heading
 	 */
-	public VelocityHeadingSystem(DriveOut<Speed> drive, AngleIn gyro) {
+	public VelocityHeadingSystem(DriveOut<Speed> drive, AngleIn<Position> gyro) {
 		this.drive = drive;
 		this.gyro = gyro;
 	}

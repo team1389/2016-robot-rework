@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import com.team1389.hardware.inputs.interfaces.BinaryInput;
 import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.DigitalIn.InputType;
+import com.team1389.hardware.inputs.software.DigitalIn.InputFilter;
 import com.team1389.hardware.inputs.software.PercentIn;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -21,7 +21,7 @@ public class JoystickHardware {
 		return new DigitalIn(getRawButton(button));
 	}
 
-	public DigitalIn getButton(int button, InputType type) {
+	public DigitalIn getButton(int button, InputFilter type) {
 		return new DigitalIn(getRawButton(button), type);
 	}
 

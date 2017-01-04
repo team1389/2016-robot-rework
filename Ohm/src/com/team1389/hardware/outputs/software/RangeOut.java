@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
+import com.team1389.hardware.value_types.PIDTunableValue;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
@@ -13,7 +14,7 @@ import com.team1389.watch.info.NumberInfo;
  * 
  * @author Kenneth
  *
- * @param <T> The type that the doubles in the stream are representing
+ * @param <T> The type that the doubles in the stream represent
  */
 public class RangeOut<T extends Value> implements ScalarInput<T> {
 	private double lastVal;
@@ -34,7 +35,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 
 	/**
 	 * 
-	 * @param out consumer converted to output stream to be operated on
+	 * @param out consumer to pass stream values down to
 	 * @param min the min value
 	 * @param max the max value
 	 */
@@ -45,7 +46,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
-	 * @return value the value of the stream
+	 * @return value the last set value of the output stream
 	 */
 	@Override
 	public Double get() {
@@ -54,7 +55,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 
 	/**
 	 * 
-	 * @param val the value being passed down the stream
+	 * @param val the value to pass down the stream
 	 */
 	public void set(double val) {
 		lastVal = val;
@@ -79,7 +80,7 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 
 	/**
 	 * 
-	 * @return range the value of the range
+	 * @return range the magnitude of the range
 	 */
 	public double range() {
 		return min() - max();
@@ -96,24 +97,25 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
-	 * map this stream from percent to a range of {@code min} to {@code max}
+	 * maps this stream to a percent stream (you pass it percent values and it converts them to the old range before passing them down)
 	 * 
-	 * @return PercentOut the new stream that is this stream mapped to the aforementioned range
+	 * @return the new stream that is this stream mapped to the aforementioned range
 	 */
 	public PercentOut mapToPercentOut() {
 		return new PercentOut(this);
 	}
 
 	/**
-	 * maps this stream from angle to a range of {@code min} to {@code max}
+	 * maps this stream to an angle stream (you pass it angle values and it converts them to the old range before passing them down)
 	 * 
-	 * @return AngleOut the new stream that is this stream mapped to the aforementioned range
+	 * @return the new stream that is this stream mapped to the aforementioned range
 	 */
-	public AngleOut mapToAngle() {
-		return new AngleOut(this);
+	public <V extends PIDTunableValue> AngleOut<V> mapToAngle() {
+		return new AngleOut<V>(convertRange());
 	}
 
 	/**
+	 * maps the stream to a given range, setting a new min and max, and adjusting the stream values to compensate
 	 * 
 	 * @param min of stream being operated on
 	 * @param max of stream being operated on
@@ -160,16 +162,17 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
-	 * 
-	 * @param name key for the value
-	 * @return NumberInfo with arguments({@code name}, this stream)
+	 * @param name the string identifier of this stream
+	 * @return a watchable object that tracks the value of this stream
 	 */
 	public Watchable getWatchable(String name) {
 		return new NumberInfo(name, this);
 	}
 
 	/**
-	 * adds a stream with same min/max, and passes down the same value
+	 * adds a stream as a follower; The stream will now be passed any value this stream recieves.
+	 * <p>
+	 * If the follower stream has a different range than the leader stream, the input will be mapped to the follower's range before being passed
 	 * 
 	 * @param outFollow stream to add as a follower
 	 * @return this stream but with an additional follower
@@ -199,14 +202,15 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	 * 
 	 * @return new stream that is limited to a range
 	 */
-	public <R extends RangeOut<T>> R capRange() {
+	public <R extends RangeOut<T>> R clamp() {
 		return limit(min, max);
 	}
 
 	/**
+	 * clamps the stream within the range of [-abs , abs]
 	 * 
 	 * @param abs the absolute value of min/max of range
-	 * @return new stream that is limited to a range
+	 * @return clamped stream
 	 */
 	public <R extends RangeOut<T>> R limit(double abs) {
 		return limit(-abs, abs);
@@ -258,6 +262,17 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 	}
 
 	/**
+	 * converts the stream to the desired value type
+	 * 
+	 * @return a new stream with the same values but the new type
+	 */
+	protected <N extends Value> RangeOut<N> convertRange() {
+		return new RangeOut<N>(output, min, max);
+	}
+
+	/**
+	 * sets the min and max values of the stream <br>
+	 * <em>NOTE</em>: Unlike {@link RangeOut#mapToRange(double, double) mapToRange}, this operation does not affect the values in the stream, only the range.
 	 * 
 	 * @param min value to set as min
 	 * @param max value to set as max
@@ -268,9 +283,8 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		this.max = max;
 		return this;
 	}
-/*	private void addOperation(Function<Double, String> operation) {
-		Supplier<String> oldOperations = operations;
-		operations = () -> oldOperations.get().concat(operation.apply(in.get()));
-	}*/
+	/*
+	 * private void addOperation(Function<Double, String> operation) { Supplier<String> oldOperations = operations; operations = () -> oldOperations.get().concat(operation.apply(in.get())); }
+	 */
 
 }

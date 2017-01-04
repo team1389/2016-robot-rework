@@ -57,7 +57,7 @@ public interface BinaryInput extends Supplier<Boolean> {
 	}
 
 	/**
-	 * combines a list of boolean streams into a single stream that returns true if and only if all of the original streams are true
+	 * combines a list of boolean streams into a single stream that returns true if any of the original streams are true
 	 * 
 	 * @param inputs the list of streams to combine
 	 * @return the combined stream

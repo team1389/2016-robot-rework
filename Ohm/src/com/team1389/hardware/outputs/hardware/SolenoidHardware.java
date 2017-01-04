@@ -11,13 +11,26 @@ import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
+/**
+ * a single solenoid attached to the PCM
+ * 
+ * @author amind
+ *
+ */
 public class SolenoidHardware extends Hardware<PCM> {
+	/**
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 */
 	public SolenoidHardware(PCM requestedPort, Registry registry) {
 		super(requestedPort, registry);
 	}
 
 	private Optional<Solenoid> wpiSolenoid;
-
+	/**
+	 * 
+	 * @return a boolean output stream that controls the position of the solenoid
+	 */
 	public DigitalOut getDigitalOut() {
 		return new DigitalOut(val -> wpiSolenoid.ifPresent(w -> w.set(val)));
 	}

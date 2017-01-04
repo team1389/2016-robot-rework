@@ -2,7 +2,7 @@ package org.usfirst.frc.team1389.robot.controls;
 
 import com.team1389.hardware.inputs.hardware.JoystickHardware;
 import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.DigitalIn.InputType;
+import com.team1389.hardware.inputs.software.DigitalIn.InputFilter;
 import com.team1389.hardware.inputs.software.PercentIn;
 
 /**
@@ -35,7 +35,7 @@ public class ControlBoard extends ControlMap {
 	public DigitalIn armButtonC = manipController.getButton(btn_ARM_POSITION_C).getLatched();
 	public DigitalIn armButtonD = manipController.getButton(btn_ARM_POSITION_D).getLatched();
 
-	public DigitalIn turretZero = manipController.getButton(btn_TURRET_ZERO, InputType.LATCHED);
+	public DigitalIn turretZero = manipController.getButton(btn_TURRET_ZERO, InputFilter.LATCHED);
 	public PercentIn turretAxis = manipController.getAxis(ax_TURRET_AXIS);
 	public PercentIn intakeAxis = manipController.getAxis(ax_INTAKE_AXIS);
 	public DigitalIn intakeOverride = manipController.getButton(btn_INTAKE_MANUAL_OVERRIDE);

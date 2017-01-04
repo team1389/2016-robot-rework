@@ -4,6 +4,7 @@ import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
 import com.team1389.util.RangeUtil;
@@ -17,7 +18,7 @@ import com.team1389.watch.Watchable;
  */
 public class FieldOrientedDriveSystem extends Subsystem {
 	DriveOut<Percent> drive;
-	private AngleIn gyro;
+	private AngleIn<Position> gyro;
 	private DriveSignal signal = DriveSignal.NEUTRAL;
 	private PercentIn throttleX;
 	private PercentIn throttleY;
@@ -32,7 +33,7 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 * @param override to override some fieldOriented() functions
 	 * @param nonGyro to override all fielOriented() functions
 	 */
-	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn gyro,
+	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn<Position> gyro,
 			DigitalIn override, DigitalIn nonGyro) {
 		this.throttleX = throttleX;
 		this.throttleY = throttleY;

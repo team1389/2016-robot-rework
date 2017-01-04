@@ -12,7 +12,7 @@ import com.team1389.watch.Watchable;
 import edu.wpi.first.wpilibj.VictorSP;
 
 /**
- * A victor motor controller
+ * A victor SP motor controller
  * 
  * @author Jacob Prinz
  */
@@ -21,11 +21,20 @@ public class VictorHardware extends Hardware<PWM> {
 	Optional<VictorSP> wpiVictor;
 	boolean inverted;
 
-	public VictorHardware(boolean inverted, PWM port, Registry registry) {
-		super(port, registry);
+	/**
+	 * 
+	 * @param inverted whether to invert the direction of the speed controller
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 */
+	public VictorHardware(boolean inverted, PWM requestedPort, Registry registry) {
+		super(requestedPort, registry);
 		this.inverted = inverted;
 	}
 
+	/**
+	 * @return a voltage output stream for this victor
+	 */
 	public PercentOut getVoltageOutput() {
 		return new PercentOut(pos -> wpiVictor.ifPresent(s -> s.set(pos)));
 	}
