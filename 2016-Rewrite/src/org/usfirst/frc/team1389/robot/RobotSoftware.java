@@ -12,7 +12,7 @@ public class RobotSoftware extends RobotHardware {
 		return INSTANCE;
 	}
 
-	public AngleIn turretAngle = turretGyro.getAngleInput().sumInputs(navX.getAngleInput()).setRange(-180, 180).getWrapped();
+	public AngleIn turretAngle = turretGyro.getAngleInput().sumInputs(navX.getYawInput()).setRange(-180, 180).getWrapped();
 	
 	public DigitalIn IRsensors = IRsensor1.getSwitchInput().combineOR(IRsensor2.getSwitchInput());
 	

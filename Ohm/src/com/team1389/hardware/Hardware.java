@@ -9,11 +9,21 @@ import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.FlagInfo;
 
-
+/**
+ * wraps a WPI lib hardware object, adding watchable support and port tracking via {@link com.team1389.hardware.registry.Registry Registry}
+ * 
+ * @author amind
+ *
+ * @param <T> the hardware port type
+ */
 public abstract class Hardware<T extends PortInstance> implements CompositeWatchable {
 	Optional<String> specificHardwareName;
 	final protected Optional<T> port;
 
+	/**
+	 * @param requestedPort the port to attempt to initialize this hardware
+	 * @param registry the registry associated with the robot
+	 */
 	public Hardware(T requestedPort, Registry registry) {
 		this.port = registry.getPort(requestedPort);
 		if (!port.isPresent()) {
@@ -25,14 +35,28 @@ public abstract class Hardware<T extends PortInstance> implements CompositeWatch
 		registry.registerWatchable(this);
 	}
 
+	/**
+	 * @param specificHardwareName a specific string Identifier for this particular hardware instance
+	 */
 	public void setName(String specificHardwareName) {
 		this.specificHardwareName = Optional.of(specificHardwareName);
 	}
 
-	public abstract void init(T port);
+	/**
+	 * initializes the hardware object (subclasses will initialize wrapped WPILib objects here)
+	 * 
+	 * @param port the port to initialize the hardware on
+	 */
+	protected abstract void init(T port);
 
-	public abstract void failInit();
+	/**
+	 * called in the place of Hardware#init when the requested port is taken
+	 */
+	protected abstract void failInit();
 
+	/**
+	 * @return the port associated with this hardware, or negative one if the hardware failed to initialize
+	 */
 	public int getPort() {
 		return port.map(PortInstance::index).orElse(-1);
 	}

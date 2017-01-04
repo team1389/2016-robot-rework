@@ -2,7 +2,6 @@ package com.team1389.hardware.inputs.interfaces;
 
 import java.util.function.Supplier;
 
-import com.team1389.hardware.value_types.Angle;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.util.RangeUtil;
@@ -46,10 +45,8 @@ public interface ScalarInput<T extends Value> extends Supplier<Double> {
 	 * @param inMax the original max value
 	 * @return the mapped output, now an angle stream
 	 */
-	static <T extends Value> ScalarInput<Angle> mapToAngle(ScalarInput<T> in, double inMin, double inMax) {
-		return () -> {
-			return RangeUtil.map(in.get(), inMin, inMax, 0, 360);
-		};
+	static <T extends Value> ScalarInput<T> mapToAngle(ScalarInput<T> in, double inMin, double inMax) {
+		return mapToRange(in, inMin, inMax, 0, 360);
 	}
 
 	/**

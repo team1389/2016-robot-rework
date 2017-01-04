@@ -8,11 +8,11 @@ import org.usfirst.frc.team1389.systems.IntakeSystem;
 import org.usfirst.frc.team1389.systems.TurretSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
-import com.team1389.hardware.inputs.software.ButtonEnumMap;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
 import com.team1389.system.drive.CheesyDriveSystem;
+import com.team1389.util.ButtonEnumMap;
 
 public class TeleopMain {
 	SystemManager manager;

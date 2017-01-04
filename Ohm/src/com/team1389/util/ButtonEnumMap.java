@@ -1,10 +1,11 @@
-package com.team1389.hardware.inputs.software;
+package com.team1389.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.StringInfo;
 
