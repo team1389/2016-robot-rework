@@ -1,10 +1,14 @@
 package input;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import com.team1389.hardware.inputs.software.DigitalIn;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier.Key;
 import net.java.games.input.Controller;
+import net.java.games.input.Controller.Type;
 import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Keyboard;
 
@@ -17,12 +21,14 @@ public class PCHardware {
 	}
 
 	private static Keyboard findKeyboard() {
-		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
-		for (int i = 0; i < controllers.length; i++)
-			if (controllers[i].getType() == Controller.Type.KEYBOARD)
-				return (Keyboard) controllers[i];
-		return null;
+		return (Keyboard) findFirst(Controller.Type.KEYBOARD).get();
 	}
+
+	public static Optional<Controller> findFirst(Controller.Type controller) {
+		Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		return Arrays.stream(controllers).filter(c -> c.getType() == controller).findFirst();
+	}
+
 
 	public boolean[] pollKeyboard() {
 		keyboard.poll();
@@ -41,9 +47,17 @@ public class PCHardware {
 	public DigitalIn getKey(Key k) {
 		return new DigitalIn(() -> keyboard.isKeyDown(k));
 	}
-	public static void main(String[] args){
-		while(true){
-			
+
+	public static void main(String[] args) {
+		findFirst(Type.STICK).ifPresent(PCHardware::init);
+	}
+
+	public static void init(Controller stick) {
+		MappedController controller=MappedController.mapController(stick);
+
+		while (true) {
+			controller.poll();
+			System.out.println(controller.getButton(1));
 		}
 	}
 }
