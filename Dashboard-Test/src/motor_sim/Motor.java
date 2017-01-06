@@ -22,7 +22,7 @@ public class Motor {
 	 * @return torque from motor
 	 */
 	public double getTorque(double omega) {
-		return stallTorque * (voltage - (omega / freeSpeed));
+		return stallTorque * (voltage - omega / freeSpeed);
 	}
 
 	public void setPercentVoltage(double voltage) {
