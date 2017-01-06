@@ -11,6 +11,8 @@ import com.team1389.util.RangeUtil;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * 
  * @author Raffi
@@ -107,7 +109,8 @@ public class FieldOrientedDriveSystem extends Subsystem {
 			speedCommand = -XThrottle;
 			clockwiseCommand = -YThrottle; // may have to reverse x and y
 		}
-
+		SmartDashboard.putNumber("speedCommand", speedCommand);
+		SmartDashboard.putNumber("clockwiseCommand", clockwiseCommand);
 		double leftSpeed = speedCommand + clockwiseCommand;
 		double rightSpeed = speedCommand - clockwiseCommand;
 
