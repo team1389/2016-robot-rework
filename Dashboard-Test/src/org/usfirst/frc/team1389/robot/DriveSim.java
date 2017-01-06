@@ -11,8 +11,8 @@ import org.newdawn.slick.geom.Shape;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
+import com.team1389.system.drive.CheesyDriveSystem;
 import com.team1389.system.drive.DriveOut;
-import com.team1389.system.drive.TankDriveSystem;
 import com.team1389.trajectory.Kinematics;
 import com.team1389.trajectory.RigidTransform2d;
 import com.team1389.trajectory.RobotState;
@@ -47,8 +47,9 @@ public class DriveSim extends BasicGame {
 			new Motor(MotorType.CIM));
 	MotorSystem right = new MotorSystem(new Attachment(new CylinderElement(.51, .097), false), 6,
 			new Motor(MotorType.CIM));
-	TankDriveSystem drive = new TankDriveSystem(
-			new DriveOut<Percent>(left.getVoltageOutput(), right.getVoltageOutput()), joy.getAxis(0), joy.getAxis(1).invert());
+	CheesyDriveSystem drive = new CheesyDriveSystem(
+			new DriveOut<Percent>(left.getVoltageOutput(), right.getVoltageOutput()), joy.getAxis(0).invert(), joy.getAxis(1).invert(),
+			joy.getButton(0));
 	RobotState state = new RobotState();
 	double leftDistance = 0;
 	double rightDistance = 0;
@@ -88,7 +89,6 @@ public class DriveSim extends BasicGame {
 		leftDistance = leftIn.get();
 		rightDistance = rightIn.get();
 		dash.publish(Watcher.DASHBOARD);
-		System.out.println(state.getLatestFieldToVehicle().getValue().getRotation().getDegrees());
 	}
 
 }
