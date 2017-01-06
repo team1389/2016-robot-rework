@@ -7,27 +7,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.team1389.hardware.inputs.software.AngleIn;
-import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.value_types.Percent;
-import com.team1389.hardware.value_types.Position;
 import com.team1389.system.drive.CheesyDriveSystem;
-import com.team1389.system.drive.DriveOut;
-import com.team1389.system.drive.FieldOrientedDriveSystem;
-import com.team1389.trajectory.Kinematics;
-import com.team1389.trajectory.RigidTransform2d;
-import com.team1389.trajectory.RobotState;
-import com.team1389.trajectory.Rotation2d;
-import com.team1389.trajectory.Translation2d;
 import com.team1389.watch.Watcher;
 
-import edu.wpi.first.wpilibj.Timer;
 import input.SimJoystick;
-import motor_sim.Attachment;
-import motor_sim.Motor;
-import motor_sim.Motor.MotorType;
-import motor_sim.MotorSystem;
-import motor_sim.element.CylinderElement;
+import motor_sim.SimRobot;
 
 public class DriveSim extends BasicGame {
 
@@ -43,69 +27,37 @@ public class DriveSim extends BasicGame {
 		cont.start();
 	}
 
+	SimRobot robot;
 	SimJoystick joy = new SimJoystick(1);
-	MotorSystem left = new MotorSystem(new Attachment(new CylinderElement(.51, .097), false), 6,
-			new Motor(MotorType.CIM));
-	MotorSystem right = new MotorSystem(new Attachment(new CylinderElement(.51, .097), false), 6,
-			new Motor(MotorType.CIM));
-	RobotState state = new RobotState();
-	CheesyDriveSystem drive = new CheesyDriveSystem(
-			new DriveOut<Percent>(left.getVoltageOutput(), right.getVoltageOutput()), joy.getAxis(0).invert(),
-			joy.getAxis(1).invert(), joy.getButton(0));
-	AngleIn<Position> gyro = new AngleIn<Position>(Position.class,
-			() -> state.getLatestFieldToVehicle().getValue().getRotation().getDegrees());
-	FieldOrientedDriveSystem fieldDrive = new FieldOrientedDriveSystem(
-			new DriveOut<Percent>(left.getVoltageOutput(), right.getVoltageOutput()), joy.getAxis(0), joy.getAxis(1),
-			gyro, joy.getButton(0), joy.getButton(1));
-	double leftDistance = 0;
-	double rightDistance = 0;
-	RangeIn<Position> leftIn = left.getPositionInput().mapToRange(0, 1).scale(Math.PI * 7.65);
-	RangeIn<Position> rightIn = right.getPositionInput().mapToRange(0, 1).scale(Math.PI * 7.65);
+	CheesyDriveSystem drive;
 	Watcher dash;
 	Image map;
-	double startX = 250;
-	double startY = 250;
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		map.draw(0, 0, 1265, 622);
-		RigidTransform2d transform = state.getLatestFieldToVehicle().getValue();
-		Translation2d trans = transform.getTranslation();
-		Rotation2d rot = transform.getRotation();
-		float x = 2 * (float) (trans.getX() + startX);
-		float y = 2 * (float) (trans.getY() + startY);
-		robot.setRotation((float) rot.getDegrees());
-		robot.drawCentered(x, y);
+		robot.render(container, g);
 	}
-
-	Image robot;
 
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
-		state.reset(Timer.getFPGATimestamp(), new RigidTransform2d(new Translation2d(), new Rotation2d()));
 		dash = new Watcher();
-		dash.watch(drive, leftIn.getWatchable("left position"), rightIn.getWatchable("right position"));
 		try {
 			map = new Image("map.png");
-			robot = new Image("robot.png").getScaledCopy(68, 70);
-			robot.setCenterOfRotation(34, 35);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+		robot = new SimRobot();
+		drive = new CheesyDriveSystem(robot.getDrive(), joy.getAxis(0).invert(), joy.getAxis(1).invert(),
+				joy.getButton(0));
+		dash.watch(drive);
 	}
 
 	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException {
+	public void update(GameContainer gc, int delta) throws SlickException {
 		drive.update();
-		left.update();
-		right.update();
-		state.addFieldToVehicleObservation(Timer.getFPGATimestamp(),
-				state.getLatestFieldToVehicle().getValue()
-						.transformBy(RigidTransform2d.fromVelocity(new Kinematics(20, 23, 1)
-								.forwardKinematics(leftIn.get() - leftDistance, rightIn.get() - rightDistance))));
-		leftDistance = leftIn.get();
-		rightDistance = rightIn.get();
 		dash.publish(Watcher.DASHBOARD);
+		robot.update(gc, delta);
 	}
 
 }
