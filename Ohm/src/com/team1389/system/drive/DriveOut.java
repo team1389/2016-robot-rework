@@ -56,6 +56,6 @@ public class DriveOut<T extends Value> implements CompositeWatchable {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(left.getWatchable("left"), right.getWatchable("right"));
+		return new AddList<Watchable>().put(left.getWatchable("left")).put(right.getWatchable("right"));
 	}
 }

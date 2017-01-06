@@ -20,7 +20,7 @@ public class RobotState {
 	protected InterpolatingTreeMap<InterpolatingDouble, RigidTransform2d> fieldToVehicle;
 	protected RigidTransform2d.Delta vehicleVel;
 
-	protected RobotState() {
+	public RobotState() {
 		reset(0, new RigidTransform2d());
 	}
 
@@ -37,13 +37,20 @@ public class RobotState {
 	}
 
 	/**
-	 * looks up a past pose at the given timestamp
-	 * <br>will give meaningless values for timeStamps before the initial observation
+	 * looks up a past pose at the given timestamp <br>
+	 * will give meaningless values for timeStamps before the initial observation
+	 * 
 	 * @param timestamp at what point in time do you want to know what the robot's pose was
 	 * @return the pose at time {@code timeStamp}
 	 */
 	public synchronized RigidTransform2d getFieldToVehicle(double timestamp) {
 		return fieldToVehicle.getInterpolated(new InterpolatingDouble(timestamp));
+	}
+	/**
+	 * @return the number of stored observations so far (max possible value is {@link RobotState#kObservationBufferSize}).
+	 */
+	public synchronized double getObservationCount() {
+		return fieldToVehicle.size();
 	}
 
 	/**

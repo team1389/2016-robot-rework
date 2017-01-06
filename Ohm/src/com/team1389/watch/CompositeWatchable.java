@@ -50,8 +50,7 @@ public interface CompositeWatchable extends Watchable {
 	@Override
 	public default Map<String, SimpleWatchable> getFlat(Optional<String> parent) {
 		Map<String, SimpleWatchable> map = new HashMap<>();
-		getSubWatchables(stem)
-				.forEach(w -> map.putAll(w.getFlat(Optional.of(parent.map(this::getFullName).orElse(getName())))));
+		getSubWatchables(stem).forEach(w -> map.putAll(w.getFlat(Optional.of(parent.map(this::getFullName).orElse(getName())))));
 		return map;
 	}
 

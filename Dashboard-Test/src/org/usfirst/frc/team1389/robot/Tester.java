@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import layout.TesterDefaultHardware;
 import motor_sim.Attachment;
 import motor_sim.Motor;
+import motor_sim.Motor.MotorType;
 import motor_sim.MotorSystem;
 import motor_sim.element.PrismElement;
 
@@ -37,17 +38,16 @@ public class Tester {
 
 	public static void init() {
 		dash2 = new Watcher();
-		sim = new MotorSystem(new Attachment(new PrismElement(7.9, .4, .05, .66), true), 200, Motor.MINI_CIM,
-				Motor.MINI_CIM);
+		sim = new MotorSystem(new Attachment(new PrismElement(7.9, .4, .05, .66), true), 200, new Motor(MotorType.MINI_CIM),
+				new Motor(MotorType.MINI_CIM));
 		sim.setRangeOfMotion(0, 89);
 		RangeIn<Position> pos = sim.getPositionInput().mapToRange(0, 360);
 		RangeIn<Speed> speed = sim.getSpeedInput().mapToRange(0, 1).scale(60);
 		cont = new SmoothSetController(.07, 0, 5, 10, 10, 30, pos, speed, sim.getVoltageOutput());
 		cont.setInputRange(0, 90);
-		dash2.watch(speed.getWatchable("speed"),pos.getWatchable("pos"));
+		dash2.watch(speed.getWatchable("speed"), pos.getWatchable("pos"));
 		dash2.watch(cont.getPIDTuner("jo"));
 	}
-
 
 	public static void update() {
 		dash2.publish(Watcher.DASHBOARD);
@@ -56,21 +56,7 @@ public class Tester {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		edu.wpi.first.wpilibj.Timer.SetImplementation(new TestTimer());
-		initNetworkTablesAsRobot();
-		HLUsageReporting.SetImplementation(new Interface() {
-			@Override
-			public void reportSmartDashboard() {
-			}
-
-			@Override
-			public void reportScheduler() {
-			}
-
-			@Override
-			public void reportPIDController(int num) {
-			}
-		});
+		initWPILib();
 		dash = new Watcher();
 		manager = new SystemManager();
 		scheduler = new CommandScheduler();
@@ -93,6 +79,24 @@ public class Tester {
 				Thread.sleep((long) (50 - 1000 * timer.get()));
 			}
 		}
+	}
+
+	public static void initWPILib() {
+		edu.wpi.first.wpilibj.Timer.SetImplementation(new TestTimer());
+		initNetworkTablesAsRobot();
+		HLUsageReporting.SetImplementation(new Interface() {
+			@Override
+			public void reportSmartDashboard() {
+			}
+
+			@Override
+			public void reportScheduler() {
+			}
+
+			@Override
+			public void reportPIDController(int num) {
+			}
+		});
 	}
 
 	static Timer timer;

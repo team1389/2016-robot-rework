@@ -4,9 +4,12 @@ import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.system.Subsystem;
 import com.team1389.util.AddList;
+import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
+
 /**
  * drive system that can turn in place
+ * 
  * @author Kenneth
  *
  */
@@ -14,6 +17,7 @@ public class TankDriveSystem extends Subsystem {
 	private DriveOut<Percent> output;
 	private PercentIn throttle;
 	private PercentIn wheel;
+
 	/**
 	 * 
 	 * @param output a percent controlled driveStream (can be speed or voltage)
@@ -25,7 +29,7 @@ public class TankDriveSystem extends Subsystem {
 		this.throttle = throttle;
 		this.wheel = wheel;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -33,6 +37,7 @@ public class TankDriveSystem extends Subsystem {
 	public void init() {
 
 	}
+
 	/**
 	 * update wheel and throttle values, then update output using those values
 	 */
@@ -42,6 +47,7 @@ public class TankDriveSystem extends Subsystem {
 		double y = throttle.get();
 		output.set(new DriveSignal(-y + x, -y - x));
 	}
+
 	/**
 	 * return key
 	 */
@@ -49,12 +55,14 @@ public class TankDriveSystem extends Subsystem {
 	public String getName() {
 		return "Tank Drive";
 	}
+
 	/**
 	 * add no watchables to stem
 	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return null;
+		return stem.put(wheel.getWatchable("wheel"), throttle.getWatchable("throttle"))
+				.put(output.getSubWatchables(CompositeWatchable.stem));
 	}
 
 }

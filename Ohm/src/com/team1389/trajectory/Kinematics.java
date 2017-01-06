@@ -14,7 +14,7 @@ public class Kinematics {
 	/**
 	 * @param trackLengthInches the distance from the front axle to the rear axle
 	 * @param trackWidthInches the width of the wheelbase
-	 * @param trackScrubFactor constant to deal with discrepancy between theoretical effectivDiam and actual effective diam
+	 * @param trackScrubFactor constant to deal with discrepancy between theoretical effectivDiam and actual effective diam, should be 1 for ideal scrub
 	 */
 	public Kinematics(double trackLengthInches, double trackWidthInches, double trackScrubFactor) {
 		this.kTrackLengthInches = trackLengthInches;
