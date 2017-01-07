@@ -2,7 +2,6 @@ package org.usfirst.frc.team1389.robot;
 
 import java.text.DecimalFormat;
 
-//import javax.swing.text.NumberFormatter; // Unused
 
 public class DoubleToStringFixedWidth {
 

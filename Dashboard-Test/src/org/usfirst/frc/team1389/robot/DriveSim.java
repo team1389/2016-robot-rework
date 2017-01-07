@@ -7,7 +7,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.team1389.system.drive.CheesyDriveSystem;
+import com.team1389.system.SystemManager;
+import com.team1389.system.drive.SimBotDriveSystem;
 import com.team1389.watch.Watcher;
 
 import input.SimJoystick;
@@ -29,8 +30,9 @@ public class DriveSim extends BasicGame {
 
 	SimRobot robot;
 	SimJoystick joy = new SimJoystick(1);
-	CheesyDriveSystem drive;
+	SimBotDriveSystem drive;
 	Watcher dash;
+	SystemManager manager=new SystemManager();
 	Image map;
 
 	@Override
@@ -48,14 +50,14 @@ public class DriveSim extends BasicGame {
 			e.printStackTrace();
 		}
 		robot = new SimRobot();
-		drive = new CheesyDriveSystem(robot.getDrive(), joy.getAxis(0).invert(), joy.getAxis(1).invert(),
-				joy.getButton(0));
+		drive = new SimBotDriveSystem(robot.getDrive(), joy.getAxis(0).invert().applyDeadband(.1), joy.getAxis(1).invert().applyDeadband(.1));
+		manager.register(drive);
 		dash.watch(drive);
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
-		drive.update();
+		manager.update();
 		dash.publish(Watcher.DASHBOARD);
 		robot.update(gc, delta);
 	}

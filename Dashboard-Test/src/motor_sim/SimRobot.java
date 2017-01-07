@@ -43,7 +43,6 @@ public class SimRobot {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		robot.setCenterOfRotation(34, 35);
 
 	}
 
@@ -52,7 +51,7 @@ public class SimRobot {
 		right.update();
 		state.addFieldToVehicleObservation(Timer.getFPGATimestamp(),
 				state.getLatestFieldToVehicle().getValue()
-						.transformBy(RigidTransform2d.fromVelocity(new Kinematics(20, 23, 1)
+						.transformBy(RigidTransform2d.fromVelocity(new Kinematics(10, 23, .8)
 								.forwardKinematics(leftIn.get() - leftDistance, rightIn.get() - rightDistance))));
 		leftDistance = leftIn.get();
 		rightDistance = rightIn.get();
@@ -69,7 +68,9 @@ public class SimRobot {
 		float renderX = 2 * (float) (trans.getX() + startX);
 		float renderY = 2 * (float) (trans.getY() + startY);
 		robot.setRotation((float) rot.getDegrees());
-		robot.drawCentered(renderX, renderY);
+		robot.setCenterOfRotation(34, 35);
+		robot.drawCentered(renderX,renderY);
+		g.fillOval(renderX-5, renderY-5, 10, 10);
 	}
 
 }
