@@ -7,8 +7,8 @@ import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.DigitalIn.InputFilter;
 import com.team1389.hardware.inputs.software.PercentIn;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.RumbleType;
 
 /**
  * offers stream sources for all values available from the WPILib joystick
