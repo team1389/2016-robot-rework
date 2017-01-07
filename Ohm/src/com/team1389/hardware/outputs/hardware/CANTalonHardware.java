@@ -2,6 +2,8 @@ package com.team1389.hardware.outputs.hardware;
 
 import java.util.Optional;
 
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.hardware.Hardware;
 import com.team1389.hardware.inputs.software.RangeIn;
@@ -17,9 +19,6 @@ import com.team1389.util.state.StateTracker;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.NumberInfo;
 import com.team1389.watch.info.StringInfo;
-
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 /**
  * This class offers input/output stream sources for a Talon SRX.
