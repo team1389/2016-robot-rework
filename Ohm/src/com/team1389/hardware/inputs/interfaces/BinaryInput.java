@@ -27,6 +27,12 @@ public interface BinaryInput extends Supplier<Boolean> {
 			return !in.get();
 		};
 	}
+	
+	public default BinaryInput invert(){
+		return () -> {
+			return !this.get();
+		};
+	}
 
 	/**
 	 * 
