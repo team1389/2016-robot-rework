@@ -1,21 +1,22 @@
 package org.usfirst.frc.team1389.robot;
 
+import java.util.List;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import com.team1389.hardware.inputs.interfaces.BinaryInput;
-import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.system.SystemManager;
-import com.team1389.system.drive.SimBotDriveSystem;
+import com.team1389.system.drive.SimboticsDriveSystem;
+import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
 
 import input.PCHardware;
-import input.SimJoystick;
 import motor_sim.SimRobot;
 import net.java.games.input.Component.Identifier.Key;
 
@@ -38,9 +39,10 @@ public class DriveSim extends BasicGame {
 	boolean pressed = false;
 	SimRobot robot;
 	//SimJoystick joy = new SimJoystick(1);
-	SimBotDriveSystem drive;
+	SimboticsDriveSystem drive;
+
 	Watcher dash;
-	SystemManager manager=new SystemManager();
+	SystemManager manager = new SystemManager();
 	Image map;
 
 	@Override
@@ -59,20 +61,27 @@ public class DriveSim extends BasicGame {
 			e.printStackTrace();
 		}
 		robot = new SimRobot();
-		drive = new SimBotDriveSystem(robot.getDrive(), new PercentIn(() -> 
+		drive = new SimboticsDriveSystem(robot.getDrive(), new PercentIn(() -> 
 		hardware.getKey(Key.UP).getLatched().get()? 0.5:
 				hardware.getKey(Key.DOWN).getLatched().get()? -0.5: 0.0
 		), 
 				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get()? 0.5:
 					hardware.getKey(Key.RIGHT).getLatched().get()? -.5: 0.0));
+
 		manager.register(drive);
 		dash.watch(drive);
 		
 	}
 
+	Input input;
+	List<Waypoint> points;
+
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		manager.update();
+		//if(input.isMousePressed(0)){
+		//	points.add(new Waypoint(new Translation2d(input.getMouseX(),input.getMouseY()),0));
+	//	}
 		dash.publish(Watcher.DASHBOARD);
 		robot.update(gc, delta);
 	}

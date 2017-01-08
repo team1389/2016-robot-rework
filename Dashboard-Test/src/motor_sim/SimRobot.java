@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.AngleOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.drive.DriveOut;
@@ -61,6 +62,12 @@ public class SimRobot {
 		return new DriveOut<Percent>(left.getVoltageOutput(), right.getVoltageOutput());
 	}
 
+	public AngleIn<Position> getHeadingIn() {
+
+		return new AngleIn<Position>(Position.class,
+				() -> state.getLatestFieldToVehicle().getValue().getRotation().getDegrees());
+	}
+
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		RigidTransform2d transform = state.getLatestFieldToVehicle().getValue();
 		Translation2d trans = transform.getTranslation();
@@ -69,8 +76,8 @@ public class SimRobot {
 		float renderY = 2 * (float) (trans.getY() + startY);
 		robot.setRotation((float) rot.getDegrees());
 		robot.setCenterOfRotation(34, 35);
-		robot.drawCentered(renderX,renderY);
-		g.fillOval(renderX-5, renderY-5, 10, 10);
+		robot.drawCentered(renderX, renderY);
+		g.fillOval(renderX - 5, renderY - 5, 10, 10);
 	}
 
 }
