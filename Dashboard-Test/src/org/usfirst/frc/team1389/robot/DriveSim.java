@@ -1,14 +1,18 @@
 package org.usfirst.frc.team1389.robot;
 
+import java.util.List;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import com.team1389.system.SystemManager;
 import com.team1389.system.drive.SimBotDriveSystem;
+import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
 
 import input.SimJoystick;
@@ -32,7 +36,7 @@ public class DriveSim extends BasicGame {
 	SimJoystick joy = new SimJoystick(1);
 	SimBotDriveSystem drive;
 	Watcher dash;
-	SystemManager manager=new SystemManager();
+	SystemManager manager = new SystemManager();
 	Image map;
 
 	@Override
@@ -50,14 +54,21 @@ public class DriveSim extends BasicGame {
 			e.printStackTrace();
 		}
 		robot = new SimRobot();
-		drive = new SimBotDriveSystem(robot.getDrive(), joy.getAxis(0).invert().applyDeadband(.1), joy.getAxis(1).invert().applyDeadband(.1));
+		drive = new SimBotDriveSystem(robot.getDrive(), joy.getAxis(0).invert().applyDeadband(.1),
+				joy.getAxis(1).invert().applyDeadband(.1));
 		manager.register(drive);
 		dash.watch(drive);
 	}
 
+	Input input;
+	List<Waypoint> points;
+
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		manager.update();
+		//if(input.isMousePressed(0)){
+		//	points.add(new Waypoint(new Translation2d(input.getMouseX(),input.getMouseY()),0));
+	//	}
 		dash.publish(Watcher.DASHBOARD);
 		robot.update(gc, delta);
 	}
