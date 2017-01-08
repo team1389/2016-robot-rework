@@ -1,4 +1,4 @@
-package input;
+package simulation.input;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.inputs.software.DigitalIn;

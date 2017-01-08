@@ -1,4 +1,4 @@
-package motor_sim;
+package simulation.motor;
 
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.value_types.Position;

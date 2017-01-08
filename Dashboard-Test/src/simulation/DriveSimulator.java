@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.robot;
+package simulation;
 
 import java.util.List;
 
@@ -16,20 +16,19 @@ import com.team1389.system.drive.SimboticsDriveSystem;
 import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
 
-import input.KeyboardHardware;
-import motor_sim.SimRobot;
 import net.java.games.input.Component.Identifier.Key;
+import simulation.input.KeyboardHardware;
 
-public class DriveSim extends BasicGame {
+public class DriveSimulator extends BasicGame {
 
-	public DriveSim(String title) {
+	public DriveSimulator(String title) {
 		super(title);
 
 	}
 
 	public static void main(String[] args) throws SlickException {
-		Tester.initWPILib();
-		DriveSim sim = new DriveSim("DriveSim");
+		Simulator.initWPILib();
+		DriveSimulator sim = new DriveSimulator("DriveSim");
 		AppGameContainer cont = new AppGameContainer(sim);
 		cont.setTargetFrameRate(50);
 		cont.setDisplayMode(1265, 622, false);
@@ -37,8 +36,8 @@ public class DriveSim extends BasicGame {
 	}
 
 	boolean pressed = false;
-	SimRobot robot;
-	//SimJoystick joy = new SimJoystick(1);
+	SimulationRobot robot;
+	// SimJoystick joy = new SimJoystick(1);
 	SimboticsDriveSystem drive;
 
 	Watcher dash;
@@ -60,17 +59,16 @@ public class DriveSim extends BasicGame {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		robot = new SimRobot();
-		drive = new SimboticsDriveSystem(robot.getDrive(), new PercentIn(() -> 
-		hardware.getKey(Key.UP).getLatched().get()? 0.5:
-				hardware.getKey(Key.DOWN).getLatched().get()? -0.5: 0.0
-		), 
-				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get()? 0.5:
-					hardware.getKey(Key.RIGHT).getLatched().get()? -.5: 0.0));
+		robot = new SimulationRobot();
+		drive = new SimboticsDriveSystem(robot.getDrive(),
+				new PercentIn(() -> hardware.getKey(Key.UP).getLatched().get() ? 0.5
+						: hardware.getKey(Key.DOWN).getLatched().get() ? -0.5 : 0.0),
+				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get() ? 0.5
+						: hardware.getKey(Key.RIGHT).getLatched().get() ? -.5 : 0.0));
 
 		manager.register(drive);
 		dash.watch(drive);
-		
+
 	}
 
 	Input input;
@@ -79,11 +77,12 @@ public class DriveSim extends BasicGame {
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		manager.update();
-		//if(input.isMousePressed(0)){
-		//	points.add(new Waypoint(new Translation2d(input.getMouseX(),input.getMouseY()),0));
-	//	}
+		// if(input.isMousePressed(0)){
+		// points.add(new Waypoint(new
+		// Translation2d(input.getMouseX(),input.getMouseY()),0));
+		// }
 		dash.publish(Watcher.DASHBOARD);
-		robot.update(gc, delta);
+		robot.update();
 	}
 
 }

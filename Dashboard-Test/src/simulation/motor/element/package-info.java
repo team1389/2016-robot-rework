@@ -5,4 +5,4 @@
  * @author amind
  *
  */
-package motor_sim.element;
+package simulation.motor.element;

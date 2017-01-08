@@ -1,4 +1,4 @@
-package motor_sim;
+package simulation.motor;
 
 public class Motor {
 	public final double stallTorque;

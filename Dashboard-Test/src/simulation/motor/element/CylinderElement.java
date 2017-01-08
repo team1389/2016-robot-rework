@@ -1,4 +1,4 @@
-package motor_sim.element;
+package simulation.motor.element;
 
 public class CylinderElement extends Element {
 

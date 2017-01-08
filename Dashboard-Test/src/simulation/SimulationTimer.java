@@ -1,9 +1,9 @@
-package org.usfirst.frc.team1389.robot;
+package simulation;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Timer.Interface;
 
-public class TestTimer implements Timer.StaticInterface{
+public class SimulationTimer implements Timer.StaticInterface{
 
 	@Override
 	public double getFPGATimestamp() {

@@ -1,4 +1,4 @@
-package input;
+package simulation.input;
 
 import com.team1389.hardware.inputs.software.DigitalIn;
 

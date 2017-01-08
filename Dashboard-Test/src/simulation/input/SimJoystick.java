@@ -1,4 +1,4 @@
-package input;
+package simulation.input;
 
 import java.util.Optional;
 

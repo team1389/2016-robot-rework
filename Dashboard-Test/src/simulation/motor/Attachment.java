@@ -1,7 +1,7 @@
-package motor_sim;
+package simulation.motor;
 
-import motor_sim.element.CylinderElement;
-import motor_sim.element.Element;
+import simulation.motor.element.CylinderElement;
+import simulation.motor.element.Element;
 
 public class Attachment {
 	public final static double GRAVITY_ACCEL = 9.8; // acceleration of gravity (m/s^2)

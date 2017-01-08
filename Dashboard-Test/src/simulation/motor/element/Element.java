@@ -1,4 +1,4 @@
-package motor_sim.element;
+package simulation.motor.element;
 
 public abstract class Element {
 	public final double mass, moment, centerOfMass;

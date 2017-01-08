@@ -1,6 +1,6 @@
-package motor_sim;
+package simulation.motor;
 
-import motor_sim.element.Element;
+import simulation.motor.element.Element;
 
 public class LinearAttachment extends Attachment {
 

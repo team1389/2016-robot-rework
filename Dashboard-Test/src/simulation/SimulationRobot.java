@@ -1,4 +1,4 @@
-package motor_sim;
+package simulation;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -7,7 +7,6 @@ import org.newdawn.slick.SlickException;
 
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.RangeIn;
-import com.team1389.hardware.outputs.software.AngleOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.drive.DriveOut;
@@ -18,10 +17,13 @@ import com.team1389.trajectory.Rotation2d;
 import com.team1389.trajectory.Translation2d;
 
 import edu.wpi.first.wpilibj.Timer;
-import motor_sim.Motor.MotorType;
-import motor_sim.element.CylinderElement;
+import simulation.motor.Attachment;
+import simulation.motor.Motor;
+import simulation.motor.MotorSystem;
+import simulation.motor.Motor.MotorType;
+import simulation.motor.element.CylinderElement;
 
-public class SimRobot {
+public class SimulationRobot {
 	Image robot;
 	MotorSystem left = new MotorSystem(new Attachment(new CylinderElement(.51, .097), false), 6,
 			new Motor(MotorType.CIM));
@@ -37,7 +39,7 @@ public class SimRobot {
 	double startX = 250;
 	double startY = 250;
 
-	public SimRobot() {
+	public SimulationRobot() {
 		state.reset(Timer.getFPGATimestamp(), new RigidTransform2d(new Translation2d(), new Rotation2d()));
 		try {
 			robot = new Image("robot.png").getScaledCopy(68, 70);
@@ -47,7 +49,7 @@ public class SimRobot {
 
 	}
 
-	public void update(GameContainer gc, int delta) {
+	public void update() {
 		left.update();
 		right.update();
 		state.addFieldToVehicleObservation(Timer.getFPGATimestamp(),
@@ -79,5 +81,4 @@ public class SimRobot {
 		robot.drawCentered(renderX, renderY);
 		g.fillOval(renderX - 5, renderY - 5, 10, 10);
 	}
-
 }
