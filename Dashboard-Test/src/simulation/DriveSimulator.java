@@ -65,7 +65,6 @@ public class DriveSimulator extends BasicGame {
 						: hardware.getKey(Key.DOWN).getLatched().get() ? -0.5 : 0.0),
 				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get() ? 0.5
 						: hardware.getKey(Key.RIGHT).getLatched().get() ? -.5 : 0.0));
-
 		manager.register(drive);
 		dash.watch(drive);
 
