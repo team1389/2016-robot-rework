@@ -1,29 +1,25 @@
 package input;
-import com.team1389.hardware.inputs.hardware.Timer;
-import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.PercentIn;
 
-public class Axis {
-	static final double kChangeRate = .05;
-	Timer timer;
-	double val;
+import com.team1389.hardware.inputs.interfaces.ScalarInput;
+import com.team1389.hardware.inputs.software.DigitalIn;
+import com.team1389.hardware.value_types.Percent;
+
+import net.java.games.input.Component.Identifier.Key;
+
+public class Axis implements ScalarInput<Percent> {
+	double scale;
+	private KeyboardHardware keyboard;
 	DigitalIn up;
 	DigitalIn down;
 
-	public Axis(DigitalIn up, DigitalIn down) {
-		this.up = up;
-		this.down = down;
-		timer = new Timer();
+	public Axis(Key up, Key down, double scale) {
+		this.keyboard = new KeyboardHardware();
+		this.up = keyboard.getKey(up).getLatched();
+		this.down = keyboard.getKey(down).getLatched();
+		this.scale = scale;
 	}
 
-	public PercentIn getVal() {
-		return new PercentIn(() -> {
-			if (up.get())
-				val += kChangeRate * timer.get();
-			if (down.get())
-				val -= kChangeRate * timer.get();
-			timer.zero();
-			return val;
-		}).clamp();
+	public Double get() {
+		return scale * (up.get() ? 1 : down.get() ? -1 : 0);
 	}
 }

@@ -16,7 +16,7 @@ import com.team1389.system.drive.SimboticsDriveSystem;
 import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
 
-import input.PCHardware;
+import input.KeyboardHardware;
 import motor_sim.SimRobot;
 import net.java.games.input.Component.Identifier.Key;
 
@@ -53,7 +53,7 @@ public class DriveSim extends BasicGame {
 
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
-		PCHardware hardware = new PCHardware();
+		KeyboardHardware hardware = new KeyboardHardware();
 		dash = new Watcher();
 		try {
 			map = new Image("map.png");
