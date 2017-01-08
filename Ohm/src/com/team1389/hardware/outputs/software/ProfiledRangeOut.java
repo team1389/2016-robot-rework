@@ -1,8 +1,8 @@
 package com.team1389.hardware.outputs.software;
 
-import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.outputs.interfaces.ScalarOutput;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.util.Timer;
 /**
  * a stream of doubles with a range with methods dealing with setpoint
  * @author Kenneth 

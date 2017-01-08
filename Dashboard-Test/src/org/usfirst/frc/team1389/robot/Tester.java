@@ -4,7 +4,6 @@ import com.team1389.command_framework.CommandScheduler;
 import com.team1389.control.SmoothSetController;
 import com.team1389.control.SynchronousPIDController;
 import com.team1389.hardware.inputs.hardware.DashboardScalarInput;
-import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
@@ -13,6 +12,7 @@ import com.team1389.hardware.value_types.Speed;
 //import com.team1389.hardware.value_types.Speed; // Unused
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.SystemManager;
+import com.team1389.util.Timer;
 import com.team1389.watch.Watcher;
 
 import edu.wpi.first.wpilibj.HLUsageReporting;

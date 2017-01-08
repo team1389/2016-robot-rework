@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.team1389.hardware.inputs.hardware.Timer;
+import com.team1389.util.Timer;
 
 /**
  * handles logging to a specific given file

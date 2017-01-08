@@ -1,6 +1,6 @@
 package com.team1389.auto.command;
 
-import com.team1389.hardware.inputs.hardware.TimedBoolean;
+import com.team1389.util.TimedBoolean;
 /**
  * This command waits a given time
  * @author Kenneth

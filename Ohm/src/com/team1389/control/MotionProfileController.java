@@ -1,12 +1,12 @@
 package com.team1389.control;
 
-import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.motion_profile.MotionProfile;
+import com.team1389.util.Timer;
 
 /**
  * a controller that uses PID to follow motion profiles

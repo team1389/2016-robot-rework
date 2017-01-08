@@ -1,9 +1,9 @@
 package motor_sim;
 
-import com.team1389.hardware.inputs.hardware.Timer;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.util.Timer;
 
 public abstract class RotationSim {
 	private static final double FRICTION_TORQUE = .1;
