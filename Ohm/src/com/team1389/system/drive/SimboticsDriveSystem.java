@@ -7,7 +7,14 @@ import com.team1389.util.AddList;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
 
-public class SimBotDriveSystem extends Subsystem {
+/**
+ * implements a tank drive system that uses bezier curves to improve joystick
+ * responsiveness. Developed by team 1114, Simbotics
+ * 
+ * @author amind
+ *
+ */
+public class SimboticsDriveSystem extends Subsystem {
 	private DriveOut<Percent> output;
 	private PercentIn throttle;
 	private PercentIn wheel;
@@ -17,11 +24,14 @@ public class SimBotDriveSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param output a percent controlled driveStream (can be speed or voltage)
-	 * @param throttle percent of desired speed (forward/back)
-	 * @param wheel percent of desired turning to (l/r)
+	 * @param output
+	 *            a percent controlled driveStream (can be speed or voltage)
+	 * @param throttle
+	 *            percent of desired speed (forward/back)
+	 * @param wheel
+	 *            percent of desired turning to (l/r)
 	 */
-	public SimBotDriveSystem(DriveOut<Percent> output, PercentIn throttle, PercentIn wheel) {
+	public SimboticsDriveSystem(DriveOut<Percent> output, PercentIn throttle, PercentIn wheel) {
 		this.output = output;
 		this.throttle = throttle;
 		this.wheel = wheel;

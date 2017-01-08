@@ -11,7 +11,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import com.team1389.system.SystemManager;
-import com.team1389.system.drive.SimBotDriveSystem;
+import com.team1389.system.drive.SimboticsDriveSystem;
 import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
 
@@ -34,7 +34,7 @@ public class DriveSim extends BasicGame {
 
 	SimRobot robot;
 	SimJoystick joy = new SimJoystick(1);
-	SimBotDriveSystem drive;
+	SimboticsDriveSystem drive;
 	Watcher dash;
 	SystemManager manager = new SystemManager();
 	Image map;
@@ -54,7 +54,7 @@ public class DriveSim extends BasicGame {
 			e.printStackTrace();
 		}
 		robot = new SimRobot();
-		drive = new SimBotDriveSystem(robot.getDrive(), joy.getAxis(0).invert().applyDeadband(.1),
+		drive = new SimboticsDriveSystem(robot.getDrive(), joy.getAxis(0).invert().applyDeadband(.1),
 				joy.getAxis(1).invert().applyDeadband(.1));
 		manager.register(drive);
 		dash.watch(drive);
