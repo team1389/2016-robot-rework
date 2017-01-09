@@ -2,6 +2,7 @@ package simulation.input;
 
 import com.team1389.hardware.inputs.interfaces.ScalarInput;
 import com.team1389.hardware.inputs.software.DigitalIn;
+import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
 
 import net.java.games.input.Component.Identifier.Key;
@@ -21,5 +22,8 @@ public class Axis implements ScalarInput<Percent> {
 
 	public Double get() {
 		return scale * (up.get() ? 1 : down.get() ? -1 : 0);
+	}
+	public static PercentIn make(Key up, Key down, double scale){
+		return new PercentIn(new Axis(up,down,scale)::get);
 	}
 }

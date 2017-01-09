@@ -19,7 +19,6 @@ import com.team1389.system.drive.PathFollowingSystem;
 import com.team1389.system.drive.SimboticsDriveSystem;
 import com.team1389.trajectory.Path;
 import com.team1389.trajectory.Path.Waypoint;
-import com.team1389.trajectory.RobotStateEstimator;
 import com.team1389.trajectory.Translation2d;
 import com.team1389.util.RangeUtil;
 import com.team1389.watch.Watcher;
@@ -57,8 +56,6 @@ public class DriveSimulator extends BasicGame {
 		map.draw(0, 0, 1265, 622);
 		robot.render(container, g);
 		g.setColor(Color.black);
-		g.fillOval((float) state.get().getTranslation().getX() - 5, (float) state.get().getTranslation().getY() - 5, 10,
-				10);
 		points.forEach(p -> g.fillOval((float) p.position.getX() - 5, (float) p.position.getY() - 5, 10, 10));
 	}
 
@@ -93,7 +90,6 @@ public class DriveSimulator extends BasicGame {
 
 	}
 
-	RobotStateEstimator state;
 	Input input;
 	List<Waypoint> points;
 	PathFollowingSystem apps;
