@@ -62,14 +62,14 @@ public class DriveSimulator extends BasicGame {
 			e.printStackTrace();
 		}
 		ArrayList<Line> lines = new ArrayList<Line>();
-		int buffer = 5;
+		int buffer = 0;
 		lines.add(new Line(buffer, buffer, buffer, 622 - buffer));
 		lines.add(new Line(buffer, 622 - buffer, 1265 - buffer, 622 - buffer));
 		lines.add(new Line(1265 - buffer, 622 - buffer, 1265 - buffer, buffer));
 		lines.add(new Line(1265 - buffer, buffer, buffer, buffer));
 		lines.add(new Line(700,0, 700, 1265));
 
-		robot = new SimulationRobot(lines, false);
+		robot = new SimulationRobot(lines, true);
 		drive = new SimboticsDriveSystem(robot.getDrive(),
 				new PercentIn(() -> hardware.getKey(Key.UP).getLatched().get() ? 0.5
 						: hardware.getKey(Key.DOWN).getLatched().get() ? -0.5 : 0.0),

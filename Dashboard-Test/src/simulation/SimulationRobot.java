@@ -71,6 +71,7 @@ public class SimulationRobot {
 		this(new ArrayList<Line>());
 	}
 
+	private Vector2f extraTranslate = null;
 	public void update() {
 
 		left.update();
@@ -83,13 +84,20 @@ public class SimulationRobot {
 		rightDistance = rightIn.get();
 
 		boolean intersects = false;
-		for(Line l : boundries){
+		System.out.println(getTransform().getTranslation().getY() + " " + getY());
 
-			if(findDistanceToTranslate(l) != null){
-				intersects = true;
-				break;
+		for(Line l : boundries){
+			Vector2f translate = findDistanceToTranslate(l);
+			if(translate != null){
+				//System.out.print(translate.y/translate.x + " ");
+				double tan = Math.tan(getTransform().getRotation().getRadians());
+				translate = new Vector2f(translate.x, (float) (Math.signum(translate.y) * (Math.abs(translate.x * tan))));
+				extraTranslate = translate.scale(-1).add(extraTranslate != null? extraTranslate: new Vector2f(0,0));
+				//System.out.println(translate.y / translate.x + " " + tan);
+				//System.out.println(getY());
 			}
 		}
+
 
 	}
 
@@ -132,13 +140,12 @@ public class SimulationRobot {
 
 	private float getX(){
 		Translation2d trans = getTransform().getTranslation();
-		return 2 * (float) (trans.getX() + startX);
+		return 2 * (float) (trans.getX() + startX)  + (extraTranslate != null? extraTranslate.x : 0);
 	}
-
 
 	private float getY(){
 		Translation2d trans = getTransform().getTranslation();
-		return 2 * (float) (trans.getY() + startY);
+		return 2 * (float) (trans.getY() + startY) + (extraTranslate != null? extraTranslate.y : 0);
 	}
 
 	private RigidTransform2d getTransform(){
@@ -154,7 +161,10 @@ public class SimulationRobot {
 		robot.setRotation((float) rot.getDegrees());
 		robot.setCenterOfRotation(34, 35);
 		robot.drawCentered(renderX, renderY);
+		g.setColor(Color.white);
+		g.fillOval(renderX - 5, renderY - 5, 10, 10);
 
+		
 		if(drawLines){
 			g.setLineWidth(2);
 			g.setColor(Color.orange);
@@ -177,16 +187,10 @@ public class SimulationRobot {
 
 
 
-		g.setColor(Color.white);
-		g.rotate(renderX, renderY, (float) rot.getDegrees());
-		g.fillOval(renderX - 5, renderY - 5, 10, 10);
-		g.setLineWidth(1);
-		g.setColor(Color.pink);
 
 
 
 		if(drawLines){
-			g.rotate(renderX, renderY, (float) -rot.getDegrees());
 			g.setLineWidth(4);
 			if(toPrint != null){
 				g.setColor(Color.magenta);
@@ -196,7 +200,7 @@ public class SimulationRobot {
 			toPrint = null;
 		}
 
-
+		//extraTranslate = null;
 
 	}
 
