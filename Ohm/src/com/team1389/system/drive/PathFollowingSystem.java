@@ -3,24 +3,29 @@ package com.team1389.system.drive;
 import java.util.Set;
 
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.system.Subsystem;
 import com.team1389.trajectory.AdaptivePurePursuitController;
 import com.team1389.trajectory.Kinematics;
 import com.team1389.trajectory.Path;
 import com.team1389.trajectory.RigidTransform2d;
 import com.team1389.trajectory.RobotStateEstimator;
+import com.team1389.util.AddList;
+import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Timer;
 
 /**
- * drive system that follows paths autonomously using the Adaptive Pure Pursuit Controller
+ * drive system that follows paths autonomously using the Adaptive Pure Pursuit
+ * Controller
  * 
  * @see AdaptivePurePursuitController
  * @author amind
  *
  */
-public class PathFollowingSystem {
+public class PathFollowingSystem extends Subsystem {
 	/**
-	 * the default distance to look down the path for the Adaptive Pure Pursuit Controller
+	 * the default distance to look down the path for the Adaptive Pure Pursuit
+	 * Controller
 	 * 
 	 * @see AdaptivePurePursuitController
 	 */
@@ -37,51 +42,65 @@ public class PathFollowingSystem {
 
 	/**
 	 * 
-	 * @param drive a speed controlled drive stream
-	 * @param state a state stream for the robot
-	 * @param maxVel in inches/sec
-	 * @param maxAccel in inches/sec^2
-	 * @param trackWidth in inches
-	 * @param trackLength in inches
-	 * @param scrub in inches
+	 * @param drive
+	 *            a speed controlled drive stream
+	 * @param state
+	 *            a state stream for the robot
+	 * @param maxVel
+	 *            in inches/sec
+	 * @param maxAccel
+	 *            in inches/sec^2
+	 * @param trackWidth
+	 *            in inches
+	 * @param trackLength
+	 *            in inches
+	 * @param scrub
+	 *            in inches
 	 */
-	public PathFollowingSystem(DriveOut<Speed> drive, RobotStateEstimator state, double maxVel, double maxAccel,
-			double trackWidth, double trackLength, double scrub) {
+	public PathFollowingSystem(DriveOut<Speed> drive, RobotStateEstimator state, double maxVel, double maxAccel) {
 		this.drive = drive;
 		this.state = state;
-		this.kinematics = new Kinematics(trackLength, trackWidth, scrub);
+		this.maxAccel=maxAccel;
+		this.maxVel=maxVel;
+		this.kinematics = state.getKinematics();
 	}
 
 	/**
 	 * The robot follows a set path, which is defined by Waypoint objects.
 	 * 
-	 * @param path the path to follow
-	 * @param reversed whether to follow the path in reverse
+	 * @param path
+	 *            the path to follow
+	 * @param reversed
+	 *            whether to follow the path in reverse
 	 * @see Path
 	 */
 	public synchronized void followPath(Path path, boolean reversed) {
 		pathFollowingController = new AdaptivePurePursuitController(PATH_LOOKAHEAD, maxAccel, UPDATE_DT, path, reversed,
-				0.25);
+				0.00);
 	}
 
 	/**
-	 * @return a list of identifiers for the waypoints that have been crossed so far
+	 * @return a list of identifiers for the waypoints that have been crossed so
+	 *         far
 	 */
 	public synchronized Set<String> getPathMarkersCrossed() {
 		return pathFollowingController.getMarkersCrossed();
 	}
 
 	/**
-	 * @return Returns if the robot mode is Path Following Control and the set path is complete.
+	 * @return Returns if the robot mode is Path Following Control and the set
+	 *         path is complete.
 	 */
 	public synchronized boolean isFinishedPath() {
-		return pathFollowingController.isDone();
+		return pathFollowingController == null || pathFollowingController.isDone();
 	}
 
 	/**
-	 * updates the pathFollower, setting the speeds of the wheels based on the robot's current pose
+	 * updates the pathFollower, setting the speeds of the wheels based on the
+	 * robot's current pose
 	 */
 	public void update() {
+
 		RigidTransform2d robotPose = state.get();
 		RigidTransform2d.Delta desiredRobotVelocity = pathFollowingController.calculate(robotPose,
 				Timer.getFPGATimestamp());
@@ -97,6 +116,21 @@ public class PathFollowingSystem {
 					desiredWheelSpeeds.right * scaling);
 		}
 		drive.set(desiredWheelSpeeds.left, desiredWheelSpeeds.right);
+	}
+
+	@Override
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(drive);
+	}
+
+	@Override
+	public String getName() {
+		return "APPS";
+	}
+
+	@Override
+	public void init() {
+
 	}
 
 }

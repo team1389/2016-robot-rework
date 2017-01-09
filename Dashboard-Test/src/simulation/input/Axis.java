@@ -14,8 +14,8 @@ public class Axis implements ScalarInput<Percent> {
 
 	public Axis(Key up, Key down, double scale) {
 		this.keyboard = new KeyboardHardware();
-		this.up = keyboard.getKey(up).getLatched();
-		this.down = keyboard.getKey(down).getLatched();
+		this.up = keyboard.getKey(up);
+		this.down = keyboard.getKey(down);
 		this.scale = scale;
 	}
 

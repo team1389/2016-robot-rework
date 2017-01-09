@@ -19,6 +19,7 @@ public class SimJoystick {
 
 	public SimJoystick(int port, Controller.Type... types) {
 		Controller[] controllers = JInputUtil.findAll(types);
+		System.out.println(controllers.length+" "+port);
 		if (port < controllers.length) {
 			this.controller = Optional.of(MappedController.mapController(controllers[port]));
 		} else {

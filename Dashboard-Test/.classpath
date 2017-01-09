@@ -13,13 +13,12 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/slick/lib/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Dashboard-Test/libs/lwjgl/lwjgl-2.9.3/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Simulator-Ohm/libs/lwjgl/lwjgl-2.9.3/native/windows"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/slick/lib/slick.jar"/>
 	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
 	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
 	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/TalonSRXLibJava.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
