@@ -49,11 +49,11 @@ public class SimulationRobot {
 	double startX = 250;
 	double startY = 250;
 	ArrayList<Line> boundries;
-	private boolean drawLines = false;
-	
-	public SimulationRobot(ArrayList<Line> boundries, boolean drawLines){
+	private boolean collision = false;
+
+	public SimulationRobot(ArrayList<Line> boundries, boolean collision){
 		this(boundries);
-		this.drawLines = drawLines;
+		this.collision = collision;
 	}
 
 	public SimulationRobot(ArrayList<Line> boundries) {
@@ -83,12 +83,13 @@ public class SimulationRobot {
 		leftDistance = leftIn.get();
 		rightDistance = rightIn.get();
 
-		
 
-		for(Line l : boundries){
-			Vector2f translate = findDistanceToTranslate(l);
-			if(translate != null){
-				extraTranslate = translate.scale(-1).add(extraTranslate != null? extraTranslate: new Vector2f(0,0));
+		if(collision){
+			for(Line l : boundries){
+				Vector2f translate = findDistanceToTranslate(l);
+				if(translate != null){
+					extraTranslate = translate.scale(-1).add(extraTranslate != null? extraTranslate: new Vector2f(0,0));
+				}
 			}
 		}
 
@@ -165,8 +166,7 @@ public class SimulationRobot {
 		g.setColor(Color.white);
 		g.fillOval(renderX - 5, renderY - 5, 10, 10);
 
-		
-		if(drawLines){
+		if(collision){
 			g.setLineWidth(2);
 			g.setColor(Color.orange);
 			for(Line l : boundries){
@@ -183,12 +183,7 @@ public class SimulationRobot {
 
 		}
 
-
-
-
-
-
-		if(drawLines){
+		if(collision){
 			g.setLineWidth(4);
 			if(toPrint != null){
 				g.setColor(Color.magenta);
@@ -196,13 +191,14 @@ public class SimulationRobot {
 				g.fillOval(tp.getX() - 5, tp.getY() - 5, 10, 10);
 			}
 			toPrint = null;
+			
+			for(Line l : getWheelLines()){
+				g.setColor(Color.cyan);
+				g.draw(l);
+			}
 		}
 
-		for(Line l : getWheelLines()){
-			g.setColor(Color.cyan);
-			g.draw(l);
-		}
-		//extraTranslate = null;
+		
 
 	}
 
@@ -219,7 +215,7 @@ public class SimulationRobot {
 		r = (Polygon) r.transform(Transform.createRotateTransform((float) rot.getRadians(), renderX, renderY));
 		return r;
 	}
-	
+
 	private Line[] getWheelLines(){
 		Rotation2d rot = getTransform().getRotation();
 		float renderX = getX();
