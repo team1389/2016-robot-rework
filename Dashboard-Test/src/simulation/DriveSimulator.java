@@ -1,5 +1,6 @@
 package simulation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.AppGameContainer;
@@ -9,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Line;
 
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.system.SystemManager;
@@ -59,7 +61,15 @@ public class DriveSimulator extends BasicGame {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		robot = new SimulationRobot();
+		ArrayList<Line> lines = new ArrayList<Line>();
+		int buffer = 5;
+		lines.add(new Line(buffer, buffer, buffer, 622 - buffer));
+		lines.add(new Line(buffer, 622 - buffer, 1265 - buffer, 622 - buffer));
+		lines.add(new Line(1265 - buffer, 622 - buffer, 1265 - buffer, buffer));
+		lines.add(new Line(1265 - buffer, buffer, buffer, buffer));
+		lines.add(new Line(700,0, 700, 1265));
+
+		robot = new SimulationRobot(lines, false);
 		drive = new SimboticsDriveSystem(robot.getDrive(),
 				new PercentIn(() -> hardware.getKey(Key.UP).getLatched().get() ? 0.5
 						: hardware.getKey(Key.DOWN).getLatched().get() ? -0.5 : 0.0),
