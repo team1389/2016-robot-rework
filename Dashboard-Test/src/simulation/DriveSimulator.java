@@ -14,6 +14,7 @@ import org.newdawn.slick.geom.Line;
 
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.system.SystemManager;
+import com.team1389.system.drive.FieldOrientedDriveSystem;
 import com.team1389.system.drive.SimboticsDriveSystem;
 import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
@@ -40,7 +41,7 @@ public class DriveSimulator extends BasicGame {
 	boolean pressed = false;
 	SimulationRobot robot;
 	// SimJoystick joy = new SimJoystick(1);
-	SimboticsDriveSystem drive;
+	FieldOrientedDriveSystem drive;
 
 	Watcher dash;
 	SystemManager manager = new SystemManager();
@@ -70,11 +71,12 @@ public class DriveSimulator extends BasicGame {
 		lines.add(new Line(700,0, 700, 1265));
 
 		robot = new SimulationRobot(lines, false);
-		drive = new SimboticsDriveSystem(robot.getDrive(),
-				new PercentIn(() -> hardware.getKey(Key.UP).getLatched().get() ? 0.5
-						: hardware.getKey(Key.DOWN).getLatched().get() ? -0.5 : 0.0),
-				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get() ? 0.5
-						: hardware.getKey(Key.RIGHT).getLatched().get() ? -.5 : 0.0));
+		drive = new FieldOrientedDriveSystem(robot.getDrive(), new PercentIn(() -> 
+		hardware.getKey(Key.UP).getLatched().get()? 0.5:
+				hardware.getKey(Key.DOWN).getLatched().get()? -0.5: 0.0
+		), 
+				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get()? 0.5:
+					hardware.getKey(Key.RIGHT).getLatched().get()? -.5: 0.0), robot.getHeadingIn());
 		manager.register(drive);
 		dash.watch(drive);
 
