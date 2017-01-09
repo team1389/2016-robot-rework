@@ -83,43 +83,44 @@ public class SimulationRobot {
 		leftDistance = leftIn.get();
 		rightDistance = rightIn.get();
 
-		boolean intersects = false;
-		System.out.println(getTransform().getTranslation().getY() + " " + getY());
+		
 
 		for(Line l : boundries){
 			Vector2f translate = findDistanceToTranslate(l);
 			if(translate != null){
-				//System.out.print(translate.y/translate.x + " ");
-				double tan = Math.tan(getTransform().getRotation().getRadians());
-				translate = new Vector2f(translate.x, (float) (Math.signum(translate.y) * (Math.abs(translate.x * tan))));
 				extraTranslate = translate.scale(-1).add(extraTranslate != null? extraTranslate: new Vector2f(0,0));
-				//System.out.println(translate.y / translate.x + " " + tan);
-				//System.out.println(getY());
 			}
 		}
 
 
 	}
 
-	Line[] someLines = null;
+	Line someLine = null;
 	Line toPrint = null;
 	Point tp = null;
 	private Vector2f findDistanceToTranslate(Line l) {
-		float[] points = getBoundingBox().getPoints();
-		Line[] lines = new Line[points.length / 2];
-		for(int i = 0; i < points.length; i+=2){
-			lines[i / 2] = new Line(getX(), getY(), points[i], points[i + 1]);
-			Vector2f poi = lines[i / 2].intersect(l, true);
+		for(Line wheelLine : getWheelLines()){
+			Vector2f poi = wheelLine.intersect(l, true);
 			if(poi != null){
-				float dx = points[i] - poi.x;
-				float dy = points[i + 1] - poi.y;
+				Vector2f one = new Vector2f(wheelLine.getX1(), wheelLine.getY1());
+				Vector2f two = new Vector2f(wheelLine.getX2(), wheelLine.getY2());
+				Vector2f opperating;
+				if(l.intersect(new Line(one, new Vector2f(getX(), getY())), true) != null){
+					opperating = one;
+				}
+				else{
+					opperating = two;
+				}
+
+				float dx = opperating.x - poi.x;
+				float dy = opperating.y - poi.y;
 				tp = new Point(poi.x, poi.y);
 				toPrint = new Line(poi.x, poi.y, poi.x + dx, poi.y + dy);
+				someLine = new Line(opperating, new Vector2f(getX(), getY()));
 				return new Vector2f(dx, dy);
 			}
 
 		}
-		someLines = lines;
 		return null;
 
 	}
@@ -174,13 +175,10 @@ public class SimulationRobot {
 
 
 			g.draw(getBoundingBox());
-			if(someLines != null){
+			if(someLine != null){
 				g.setColor(Color.green);
-				for(Line l : someLines){
-					if(l != null)
-						g.draw(l);
-				}
-				someLines = null;
+				g.draw(someLine);
+				someLine = null;
 			}
 
 		}
@@ -200,6 +198,10 @@ public class SimulationRobot {
 			toPrint = null;
 		}
 
+		for(Line l : getWheelLines()){
+			g.setColor(Color.cyan);
+			g.draw(l);
+		}
 		//extraTranslate = null;
 
 	}
@@ -216,5 +218,18 @@ public class SimulationRobot {
 
 		r = (Polygon) r.transform(Transform.createRotateTransform((float) rot.getRadians(), renderX, renderY));
 		return r;
+	}
+	
+	private Line[] getWheelLines(){
+		Rotation2d rot = getTransform().getRotation();
+		float renderX = getX();
+		float renderY = getY();
+		Line one = new Line(renderX + robot.getWidth() / 2, renderY + robot.getHeight() / 2, 
+				renderX - robot.getWidth() / 2, renderY + robot.getHeight() / 2);
+		Line two = new Line(renderX + robot.getWidth() / 2, renderY - robot.getHeight() / 2, 
+				renderX - robot.getWidth() / 2, renderY - robot.getHeight() / 2);
+		one = (Line) one.transform(Transform.createRotateTransform((float) rot.getRadians(), renderX , renderY));
+		two = (Line) two.transform(Transform.createRotateTransform((float) rot.getRadians(), renderX, renderY));
+		return new Line[]{one, two};
 	}
 }

@@ -67,7 +67,6 @@ public class DriveSimulator extends BasicGame {
 		lines.add(new Line(buffer, 622 - buffer, 1265 - buffer, 622 - buffer));
 		lines.add(new Line(1265 - buffer, 622 - buffer, 1265 - buffer, buffer));
 		lines.add(new Line(1265 - buffer, buffer, buffer, buffer));
-		lines.add(new Line(700,0, 700, 1265));
 
 		robot = new SimulationRobot(lines, true);
 		drive = new SimboticsDriveSystem(robot.getDrive(),
