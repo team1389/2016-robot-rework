@@ -11,11 +11,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Line;
 
 import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.value_types.Speed;
 import com.team1389.system.SystemManager;
-import com.team1389.system.drive.DriveOut;
 import com.team1389.system.drive.PathFollowingSystem;
 import com.team1389.system.drive.SimboticsDriveSystem;
 import com.team1389.trajectory.Path;
@@ -25,7 +24,8 @@ import com.team1389.trajectory.Translation2d;
 import com.team1389.util.RangeUtil;
 import com.team1389.watch.Watcher;
 
-import simulation.input.SimJoystick;
+import net.java.games.input.Component.Identifier.Key;
+import simulation.input.Axis;
 
 public class DriveSimulator extends BasicGame {
 
@@ -45,7 +45,7 @@ public class DriveSimulator extends BasicGame {
 
 	boolean pressed = false;
 	SimulationRobot robot;
-	SimJoystick joy = new SimJoystick(0);
+	// SimJoystick joy = new SimJoystick(1);
 	SimboticsDriveSystem drive;
 
 	Watcher dash;
@@ -57,7 +57,8 @@ public class DriveSimulator extends BasicGame {
 		map.draw(0, 0, 1265, 622);
 		robot.render(container, g);
 		g.setColor(Color.black);
-		g.fillOval((float) state.get().getTranslation().getX() - 5, (float) state.get().getTranslation().getY() - 5, 10, 10);
+		g.fillOval((float) state.get().getTranslation().getX() - 5, (float) state.get().getTranslation().getY() - 5, 10,
+				10);
 		points.forEach(p -> g.fillOval((float) p.position.getX() - 5, (float) p.position.getY() - 5, 10, 10));
 	}
 
@@ -76,18 +77,22 @@ public class DriveSimulator extends BasicGame {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		robot = new SimulationRobot();
-		state = new RobotStateEstimator(robot.state, robot.leftIn, robot.rightIn, robot.left.getSpeedInput(),
-				robot.right.getSpeedInput(), robot.gyro, robot.kinematics);
-		apps = new PathFollowingSystem(new DriveOut<Speed>(robot.leftSpeed, robot.rightSpeed),
-				state,
-				10000, 500000);
-		drive = new SimboticsDriveSystem(robot.getDrive(), joy.getAxis(0).applyDeadband(0.1).invert(),
-				joy.getAxis(1).applyDeadband(0.1).invert());
-		manager.register(apps);
-		dash.watch(apps);
+		ArrayList<Line> lines = new ArrayList<Line>();
+		int buffer = 5;
+		lines.add(new Line(buffer, buffer, buffer, 622 - buffer));
+		lines.add(new Line(buffer, 622 - buffer, 1265 - buffer, 622 - buffer));
+		lines.add(new Line(1265 - buffer, 622 - buffer, 1265 - buffer, buffer));
+		lines.add(new Line(1265 - buffer, buffer, buffer, buffer));
+		lines.add(new Line(700, 0, 700, 1265));
+
+		robot = new SimulationRobot(lines, false);
+		drive = new SimboticsDriveSystem(robot.getDrive(), Axis.make(Key.UP, Key.DOWN, 0.5),
+				Axis.make(Key.LEFT, Key.RIGHT, 0.5));
+		manager.register(drive);
+		dash.watch(drive);
 
 	}
+
 	RobotStateEstimator state;
 	Input input;
 	List<Waypoint> points;

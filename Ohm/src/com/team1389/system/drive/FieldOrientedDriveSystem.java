@@ -35,13 +35,13 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 * @param override to override some fieldOriented() functions
 	 * @param nonGyro to override all fielOriented() functions
 	 */
-	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn<Position> gyro,
-			DigitalIn override, DigitalIn nonGyro) {
+	public FieldOrientedDriveSystem(DriveOut<Percent> drive, PercentIn throttleX, PercentIn throttleY, AngleIn<Position> gyro/*,
+			DigitalIn override, DigitalIn nonGyro*/) {
 		this.throttleX = throttleX;
 		this.throttleY = throttleY;
 		this.gyro = gyro;
-		this.override = override;
-		this.nonGyro = nonGyro;
+		//this.override = override;
+		//this.nonGyro = nonGyro;
 		this.drive = drive;
 	}
 
@@ -55,7 +55,7 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 */
 	@Override
 	public void update() {
-		signal = fieldOriented(throttleX.get(), throttleY.get(), gyro.get(), override.get(), nonGyro.get());
+		signal = fieldOriented(throttleX.get(), throttleY.get(), gyro.get()/*, override.get(), nonGyro.get()*/);
 		drive.set(signal);
 	}
 
@@ -82,15 +82,15 @@ public class FieldOrientedDriveSystem extends Subsystem {
 	 * @param nonGyro ^
 	 * @return returns the DriveOut used for field oriented driving
 	 */
-	public DriveSignal fieldOriented(double XThrottle, double YThrottle, double gyro, boolean override,
-			boolean nonGyro) {
+	public DriveSignal fieldOriented(double XThrottle, double YThrottle, double gyro/*, boolean override,
+			boolean nonGyro*/) {
 		double speedCommand = Math.max(Math.abs(XThrottle), Math.abs(YThrottle));
 		double directionCommand = Math.toDegrees(Math.atan2(XThrottle, YThrottle));
 		double angleError = directionCommand - gyro;
 
 		angleError = RangeUtil.wrapValue(angleError, -180, 180);
 
-		if (!override) {
+		//if (!override) {
 			if (angleError > 100) {
 				angleError -= 180;
 				speedCommand = -speedCommand;
@@ -98,17 +98,17 @@ public class FieldOrientedDriveSystem extends Subsystem {
 				angleError += 180;
 				speedCommand = -speedCommand;
 			}
-		}
+		//}
 
 		double clockwiseCommand = angleError / 45;
 
 		if (Math.abs(speedCommand) < .1)
 			clockwiseCommand = 0;
 
-		if (nonGyro) {
+		/*if (nonGyro) {
 			speedCommand = -XThrottle;
 			clockwiseCommand = -YThrottle; // may have to reverse x and y
-		}
+		}*/
 		SmartDashboard.putNumber("speedCommand", speedCommand);
 		SmartDashboard.putNumber("clockwiseCommand", clockwiseCommand);
 		double leftSpeed = speedCommand + clockwiseCommand;
