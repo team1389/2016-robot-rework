@@ -11,7 +11,6 @@ public class KeyboardHardware {
 
 	public KeyboardHardware() {
 		keyboard = findKeyboard();
-		System.out.println(keyboard);
 	}
 
 	private static Keyboard findKeyboard() {

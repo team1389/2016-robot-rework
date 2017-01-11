@@ -8,7 +8,11 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * A Path is a recording of the path that the robot takes. Path objects consist of a List of Waypoints that the robot passes by. Using multiple Waypoints in a Path object and the robot's current speed, the code can extrapolate future Waypoints and predict the robot's motion. It can also dictate the robot's motion along the set path.
+ * A Path is a recording of the path that the robot takes. Path objects consist
+ * of a List of Waypoints that the robot passes by. Using multiple Waypoints in
+ * a Path object and the robot's current speed, the code can extrapolate future
+ * Waypoints and predict the robot's motion. It can also dictate the robot's
+ * motion along the set path.
  */
 public class Path {
 	protected static final double kSegmentCompletePercentage = .99;
@@ -18,7 +22,9 @@ public class Path {
 	protected Set<String> mMarkersCrossed;
 
 	/**
-	 * A point along the Path, which consists of the location, the speed, and a string marker (that future code can identify). Paths consist of a List of Waypoints.
+	 * A point along the Path, which consists of the location, the speed, and a
+	 * string marker (that future code can identify). Paths consist of a List of
+	 * Waypoints.
 	 */
 	public static class Waypoint {
 		/**
@@ -36,8 +42,11 @@ public class Path {
 		public final Optional<String> marker;
 
 		/**
-		 * @param position the position of the waypoint
-		 * @param speed the speed the robot should be travelling when it reaches the waypoint
+		 * @param position
+		 *            the position of the waypoint
+		 * @param speed
+		 *            the speed the robot should be travelling when it reaches
+		 *            the waypoint
 		 */
 		public Waypoint(Translation2d position, double speed) {
 			this.position = position;
@@ -46,19 +55,28 @@ public class Path {
 		}
 
 		/**
-		 * @param position the position of the waypoint
-		 * @param speed the speed the robot should be travelling when it reaches the waypoint
-		 * @param marker the string representation of the waypoint
+		 * @param position
+		 *            the position of the waypoint
+		 * @param speed
+		 *            the speed the robot should be travelling when it reaches
+		 *            the waypoint
+		 * @param marker
+		 *            the string representation of the waypoint
 		 */
 		public Waypoint(Translation2d position, double speed, String marker) {
 			this.position = position;
 			this.speed = speed;
 			this.marker = Optional.of(marker);
 		}
+
+		public String toString() {
+			return position.x_ + " " + position.y_;
+		}
 	}
 
 	/**
-	 * @param waypoints the points to hit along the path
+	 * @param waypoints
+	 *            the points to hit along the path
 	 */
 	public Path(List<Waypoint> waypoints) {
 		mMarkersCrossed = new HashSet<String>();
@@ -79,8 +97,10 @@ public class Path {
 	}
 
 	/**
-	 * @param position an initial position
-	 * @return Returns the distance from the position to the first point on the path
+	 * @param position
+	 *            an initial position
+	 * @return Returns the distance from the position to the first point on the
+	 *         path
 	 */
 	public double update(Translation2d position) {
 		double rv = 0.0;
@@ -147,9 +167,12 @@ public class Path {
 	}
 
 	/**
-	 * @param position the robot's current position
-	 * @param lookahead_distance a specified distance to predict a future waypoint
-	 * @return A segment of the robot's predicted motion with start/end points and speed.
+	 * @param position
+	 *            the robot's current position
+	 * @param lookahead_distance
+	 *            a specified distance to predict a future waypoint
+	 * @return A segment of the robot's predicted motion with start/end points
+	 *         and speed.
 	 */
 	public PathSegment.Sample getLookaheadPoint(Translation2d position, double lookahead_distance) {
 		if (mSegments.size() == 0) {
