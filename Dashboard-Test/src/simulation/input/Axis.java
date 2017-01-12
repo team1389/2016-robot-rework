@@ -9,12 +9,14 @@ import net.java.games.input.Component.Identifier.Key;
 
 public class Axis implements ScalarInput<Percent> {
 	double scale;
-	private KeyboardHardware keyboard;
 	DigitalIn up;
 	DigitalIn down;
 
 	public Axis(Key up, Key down, double scale) {
-		this.keyboard = new KeyboardHardware();
+		this(new KeyboardHardware(), up, down, scale);
+	}
+
+	public Axis(KeyboardHardware keyboard, Key up, Key down, double scale) {
 		this.up = keyboard.getKey(up);
 		this.down = keyboard.getKey(down);
 		this.scale = scale;
@@ -23,7 +25,12 @@ public class Axis implements ScalarInput<Percent> {
 	public Double get() {
 		return scale * (up.get() ? 1 : down.get() ? -1 : 0);
 	}
-	public static PercentIn make(Key up, Key down, double scale){
-		return new PercentIn(new Axis(up,down,scale)::get);
+
+	public static PercentIn make(Key up, Key down, double scale) {
+		return new PercentIn(new Axis(up, down, scale)::get);
+	}
+
+	public static PercentIn make(KeyboardHardware keyboard, Key up, Key down, double scale) {
+		return new PercentIn(new Axis(keyboard, up, down, scale)::get);
 	}
 }

@@ -1,25 +1,22 @@
 package simulation;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.geom.Point;
 
-import com.team1389.hardware.inputs.software.PercentIn;
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.system.SystemManager;
 import com.team1389.system.drive.SimboticsDriveSystem;
-import com.team1389.trajectory.Path.Waypoint;
 import com.team1389.watch.Watcher;
 
 import net.java.games.input.Component.Identifier.Key;
+import simulation.input.Axis;
 import simulation.input.KeyboardHardware;
 
 public class DriveSimulator extends BasicGame {
@@ -53,9 +50,12 @@ public class DriveSimulator extends BasicGame {
 		robot.render(container, g);
 	}
 
+	DigitalIn undo;
+
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		KeyboardHardware hardware = new KeyboardHardware();
+		undo = hardware.getKey(Key.LCONTROL).combineAND(hardware.getKey(Key.Z).getLatched());
 		dash = new Watcher();
 		try {
 			map = new Image("map.png");
@@ -68,31 +68,22 @@ public class DriveSimulator extends BasicGame {
 		lines.add(new Line(buffer, 622 - buffer, 1265 - buffer, 622 - buffer));
 		lines.add(new Line(1265 - buffer, 622 - buffer, 1265 - buffer, buffer));
 		lines.add(new Line(1265 - buffer, buffer, buffer, buffer));
+		lines.add(new Line(150, 150, 0, 0));
 
 		robot = new SimulationRobot(lines, true);
-		drive = new SimboticsDriveSystem(robot.getDrive(),
-				new PercentIn(() -> hardware.getKey(Key.UP).getLatched().get() ? 0.5
-						: hardware.getKey(Key.DOWN).getLatched().get() ? -0.5 : 0.0),
-				new PercentIn(() -> hardware.getKey(Key.LEFT).getLatched().get() ? 0.5
-						: hardware.getKey(Key.RIGHT).getLatched().get() ? -.5 : 0.0));
+		drive = new SimboticsDriveSystem(robot.getDrive(), Axis.make(hardware, Key.UP, Key.DOWN, 0.5),
+				Axis.make(hardware, Key.LEFT, Key.RIGHT, 0.5));
 		manager.register(drive);
 		dash.watch(drive);
 
 	}
 
-	//Input input;
-	//List<Waypoint> points;
-	// if(input.isMousePressed(0)){
-			// points.add(new Waypoint(new
-			// Translation2d(input.getMouseX(),input.getMouseY()),0));
-			// }
-	
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		manager.update();
 		dash.publish(Watcher.DASHBOARD);
 		robot.update();
-		
+
 	}
 
 }
