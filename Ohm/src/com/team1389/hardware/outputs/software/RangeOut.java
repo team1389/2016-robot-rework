@@ -61,6 +61,12 @@ public class RangeOut<T extends Value> implements ScalarInput<T> {
 		lastVal = val;
 		output.set(val);
 	}
+	
+	public <R extends RangeOut<T>> R setRange(double min, double max){
+		this.min = min;
+		this.max = max;
+		return cast();
+	}
 
 	/**
 	 * 
