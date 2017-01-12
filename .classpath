@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="2016-Rewrite/src"/>
+	<classpathentry kind="src" path="Dashboard-Test/src"/>
+	<classpathentry kind="src" path="Ohm/src"/>
+	<classpathentry kind="lib" path="2016-Rewrite/dist/FRCUserProgram.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/Jinput/jinput.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/ibxm.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/jnlp.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/lwjgl_util_applet.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/natives-linux.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/natives-mac.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/natives-windows.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/slick-examples.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/slick.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/lib/tinylinepp.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/libs/slick/Pack200Task.jar"/>
+	<classpathentry kind="lib" path="Dashboard-Test/NetworkTables-3.0.0-20160125.000943-1-desktop.jar"/>
+	<classpathentry kind="lib" path="Ohm/export/OhmLib.jar"/>
+	<classpathentry kind="lib" path="Ohm/lib/navx_frc.jar"/>
+	<classpathentry kind="lib" path="Ohm/lib/TalonSRXLibJava.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="2016-Rewrite/build"/>
+</classpath>
