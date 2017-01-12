@@ -7,6 +7,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Point;
@@ -86,10 +87,27 @@ public class SimulationRobot {
 
 		if(collision){
 			for(Line l : boundries){
+				//System.out.println(checkCollision(l));
 				Vector2f translate = findDistanceToTranslate(l);
 				if(translate != null){
 					extraTranslate = translate.scale(-1).add(extraTranslate != null? extraTranslate: new Vector2f(0,0));
 				}
+				/*while(checkCollision(l)){
+					double distanceFromLine = l.distance(new Vector2f(getX(), getY()));
+					Vector2f possibleTranslate = new Vector2f(getWheelLines()[0].getX(), getWheelLines()[0].getY()).scale((float) .01);
+					double secondDistance = l.distance(new Vector2f(getX(), getY()).add(possibleTranslate));
+					double thirdDistance = l.distance(new Vector2f(getX(), getY()).add(possibleTranslate.scale(-1)));
+					System.out.println(distanceFromLine + " " + secondDistance + " " + thirdDistance);
+					//System.out.println(new Vector2f(getX(), getY()).add(possibleTranslate));
+					if(distanceFromLine < secondDistance){
+						possibleTranslate.scale(-1);
+					}
+					//System.out.print(distanceFromLine);
+					//System.out.println(" " + secondDistance);
+					//System.out.println(possibleTranslate);
+					extraTranslate = possibleTranslate.add(extraTranslate != null? extraTranslate: new Vector2f(0,0));
+					//System.out.println(extraTranslate);
+				}*/
 			}
 		}
 
@@ -154,8 +172,26 @@ public class SimulationRobot {
 		return  state.getLatestFieldToVehicle().getValue();
 	}
 
-
+	private ArrayList<Point> points = new ArrayList<Point>();
 	public void render(GameContainer container, Graphics g) throws SlickException {
+		Input input = container.getInput();
+		int xpos = input.getMouseX();
+		int ypos = input.getMouseY();
+
+		if(input.isMousePressed(0)){
+			points.add(new Point(xpos, ypos));
+		}
+		if(input.isMousePressed(1)){
+			points.add(null);
+		}
+
+		if(points.size() > 1){
+			Point point1 = points.get(points.size() - 1);
+			Point point2 = points.get(points.size() - 2);
+			if(point1 != null && point2 != null){
+				boundries.add(new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY()));
+			}
+		}
 
 		Rotation2d rot = getTransform().getRotation();
 		float renderX = getX();
@@ -191,14 +227,14 @@ public class SimulationRobot {
 				g.fillOval(tp.getX() - 5, tp.getY() - 5, 10, 10);
 			}
 			toPrint = null;
-			
+
 			for(Line l : getWheelLines()){
 				g.setColor(Color.cyan);
 				g.draw(l);
 			}
 		}
 
-		
+
 
 	}
 

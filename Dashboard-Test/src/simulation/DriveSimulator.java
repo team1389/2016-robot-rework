@@ -11,6 +11,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Point;
 
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.system.SystemManager;
@@ -79,18 +80,19 @@ public class DriveSimulator extends BasicGame {
 
 	}
 
-	Input input;
-	List<Waypoint> points;
-
+	//Input input;
+	//List<Waypoint> points;
+	// if(input.isMousePressed(0)){
+			// points.add(new Waypoint(new
+			// Translation2d(input.getMouseX(),input.getMouseY()),0));
+			// }
+	
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		manager.update();
-		// if(input.isMousePressed(0)){
-		// points.add(new Waypoint(new
-		// Translation2d(input.getMouseX(),input.getMouseY()),0));
-		// }
 		dash.publish(Watcher.DASHBOARD);
 		robot.update();
+		
 	}
 
 }
