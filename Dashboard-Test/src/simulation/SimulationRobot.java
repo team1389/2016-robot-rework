@@ -1,7 +1,6 @@
 package simulation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -12,7 +11,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -30,8 +28,8 @@ import com.team1389.trajectory.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import simulation.motor.Attachment;
 import simulation.motor.Motor;
-import simulation.motor.MotorSystem;
 import simulation.motor.Motor.MotorType;
+import simulation.motor.MotorSystem;
 import simulation.motor.element.CylinderElement;
 
 public class SimulationRobot {
