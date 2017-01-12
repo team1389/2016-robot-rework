@@ -3,7 +3,7 @@ package com.team1389.system.drive;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
-import com.team1389.system.Subsystem;
+import com.team1389.system.DriveSystem;
 import com.team1389.util.AddList;
 import com.team1389.watch.Watchable;
 
@@ -12,7 +12,7 @@ import com.team1389.watch.Watchable;
  * @author Kenneth
  *
  */
-public class CheesyDriveSystem extends Subsystem {
+public class CheesyDriveSystem extends DriveSystem {
 	private DriveOut<Percent> drive;
 	private PercentIn throttle;
 	private PercentIn wheel;

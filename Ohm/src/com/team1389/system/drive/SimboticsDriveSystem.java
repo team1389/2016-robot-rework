@@ -2,7 +2,7 @@ package com.team1389.system.drive;
 
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
-import com.team1389.system.Subsystem;
+import com.team1389.system.DriveSystem;
 import com.team1389.util.AddList;
 import com.team1389.watch.CompositeWatchable;
 import com.team1389.watch.Watchable;
@@ -14,7 +14,7 @@ import com.team1389.watch.Watchable;
  * @author amind
  *
  */
-public class SimboticsDriveSystem extends Subsystem {
+public class SimboticsDriveSystem extends DriveSystem {
 	private DriveOut<Percent> output;
 	private PercentIn throttle;
 	private PercentIn wheel;

@@ -26,7 +26,7 @@ public interface CompositeWatchable extends Watchable {
 	 * 
 	 * @see CompositeWatchable#getSubWatchables(AddList stem)
 	 */
-	static AddList<Watchable> stem = new AddList<Watchable>();
+	
 
 	/**
 	 * @param stem a supplied empty list to build the subWatchables list from
@@ -37,7 +37,7 @@ public interface CompositeWatchable extends Watchable {
 
 	@Override
 	default void publishUnderName(String name, ITable table) {
-		getSubWatchables(stem).forEach(w -> w.publish(name, table));
+		getSubWatchables(makeStem()).forEach(w -> w.publish(name, table));
 	}
 
 	// TODO fix these
@@ -50,7 +50,7 @@ public interface CompositeWatchable extends Watchable {
 	@Override
 	public default Map<String, SimpleWatchable> getFlat(Optional<String> parent) {
 		Map<String, SimpleWatchable> map = new HashMap<>();
-		getSubWatchables(stem).forEach(w -> map.putAll(w.getFlat(Optional.of(parent.map(this::getFullName).orElse(getName())))));
+		getSubWatchables(makeStem()).forEach(w -> map.putAll(w.getFlat(Optional.of(parent.map(this::getFullName).orElse(getName())))));
 		return map;
 	}
 
@@ -86,5 +86,8 @@ public interface CompositeWatchable extends Watchable {
 	 */
 	public static CompositeWatchable of(String name, List<Watchable> subWatchables) {
 		return of(name, subWatchables.toArray(new Watchable[0]));
+	}
+	public static AddList<Watchable> makeStem(){
+		return new AddList<Watchable>();
 	}
 }

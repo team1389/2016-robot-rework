@@ -5,7 +5,7 @@ import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
-import com.team1389.system.Subsystem;
+import com.team1389.system.DriveSystem;
 import com.team1389.util.AddList;
 import com.team1389.util.RangeUtil;
 import com.team1389.watch.CompositeWatchable;
@@ -14,11 +14,11 @@ import com.team1389.watch.Watchable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * 
+ * Field Oriented Drive System
  * @author Raffi
  *
  */
-public class FieldOrientedDriveSystem extends Subsystem {
+public class FieldOrientedDriveSystem extends DriveSystem {
 	DriveOut<Percent> drive;
 	private AngleIn<Position> gyro;
 	private DriveSignal signal = DriveSignal.NEUTRAL;

@@ -3,7 +3,7 @@ package com.team1389.system.drive;
 import java.util.Set;
 
 import com.team1389.hardware.value_types.Speed;
-import com.team1389.system.Subsystem;
+import com.team1389.system.DriveSystem;
 import com.team1389.trajectory.AdaptivePurePursuitController;
 import com.team1389.trajectory.Kinematics;
 import com.team1389.trajectory.Path;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.Timer;
  * @author amind
  *
  */
-public class PathFollowingSystem extends Subsystem {
+public class PathFollowingSystem extends DriveSystem {
 	/**
 	 * the default distance to look down the path for the Adaptive Pure Pursuit
 	 * Controller
