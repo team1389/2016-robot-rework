@@ -95,6 +95,7 @@ public class CANTalonHardware extends Hardware<CAN> {
 			wpiTalon.ifPresent(talon -> talon.set(voltage));
 		});
 	}
+	
 
 	/**
 	 * @param config the speed PIDConstants
