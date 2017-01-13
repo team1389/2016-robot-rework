@@ -69,7 +69,7 @@ public class FieldOrientedDriveSystem extends DriveSystem {
 	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(gyro.getWatchable("Gyro")).put(drive.getSubWatchables(CompositeWatchable.stem));
+		return stem.put(gyro.getWatchable("Gyro")).put(drive.getSubWatchables(CompositeWatchable.makeStem()));
 	}
 
 	/**

@@ -62,7 +62,7 @@ public class TankDriveSystem extends DriveSystem {
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return stem.put(wheel.getWatchable("wheel"), throttle.getWatchable("throttle"))
-				.put(output.getSubWatchables(CompositeWatchable.stem));
+				.put(output.getSubWatchables(CompositeWatchable.makeStem()));
 	}
 
 }

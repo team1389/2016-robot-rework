@@ -127,7 +127,7 @@ public class SynchronousPIDController<O extends Value, I extends PIDTunableValue
 	 */
 	public CompositeWatchable getPIDTuner(String name) {
 		return CompositeWatchable.of(name,
-				new PIDInput(name, getPID(), this::setPID).getSubWatchables(CompositeWatchable.stem)
+				new PIDInput(name, getPID(), this::setPID).getSubWatchables(CompositeWatchable.makeStem())
 						.put(new NumberInput("setpoint", getSetpoint(), this::setSetpoint)));
 	}
 
